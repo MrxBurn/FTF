@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class RegisterFan extends StatelessWidget {
+  const RegisterFan({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        leading: const BackButton(),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -16,7 +22,7 @@ class LoginPage extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.only(left: 24.0),
               child: Text(
-                'Login',
+                'Register',
                 style: headerStyle,
               ),
             ),
@@ -25,19 +31,32 @@ class LoginPage extends StatelessWidget {
               child: Row(
                 children: [
                   const Text(
-                    "Don't have an account?",
+                    "Already have an account?",
                     style: bodyStyle,
                   ),
                   TextButton(
                       style: const ButtonStyle(
                           splashFactory: NoSplash.splashFactory),
                       onPressed: () =>
-                          Navigator.pushNamed(context, 'accountType'),
+                          Navigator.pushNamed(context, 'loginPage'),
                       child: const Text(
-                        'Register',
+                        'Login',
                         style: TextStyle(color: Colors.red, fontSize: 16),
                       ))
                 ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 24.0, right: 24),
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white)),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white)),
+                  labelStyle: TextStyle(color: Colors.grey),
+                  labelText: 'First name',
+                ),
               ),
             ),
             Padding(
@@ -76,7 +95,7 @@ class LoginPage extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () => (),
                     child: const Text(
-                      'Login',
+                      'Register',
                       style: TextStyle(fontSize: 16),
                     )),
               ),
