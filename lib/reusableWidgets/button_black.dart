@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ftf/styles/styles.dart';
 
 class BlackButton extends StatelessWidget {
   final void Function()? onPressed;

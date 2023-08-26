@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "383299023830",
+    "project_id": "ftfdb-83750",
+    "storage_bucket": "ftfdb-83750.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383299023830:android:a10406c3617e83e377aa77",
+        "android_client_info": {
+          "package_name": "com.ftf.ftf"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "383299023830-b8d4lv174sdom3trsm96e8l48fqk1r6k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5IAHNOfrTjmHKCvSBl3oGhLbKvuaGb-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "383299023830-b8d4lv174sdom3trsm96e8l48fqk1r6k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
