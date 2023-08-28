@@ -26,6 +26,8 @@ const List<String> weightList = <String>[
   'Strawweight',
 ];
 
+List<String> fighterTypeList = <String>['Boxer', 'MMA'];
+
 class RegisterFighter extends StatefulWidget {
   const RegisterFighter({super.key});
 
@@ -35,7 +37,6 @@ class RegisterFighter extends StatefulWidget {
 
 class _RegisterFighterState extends State<RegisterFighter> {
   //TODO: Implement registration logic
-  //TODO: Add fighter type - box, mma
   String firstName = '';
 
   String lastName = '';
@@ -47,6 +48,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
   var genderValue = genderList.first;
 
   var weightValue = weightList.first;
+
+  var fighterType = fighterTypeList.first;
 
   String email = '';
 
@@ -218,6 +221,43 @@ class _RegisterFighterState extends State<RegisterFighter> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
+                          'Fighter type',
+                          style: bodyStyle,
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        DropdownButton<String>(
+                          value: fighterType,
+                          icon: const Icon(Icons.arrow_downward),
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.white),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.white,
+                          ),
+                          onChanged: (String? value) {
+                            setState(() {
+                              fighterType = value!;
+                            });
+                          },
+                          items: fighterTypeList
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 24.0, right: 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
                           'Gender',
                           style: bodyStyle,
                         ),
@@ -234,7 +274,6 @@ class _RegisterFighterState extends State<RegisterFighter> {
                             color: Colors.white,
                           ),
                           onChanged: (String? value) {
-                            // This is called when the user selects an item.
                             setState(() {
                               genderValue = value!;
                             });
@@ -300,22 +339,26 @@ class _RegisterFighterState extends State<RegisterFighter> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 300,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 24.0, right: 24),
-                      child: TextFormField(
-                        controller: bioController,
-                        decoration: const InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white)),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 24.0, right: 24),
+                    child: TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      controller: bioController,
+                      decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 25.0, horizontal: 10.0),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.white)),
                           labelStyle: TextStyle(color: Colors.grey),
-                          labelText: 'Press to type...',
-                        ),
-                        onChanged: (value) => bio = value,
-                      ),
+                          hintText: 'Press to type...'),
+                      onChanged: (value) => bio = value,
                     ),
                   ),
                 ],
