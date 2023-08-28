@@ -35,6 +35,7 @@ class RegisterFighter extends StatefulWidget {
 
 class _RegisterFighterState extends State<RegisterFighter> {
   //TODO: Implement registration logic
+  //TODO: Add fighter type - box, mma
   String firstName = '';
 
   String lastName = '';
@@ -72,7 +73,9 @@ class _RegisterFighterState extends State<RegisterFighter> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LogoHeader(),
+            LogoHeader(
+              backRequired: true,
+            ),
             const Padding(
               padding: EdgeInsets.only(left: 24.0),
               child: Text(

@@ -82,7 +82,9 @@ class _RegisterFanState extends State<RegisterFan> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LogoHeader(),
+            LogoHeader(
+              backRequired: true,
+            ),
             const Padding(
               padding: EdgeInsets.only(left: 24.0),
               child: Text(

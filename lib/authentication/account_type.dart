@@ -10,7 +10,9 @@ class AccountType extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(children: [
-          LogoHeader(),
+          LogoHeader(
+            backRequired: true,
+          ),
           BlackButton(
             onPressed: () => Navigator.pushNamed(context, 'registerFighter'),
             text: 'I am a fighter',

@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class LogoHeader extends StatelessWidget {
-  bool? backRequired = false;
+  bool backRequired = true;
 
-  LogoHeader({Key? key, this.backRequired}) : super(key: key);
-
-  //TODO: display back button conditionally
+  LogoHeader({Key? key, required this.backRequired}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
