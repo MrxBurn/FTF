@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/utils/snack_bar.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/regex.dart';
 
@@ -42,22 +43,26 @@ class _RegisterFanState extends State<RegisterFan> {
   void registerFan(
       String email, String password, String userName, String firstName) async {
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            email: email,
-            password: password,
-          )
-          .then((value) => {
-                fanUsers
-                    .doc(value.user?.uid)
-                    .set({'firstName': firstName, 'userName': userName})
-              });
+      final DocumentSnapshot result = await Future.value(
+          fanUsers.doc(userNameController.text.toLowerCase()).get());
+      if (result.exists && context.mounted) {
+        showSnackBar('Username already exists', context);
+      } else {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: email,
+              password: password,
+            )
+            .then((value) => {
+                  fanUsers
+                      .doc(userName)
+                      .set({'firstName': firstName, 'userName': userName})
+                });
+      }
     } on FirebaseAuthException catch (e) {
       authenticationError = e.message.toString();
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(authenticationError)),
-        );
+        showSnackBar(authenticationError, context);
       }
     }
 
@@ -67,26 +72,17 @@ class _RegisterFanState extends State<RegisterFan> {
     passwordController.clear();
   }
 
-Verifica daca username exista
-  void checkUsername(TextEditingController userName) {
-    fanUsers.doc(use)
-  }
+  void checkUsername(TextEditingController userName) async {}
 
   @override
   Widget build(BuildContext context) {
     print(authenticationError);
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        leading: const BackButton(),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const LogoHeader(),
+            LogoHeader(),
             const Padding(
               padding: EdgeInsets.only(left: 24.0),
               child: Text(
@@ -128,12 +124,12 @@ Verifica daca username exista
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)),
                         labelStyle: TextStyle(color: Colors.grey),
-                        labelText: 'User name',
+                        labelText: 'User name*',
                       ),
                       onChanged: (value) => userName = value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return 'This field is required';
                         }
                         return null;
                       },
@@ -149,12 +145,12 @@ Verifica daca username exista
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)),
                         labelStyle: TextStyle(color: Colors.grey),
-                        labelText: 'First name',
+                        labelText: 'First name*',
                       ),
                       onChanged: (value) => firstName = value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return 'This field is required';
                         }
                         return null;
                       },
@@ -170,12 +166,12 @@ Verifica daca username exista
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)),
                         labelStyle: TextStyle(color: Colors.grey),
-                        labelText: 'Email',
+                        labelText: 'Email*',
                       ),
                       onChanged: (value) => email = value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
+                          return 'This field is required';
                         } else if (!emailRgx.hasMatch(value)) {
                           return 'Invalid email';
                         }
@@ -193,7 +189,7 @@ Verifica daca username exista
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)),
                         labelStyle: TextStyle(color: Colors.grey),
-                        labelText: 'Password',
+                        labelText: 'Password*',
                       ),
                       onChanged: (value) => password = value,
                     ),

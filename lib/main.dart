@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ftf/authentication/account_type.dart';
 import 'package:ftf/authentication/login.dart';
 import 'package:ftf/authentication/register_fan.dart';
+import 'package:ftf/authentication/register_fighter.dart';
 import 'package:ftf/styles/styles.dart';
 
 void main() async {
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
         // '/fighterHome': (context) =>  FighterHomePage(),
 // '/fanHome':(context) => FanHomePage(),
         'accountType': (context) => const AccountType(),
-        // 'registerFighter':(context) => RegisterFighter(),
+        'registerFighter': (context) => const RegisterFighter(),
         'registerFan': (context) => const RegisterFan(),
         'loginPage': (context) => const LoginPage()
       },

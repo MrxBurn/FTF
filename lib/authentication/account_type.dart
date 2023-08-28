@@ -8,17 +8,11 @@ class AccountType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        leading: const BackButton(),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
       body: SingleChildScrollView(
         child: Column(children: [
-          const LogoHeader(),
+          LogoHeader(),
           BlackButton(
-            onPressed: () => (),
+            onPressed: () => Navigator.pushNamed(context, 'registerFighter'),
             text: 'I am a fighter',
           ),
           const SizedBox(

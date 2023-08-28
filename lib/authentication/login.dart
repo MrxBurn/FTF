@@ -5,6 +5,8 @@ import 'package:ftf/styles/styles.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
+  //TODO: Implement login
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +14,9 @@ class LoginPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const LogoHeader(),
+            LogoHeader(
+              backRequired: false,
+            ),
             const Padding(
               padding: EdgeInsets.only(left: 24.0),
               child: Text(

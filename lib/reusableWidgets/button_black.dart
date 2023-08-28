@@ -30,7 +30,6 @@ class BlackButton extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
               ),
-              // shadowColor: const MaterialStatePropertyAll(Colors.red),
             ),
             onPressed: onPressed,
             child: Text(
