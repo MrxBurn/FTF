@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/regex.dart';
+import 'package:ftf/utils/snack_bar.dart';
 
 const List<String> genderList = <String>['Male', 'Female'];
 
@@ -36,7 +39,6 @@ class RegisterFighter extends StatefulWidget {
 }
 
 class _RegisterFighterState extends State<RegisterFighter> {
-  //TODO: Implement registration logic
   String firstName = '';
 
   String lastName = '';
@@ -67,7 +69,55 @@ class _RegisterFighterState extends State<RegisterFighter> {
 
   var bioController = TextEditingController();
 
+  var nationalityController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
+
+  CollectionReference figherUsers =
+      FirebaseFirestore.instance.collection('fighterUsers');
+
+  void registerFighter(
+      String email,
+      String password,
+      String firstName,
+      String lastName,
+      String nationality,
+      String fighterType,
+      String gender,
+      String weightClass,
+      String bio) async {
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => {
+                figherUsers.doc(email).set({
+                  'firstName': firstName,
+                  'lastName': lastName,
+                  'nationality': nationality,
+                  'fighterType': fighterType,
+                  'gender': gender,
+                  'weightClass': weightClass,
+                  'description': bio
+                })
+              });
+    } on FirebaseAuthException catch (e) {
+      String authenticationError = e.message.toString();
+      if (context.mounted) {
+        showSnackBar(authenticationError, context);
+      }
+    }
+    firstNameController.clear();
+
+    emailController.clear();
+
+    passwordController.clear();
+
+    lastNameController.clear();
+
+    bioController.clear();
+
+    nationalityController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +214,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                         labelStyle: TextStyle(color: Colors.grey),
                         labelText: 'Email*',
                       ),
+                      keyboardType: TextInputType.emailAddress,
                       onChanged: (value) => email = value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -187,31 +238,42 @@ class _RegisterFighterState extends State<RegisterFighter> {
                         labelStyle: TextStyle(color: Colors.grey),
                         labelText: 'Password*',
                       ),
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
                       onChanged: (value) => password = value,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'This field is required';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: InkWell(
+                    child: TextFormField(
+                      controller: nationalityController,
+                      keyboardType: TextInputType.none,
+                      readOnly: true,
                       onTap: () {
                         showCountryPicker(
                           context: context,
                           onSelect: (Country country) {
-                            setState(() => nationality = country.name);
+                            setState(() => {
+                                  nationality = country.name,
+                                  nationalityController.text = country.name
+                                });
                           },
                         );
                       },
-                      child: InputDecorator(
-                        decoration: const InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white)),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white)),
-                          labelStyle:
-                              TextStyle(color: Colors.grey, fontSize: 20),
-                          labelText: "Nationality*",
-                        ),
-                        child: nationality != '' ? Text(nationality) : null,
+                      decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white)),
+                        labelStyle: TextStyle(color: Colors.grey, fontSize: 20),
+                        labelText: "Nationality*",
                       ),
                     ),
                   ),
@@ -372,7 +434,21 @@ class _RegisterFighterState extends State<RegisterFighter> {
                 width: 150,
                 height: 48,
                 child: ElevatedButton(
-                    onPressed: () => {},
+                    onPressed: () => {
+                          if (_formKey.currentState!.validate() == true)
+                            {
+                              registerFighter(
+                                  email,
+                                  password,
+                                  firstName,
+                                  lastName,
+                                  nationality,
+                                  fighterType,
+                                  genderValue,
+                                  weightValue,
+                                  bio)
+                            },
+                        },
                     child: const Text(
                       'Register',
                       style: TextStyle(fontSize: 16),

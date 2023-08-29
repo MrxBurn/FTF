@@ -72,8 +72,6 @@ class _RegisterFanState extends State<RegisterFan> {
     passwordController.clear();
   }
 
-  void checkUsername(TextEditingController userName) async {}
-
   @override
   Widget build(BuildContext context) {
     print(authenticationError);
@@ -170,6 +168,7 @@ class _RegisterFanState extends State<RegisterFan> {
                         labelStyle: TextStyle(color: Colors.grey),
                         labelText: 'Email*',
                       ),
+                      keyboardType: TextInputType.emailAddress,
                       onChanged: (value) => email = value,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -193,7 +192,16 @@ class _RegisterFanState extends State<RegisterFan> {
                         labelStyle: TextStyle(color: Colors.grey),
                         labelText: 'Password*',
                       ),
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
                       onChanged: (value) => password = value,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'This field is required';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
