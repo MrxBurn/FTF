@@ -74,7 +74,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
 
   final _formKey = GlobalKey<FormState>();
 
-  CollectionReference figherUsers =
+  CollectionReference fighterUsers =
       FirebaseFirestore.instance.collection('fighterUsers');
 
   void registerFighter(
@@ -91,7 +91,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {
-                figherUsers.doc(email).set({
+                fighterUsers.doc(value.user?.uid).set({
                   'firstName': firstName,
                   'lastName': lastName,
                   'nationality': nationality,
@@ -101,6 +101,12 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   'description': bio
                 })
               });
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      if (context.mounted) {
+        Navigator.pushNamed(context, 'fighterImageUpload');
+      }
     } on FirebaseAuthException catch (e) {
       String authenticationError = e.message.toString();
       if (context.mounted) {
@@ -273,7 +279,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                             borderSide: BorderSide(color: Colors.white)),
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)),
-                        labelStyle: TextStyle(color: Colors.grey, fontSize: 20),
+                        labelStyle: TextStyle(color: Colors.grey),
                         labelText: "Nationality*",
                       ),
                     ),

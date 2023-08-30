@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/authentication/account_type.dart';
+import 'package:ftf/authentication/fighter_image_upload.dart';
 import 'package:ftf/authentication/login.dart';
 import 'package:ftf/authentication/register_fan.dart';
 import 'package:ftf/authentication/register_fighter.dart';
@@ -55,7 +56,9 @@ class MyApp extends StatelessWidget {
         'accountType': (context) => const AccountType(),
         'registerFighter': (context) => const RegisterFighter(),
         'registerFan': (context) => const RegisterFan(),
-        'loginPage': (context) => const LoginPage()
+        'loginPage': (context) => const LoginPage(),
+        // 'homePageFigher':(context) => const FighterHomePage();
+        'fighterImageUpload': (context) => FighterImageUpload()
       },
       home: const LoginPage(),
     );

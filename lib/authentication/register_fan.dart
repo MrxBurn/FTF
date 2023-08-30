@@ -43,22 +43,28 @@ class _RegisterFanState extends State<RegisterFan> {
   void registerFan(
       String email, String password, String userName, String firstName) async {
     try {
-      final DocumentSnapshot result = await Future.value(
-          fanUsers.doc(userNameController.text.toLowerCase()).get());
-      if (result.exists && context.mounted) {
-        showSnackBar('Username already exists', context);
-      } else {
-        await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-              email: email,
-              password: password,
-            )
-            .then((value) => {
-                  fanUsers
-                      .doc(userName)
-                      .set({'firstName': firstName, 'userName': userName})
-                });
-      }
+      fanUsers
+          .where('userName', isEqualTo: userName)
+          .get()
+          .then((doc) async => {
+                if (doc.docs.isNotEmpty)
+                  {showSnackBar('Username already exists', context)}
+                else
+                  {
+                    await FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        )
+                        .then((value) => {
+                              fanUsers.doc(value.user?.uid).set({
+                                'firstName': firstName,
+                                'userName': userName
+                              })
+                            })
+                    //TODO: Redirect to fan home page
+                  }
+              });
     } on FirebaseAuthException catch (e) {
       authenticationError = e.message.toString();
       if (context.mounted) {

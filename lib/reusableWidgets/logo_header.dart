@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class LogoHeader extends StatelessWidget {
-  bool backRequired = true;
+class LogoHeader extends StatefulWidget {
+  bool backRequired;
 
   LogoHeader({Key? key, required this.backRequired}) : super(key: key);
 
+  @override
+  State<LogoHeader> createState() => _LogoHeaderState();
+}
+
+class _LogoHeaderState extends State<LogoHeader> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -17,7 +22,7 @@ class LogoHeader extends StatelessWidget {
           padding: const EdgeInsets.only(top: 100.0),
           child: SvgPicture.asset('assets/illustrations/logo.svg'),
         ),
-        backRequired == true
+        widget.backRequired == true
             ? AppBar(
                 leading: const BackButton(),
                 backgroundColor: Colors.transparent,
