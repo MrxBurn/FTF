@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         'registerFan': (context) => const RegisterFan(),
         'loginPage': (context) => const LoginPage(),
         // 'homePageFigher':(context) => const FighterHomePage();
-        'fighterImageUpload': (context) => FighterImageUpload()
+        'fighterImageUpload': (context) => const FighterImageUpload()
       },
       home: const LoginPage(),
     );
