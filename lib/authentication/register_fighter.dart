@@ -441,6 +441,10 @@ class _RegisterFighterState extends State<RegisterFighter> {
                 width: 150,
                 height: 48,
                 child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      shadowColor: Colors.red,
+                    ),
                     onPressed: () => {
                           if (_formKey.currentState!.validate() == true)
                             {

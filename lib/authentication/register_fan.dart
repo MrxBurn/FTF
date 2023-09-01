@@ -221,6 +221,10 @@ class _RegisterFanState extends State<RegisterFan> {
                 width: 150,
                 height: 48,
                 child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      shadowColor: Colors.red,
+                    ),
                     onPressed: () => {
                           if (_formKey.currentState!.validate() == true)
                             {
