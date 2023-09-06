@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/snack_bar.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FighterImageUpload extends StatefulWidget {
@@ -32,6 +33,7 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
   String imageName = '';
 
   uploadImage(ImageSource source) async {
+    print('mis aici');
     try {
       var image = await ImagePicker().pickImage(source: source);
 
@@ -45,7 +47,9 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
         this.image = imageTemporary;
       });
     } on PlatformException catch (e) {
-      print(e);
+      if (context.mounted) {
+        showSnackBar(e.toString(), context);
+      }
     }
     if (context.mounted) {
       Navigator.pop(context);
@@ -54,14 +58,20 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
 
   saveToFirebase(File? image) async {
     if (image != null) {
-      await storageRef
-          .child('fighterProfiles/$currentUser/$imageName')
-          .putFile(image);
+      Reference file =
+          storageRef.child('fighterProfiles/$currentUser/$imageName');
+
+      await file.putFile(image);
+
+      String imageURL = (await file.getDownloadURL()).toString();
+
+      await fighterUsers.doc(currentUser).update({'profileImageURL': imageURL});
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     var uid = firebaseAuth.currentUser?.uid;
     fighterUsers.doc(uid).get().then((DocumentSnapshot doc) => {
           setState(() {
@@ -99,36 +109,47 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                               onPressed: () => showModalBottomSheet(
                                   context: context,
                                   builder: ((context) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(top: 15.0),
-                                      child: SizedBox(
-                                        height: 100,
-                                        child: Column(
-                                          children: [
-                                            Row(
+                                    return SizedBox(
+                                      height: 100,
+                                      child: Column(
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () =>
+                                                uploadImage(ImageSource.camera),
+                                            style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                backgroundColor:
+                                                    Colors.transparent),
+                                            child: const Row(
                                               children: [
-                                                IconButton(
-                                                    onPressed: () =>
-                                                        uploadImage(
-                                                            ImageSource.camera),
-                                                    icon: const Icon(
-                                                        Icons.camera_alt)),
-                                                const Text('Camera'),
+                                                Icon(Icons.camera_alt),
+                                                Text(
+                                                  'Camera',
+                                                  textAlign: TextAlign.left,
+                                                ),
                                               ],
                                             ),
-                                            Row(
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () => uploadImage(
+                                                ImageSource.gallery),
+                                            style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                backgroundColor:
+                                                    Colors.transparent),
+                                            child: const Row(
                                               children: [
-                                                IconButton(
-                                                    onPressed: () =>
-                                                        uploadImage(ImageSource
-                                                            .gallery),
-                                                    icon: const Icon(
-                                                        Icons.image)),
-                                                const Text('Gallery'),
+                                                Icon(
+                                                  Icons.image,
+                                                ),
+                                                Text(
+                                                  'Gallery',
+                                                  textAlign: TextAlign.center,
+                                                ),
                                               ],
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     );
                                   })),
