@@ -31,6 +31,8 @@ const List<String> weightList = <String>[
 
 List<String> fighterTypeList = <String>['Boxer', 'MMA'];
 
+List<String> fighterStatusList = <String>['Professional', 'Amateur'];
+
 class RegisterFighter extends StatefulWidget {
   const RegisterFighter({super.key});
 
@@ -46,11 +48,15 @@ class _RegisterFighterState extends State<RegisterFighter> {
 
   String weigthClass = '';
 
+  String fighterStatus = '';
+
   String nationality = '';
 
   var genderValue = genderList.first;
 
   var weightValue = weightList.first;
+
+  var fighterStatusValue = fighterStatusList.first;
 
   var fighterType = fighterTypeList.first;
 
@@ -90,6 +96,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
       String fighterType,
       String gender,
       String weightClass,
+      String fighterStatus,
       String bio) async {
     try {
       await FirebaseAuth.instance
@@ -102,6 +109,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   'fighterType': fighterType,
                   'gender': gender,
                   'weightClass': weightClass,
+                  'fighterStatus': fighterStatus,
                   'description': bio
                 })
               });
@@ -322,7 +330,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Fighter type',
+                          'Fighter type*',
                           style: bodyStyle,
                         ),
                         const SizedBox(
@@ -359,7 +367,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Gender',
+                          'Gender*',
                           style: bodyStyle,
                         ),
                         const SizedBox(
@@ -396,7 +404,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Weight class',
+                          'Weight class*',
                           style: bodyStyle,
                         ),
                         const SizedBox(
@@ -417,6 +425,43 @@ class _RegisterFighterState extends State<RegisterFighter> {
                             });
                           },
                           items: weightList
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 24.0, right: 24),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Fighter Status*',
+                          style: bodyStyle,
+                        ),
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        DropdownButton<String>(
+                          value: fighterStatusValue,
+                          icon: const Icon(Icons.arrow_downward),
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.white),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.white,
+                          ),
+                          onChanged: (String? value) {
+                            setState(() {
+                              fighterStatusValue = value!;
+                            });
+                          },
+                          items: fighterStatusList
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -489,6 +534,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                                   fighterType,
                                   genderValue,
                                   weightValue,
+                                  fighterStatusValue,
                                   bio)
                             },
                         },
