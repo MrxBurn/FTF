@@ -58,6 +58,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
 
   String password = '';
 
+  String confirmPassword = '';
+
   String bio = '';
 
   var firstNameController = TextEditingController();
@@ -65,6 +67,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
   var emailController = TextEditingController();
 
   var passwordController = TextEditingController();
+
+  var confirmPasswordController = TextEditingController();
 
   var lastNameController = TextEditingController();
 
@@ -124,6 +128,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
     bioController.clear();
 
     nationalityController.clear();
+
+    confirmPasswordController.clear();
   }
 
   @override
@@ -252,6 +258,32 @@ class _RegisterFighterState extends State<RegisterFighter> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'This field is required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 24.0, right: 24),
+                    child: TextFormField(
+                      controller: confirmPasswordController,
+                      decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white)),
+                        labelStyle: TextStyle(color: Colors.grey),
+                        labelText: 'Confirm password*',
+                      ),
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      onChanged: (value) => confirmPassword = value,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'This field is required';
+                        } else if (value != password) {
+                          return "Passwords don't match";
                         }
                         return null;
                       },
