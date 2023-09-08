@@ -40,7 +40,6 @@ class RegisterFighter extends StatefulWidget {
   State<RegisterFighter> createState() => _RegisterFighterState();
 }
 
-//TODO: Implement image upload
 class _RegisterFighterState extends State<RegisterFighter> {
   String firstName = '';
 

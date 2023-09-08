@@ -33,7 +33,6 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
   String imageName = '';
 
   uploadImage(ImageSource source) async {
-    print('mis aici');
     try {
       var image = await ImagePicker().pickImage(source: source);
 
@@ -71,7 +70,6 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     var uid = firebaseAuth.currentUser?.uid;
     fighterUsers.doc(uid).get().then((DocumentSnapshot doc) => {
           setState(() {

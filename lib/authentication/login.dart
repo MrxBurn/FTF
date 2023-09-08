@@ -24,7 +24,8 @@ class _LoginPageState extends State<LoginPage> {
   void loginFighter(String email, String password) async {
     try {
       await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) => print('Logged in user ${value.user?.uid}'));
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
         showSnackBar(e.toString(), context);
