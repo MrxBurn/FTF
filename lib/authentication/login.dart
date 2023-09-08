@@ -1,11 +1,36 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/snack_bar.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
-  //TODO: Implement login
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String email = '';
+
+  String password = '';
+
+  TextEditingController emailController = TextEditingController();
+
+  TextEditingController passwordController = TextEditingController();
+
+  //TODO: Implement redirection login for fighter or fan
+  void loginFighter(String email, String password) async {
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (context.mounted) {
+        showSnackBar(e.toString(), context);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +72,7 @@ class LoginPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 24),
               child: TextFormField(
+                controller: emailController,
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.white)),
@@ -55,11 +81,13 @@ class LoginPage extends StatelessWidget {
                   labelStyle: TextStyle(color: Colors.grey),
                   labelText: 'Email',
                 ),
+                onChanged: (value) => (email = value),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 24),
               child: TextFormField(
+                controller: passwordController,
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.white)),
@@ -68,6 +96,7 @@ class LoginPage extends StatelessWidget {
                   labelStyle: TextStyle(color: Colors.grey),
                   labelText: 'Password',
                 ),
+                onChanged: ((value) => password = value),
               ),
             ),
             const SizedBox(
@@ -82,7 +111,7 @@ class LoginPage extends StatelessWidget {
                       elevation: 5,
                       shadowColor: Colors.red,
                     ),
-                    onPressed: () => (),
+                    onPressed: () => loginFighter(email, password),
                     child: const Text(
                       'Login',
                       style: TextStyle(fontSize: 16),
