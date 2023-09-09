@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/reusableWidgets/dropdown_widget.dart';
+import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
-import 'package:ftf/utils/regex.dart';
+import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/snack_bar.dart';
 
 const List<String> genderList = <String>['Male', 'Female'];
@@ -180,121 +182,38 @@ class _RegisterFighterState extends State<RegisterFighter> {
               key: _formKey,
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: TextFormField(
-                      controller: firstNameController,
-                      decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        labelStyle: TextStyle(color: Colors.grey),
-                        labelText: 'First name*',
-                      ),
-                      onChanged: (value) => firstName = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
-                    ),
+                  InputFieldWidget(
+                    fieldValue: firstName,
+                    pLabelText: 'First name*',
+                    controller: firstNameController,
+                    validatorFunction: (value) => fieldRequired(value),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: TextFormField(
-                      controller: lastNameController,
-                      decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        labelStyle: TextStyle(color: Colors.grey),
-                        labelText: 'Last name*',
-                      ),
-                      onChanged: (value) => lastName = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
-                    ),
+                  InputFieldWidget(
+                    fieldValue: lastName,
+                    pLabelText: 'Last name*',
+                    controller: lastNameController,
+                    validatorFunction: (value) => fieldRequired(value),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: TextFormField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        labelStyle: TextStyle(color: Colors.grey),
-                        labelText: 'Email*',
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      onChanged: (value) => email = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This field is required';
-                        } else if (!emailRgx.hasMatch(value)) {
-                          return 'Invalid email';
-                        }
-                        return null;
-                      },
-                    ),
+                  InputFieldWidget(
+                    fieldValue: email,
+                    pLabelText: 'Email*',
+                    controller: emailController,
+                    validatorFunction: (value) => emailValidation(value),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: TextFormField(
-                      controller: passwordController,
-                      decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        labelStyle: TextStyle(color: Colors.grey),
-                        labelText: 'Password*',
-                      ),
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      onChanged: (value) => password = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
-                    ),
+                  InputFieldWidget(
+                    fieldValue: password,
+                    pLabelText: 'Password*',
+                    controller: passwordController,
+                    validatorFunction: (value) => fieldRequired(value),
+                    passwordField: true,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: TextFormField(
-                      controller: confirmPasswordController,
-                      decoration: const InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
-                        labelStyle: TextStyle(color: Colors.grey),
-                        labelText: 'Confirm password*',
-                      ),
-                      obscureText: true,
-                      enableSuggestions: false,
-                      autocorrect: false,
-                      onChanged: (value) => confirmPassword = value,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This field is required';
-                        } else if (value != password) {
-                          return "Passwords don't match";
-                        }
-                        return null;
-                      },
-                    ),
+                  InputFieldWidget(
+                    fieldValue: confirmPassword,
+                    pLabelText: 'Confirm password*',
+                    controller: confirmPasswordController,
+                    validatorFunction: (value) =>
+                        confirmPasswordValidator(value, password),
+                    passwordField: true,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 24.0, right: 24),
@@ -323,154 +242,22 @@ class _RegisterFighterState extends State<RegisterFighter> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Fighter type*',
-                          style: bodyStyle,
-                        ),
-                        const SizedBox(
-                          width: 50,
-                        ),
-                        DropdownButton<String>(
-                          value: fighterType,
-                          icon: const Icon(Icons.arrow_downward),
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.white),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.white,
-                          ),
-                          onChanged: (String? value) {
-                            setState(() {
-                              fighterType = value!;
-                            });
-                          },
-                          items: fighterTypeList
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Gender*',
-                          style: bodyStyle,
-                        ),
-                        const SizedBox(
-                          width: 50,
-                        ),
-                        DropdownButton<String>(
-                          value: genderValue,
-                          icon: const Icon(Icons.arrow_downward),
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.white),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.white,
-                          ),
-                          onChanged: (String? value) {
-                            setState(() {
-                              genderValue = value!;
-                            });
-                          },
-                          items: genderList
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Weight class*',
-                          style: bodyStyle,
-                        ),
-                        const SizedBox(
-                          width: 50,
-                        ),
-                        DropdownButton<String>(
-                          value: weightValue,
-                          icon: const Icon(Icons.arrow_downward),
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.white),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.white,
-                          ),
-                          onChanged: (String? value) {
-                            setState(() {
-                              weightValue = value!;
-                            });
-                          },
-                          items: weightList
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0, right: 24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Fighter Status*',
-                          style: bodyStyle,
-                        ),
-                        const SizedBox(
-                          width: 50,
-                        ),
-                        DropdownButton<String>(
-                          value: fighterStatusValue,
-                          icon: const Icon(Icons.arrow_downward),
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.white),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.white,
-                          ),
-                          onChanged: (String? value) {
-                            setState(() {
-                              fighterStatusValue = value!;
-                            });
-                          },
-                          items: fighterStatusList
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
+                  DropDownWidget(
+                      dropDownValue: fighterType,
+                      dropDownList: fighterTypeList,
+                      dropDownName: 'Fighter type*'),
+                  DropDownWidget(
+                      dropDownValue: genderValue,
+                      dropDownList: genderList,
+                      dropDownName: 'Gender*'),
+                  DropDownWidget(
+                      dropDownValue: weightValue,
+                      dropDownList: weightList,
+                      dropDownName: 'Weight class*'),
+                  DropDownWidget(
+                      dropDownValue: fighterStatusValue,
+                      dropDownList: fighterStatusList,
+                      dropDownName: 'Fighter status*'),
                   const SizedBox(
                     height: 24,
                   ),

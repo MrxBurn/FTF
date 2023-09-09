@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/snack_bar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -19,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   //TODO: Implement redirection login for fighter or fan
   void loginFighter(String email, String password) async {
@@ -70,55 +74,47 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 24.0, right: 24),
-              child: TextFormField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white)),
-                  labelStyle: TextStyle(color: Colors.grey),
-                  labelText: 'Email',
-                ),
-                onChanged: (value) => (email = value),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 24.0, right: 24),
-              child: TextFormField(
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white)),
-                  labelStyle: TextStyle(color: Colors.grey),
-                  labelText: 'Password',
-                ),
-                onChanged: ((value) => password = value),
-              ),
-            ),
-            const SizedBox(
-              height: 25,
-            ),
-            Center(
-              child: SizedBox(
-                width: 150,
-                height: 48,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      shadowColor: Colors.red,
+            Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    InputFieldWidget(
+                      fieldValue: email,
+                      pLabelText: 'Email',
+                      controller: emailController,
+                      validatorFunction: (value) => emailValidation(value),
                     ),
-                    onPressed: () => loginFighter(email, password),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(fontSize: 16),
-                    )),
-              ),
-            )
+                    InputFieldWidget(
+                      fieldValue: password,
+                      pLabelText: 'Password',
+                      controller: passwordController,
+                      validatorFunction: (value) => fieldRequired(value),
+                      passwordField: true,
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Center(
+                      child: SizedBox(
+                        width: 150,
+                        height: 48,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 5,
+                              shadowColor: Colors.red,
+                            ),
+                            onPressed: () => {
+                                  if (_formKey.currentState!.validate() == true)
+                                    {loginFighter(email, password)}
+                                },
+                            child: const Text(
+                              'Login',
+                              style: TextStyle(fontSize: 16),
+                            )),
+                      ),
+                    )
+                  ],
+                )),
           ],
         ),
       ),
