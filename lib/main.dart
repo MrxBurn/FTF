@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,7 +21,7 @@ User? currentUser = FirebaseAuth.instance.currentUser;
 
 Widget initialWidget = const Placeholder();
 
-//TODO: Differentiate between Fighter and Fan
+//TODO: Check if logic for login works
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -50,14 +48,6 @@ class _MyAppState extends State<MyApp> {
     }
 
     return initialWidget;
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    checkIfUserLoggedIn();
   }
 
   @override
@@ -101,9 +91,22 @@ class _MyAppState extends State<MyApp> {
           'registerFighter': (context) => const RegisterFighter(),
           'registerFan': (context) => const RegisterFan(),
           'loginPage': (context) => const LoginPage(),
-          // 'homePageFigher':(context) => const FighterHomePage();
           'fighterImageUpload': (context) => const FighterImageUpload()
         },
-        home: initialWidget);
+        home: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('fanUsers')
+              .doc(currentUser?.uid)
+              .snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData && currentUser != null) {
+              return const FanHomePage();
+            } else if (!snapshot.hasData && currentUser != null) {
+              return const FighterHomePage();
+            } else {
+              return const LoginPage();
+            }
+          },
+        ));
   }
 }

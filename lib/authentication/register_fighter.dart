@@ -70,6 +70,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
   CollectionReference fighterUsers =
       FirebaseFirestore.instance.collection('fighterUsers');
 
+  bool isLoading = false;
+
   void registerFighter(
       String email,
       String password,
@@ -82,6 +84,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
       String fighterStatus,
       String bio) async {
     try {
+      isLoading = true;
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {
@@ -99,12 +102,15 @@ class _RegisterFighterState extends State<RegisterFighter> {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
+      isLoading = false;
+
       if (context.mounted) {
         Navigator.pushNamed(context, 'fighterImageUpload');
       }
     } on FirebaseAuthException catch (e) {
       String authenticationError = e.message.toString();
       if (context.mounted) {
+        isLoading = false;
         showSnackBar(authenticationError, context);
       }
     }
@@ -298,10 +304,12 @@ class _RegisterFighterState extends State<RegisterFighter> {
                                   bioController.text)
                             },
                         },
-                    child: const Text(
-                      'Register',
-                      style: TextStyle(fontSize: 16),
-                    )),
+                    child: isLoading == true
+                        ? const CircularProgressIndicator()
+                        : const Text(
+                            'Register',
+                            style: TextStyle(fontSize: 16),
+                          )),
               ),
             ),
           ],
