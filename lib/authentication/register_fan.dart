@@ -17,16 +17,6 @@ class RegisterFan extends StatefulWidget {
 }
 
 class _RegisterFanState extends State<RegisterFan> {
-  String firstName = '';
-
-  String userName = '';
-
-  String email = '';
-
-  String password = '';
-
-  String confirmPassword = '';
-
   var firstNameController = TextEditingController();
 
   var userNameController = TextEditingController();
@@ -127,36 +117,31 @@ class _RegisterFanState extends State<RegisterFan> {
               child: Column(
                 children: [
                   InputFieldWidget(
-                    fieldValue: userName,
                     pLabelText: 'User name*',
                     controller: userNameController,
                     validatorFunction: (value) => userNameValidator(value),
                   ),
                   InputFieldWidget(
-                    fieldValue: firstName,
                     pLabelText: 'First name*',
                     controller: firstNameController,
                     validatorFunction: (value) => fieldRequired(value),
                   ),
                   InputFieldWidget(
-                    fieldValue: email,
                     pLabelText: 'Email*',
                     controller: emailController,
                     validatorFunction: (value) => emailValidation(value),
                   ),
                   InputFieldWidget(
-                    fieldValue: password,
                     pLabelText: 'Password*',
                     controller: passwordController,
                     validatorFunction: (value) => fieldRequired(value),
                     passwordField: true,
                   ),
                   InputFieldWidget(
-                    fieldValue: confirmPassword,
                     pLabelText: 'Confirm password*',
                     controller: confirmPasswordController,
-                    validatorFunction: (value) =>
-                        confirmPasswordValidator(value, password),
+                    validatorFunction: (value) => confirmPasswordValidator(
+                        value, passwordController.text),
                     passwordField: true,
                   ),
                 ],
@@ -177,7 +162,11 @@ class _RegisterFanState extends State<RegisterFan> {
                     onPressed: () => {
                           if (_formKey.currentState!.validate() == true)
                             {
-                              registerFan(email, password, userName, firstName),
+                              registerFan(
+                                  emailController.text,
+                                  passwordController.text,
+                                  userNameController.text,
+                                  firstNameController.text),
                             }
                         },
                     child: const Text(

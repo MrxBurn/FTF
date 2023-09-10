@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class InputFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
 
-  String fieldValue;
+  // String fieldValue;
 
   String? pLabelText;
 
@@ -16,7 +16,7 @@ class InputFieldWidget extends StatelessWidget {
   InputFieldWidget(
       {Key? key,
       this.controller,
-      required this.fieldValue,
+      // required this.fieldValue,
       required this.pLabelText,
       this.validatorFunction,
       this.passwordField})
@@ -37,7 +37,7 @@ class InputFieldWidget extends StatelessWidget {
             labelText: pLabelText,
           ),
           obscureText: passwordField == true ? true : false,
-          onChanged: (value) => fieldValue = value,
+          // onChanged: (value) => fieldValue = value,
           validator: validatorFunction),
     );
   }

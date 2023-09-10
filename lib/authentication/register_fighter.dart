@@ -43,16 +43,6 @@ class RegisterFighter extends StatefulWidget {
 }
 
 class _RegisterFighterState extends State<RegisterFighter> {
-  String firstName = '';
-
-  String lastName = '';
-
-  String weigthClass = '';
-
-  String fighterStatus = '';
-
-  String nationality = '';
-
   var genderValue = genderList.first;
 
   var weightValue = weightList.first;
@@ -60,14 +50,6 @@ class _RegisterFighterState extends State<RegisterFighter> {
   var fighterStatusValue = fighterStatusList.first;
 
   var fighterType = fighterTypeList.first;
-
-  String email = '';
-
-  String password = '';
-
-  String confirmPassword = '';
-
-  String bio = '';
 
   var firstNameController = TextEditingController();
 
@@ -183,36 +165,31 @@ class _RegisterFighterState extends State<RegisterFighter> {
               child: Column(
                 children: [
                   InputFieldWidget(
-                    fieldValue: firstName,
                     pLabelText: 'First name*',
                     controller: firstNameController,
                     validatorFunction: (value) => fieldRequired(value),
                   ),
                   InputFieldWidget(
-                    fieldValue: lastName,
                     pLabelText: 'Last name*',
                     controller: lastNameController,
                     validatorFunction: (value) => fieldRequired(value),
                   ),
                   InputFieldWidget(
-                    fieldValue: email,
                     pLabelText: 'Email*',
                     controller: emailController,
                     validatorFunction: (value) => emailValidation(value),
                   ),
                   InputFieldWidget(
-                    fieldValue: password,
                     pLabelText: 'Password*',
                     controller: passwordController,
                     validatorFunction: (value) => fieldRequired(value),
                     passwordField: true,
                   ),
                   InputFieldWidget(
-                    fieldValue: confirmPassword,
                     pLabelText: 'Confirm password*',
                     controller: confirmPasswordController,
-                    validatorFunction: (value) =>
-                        confirmPasswordValidator(value, password),
+                    validatorFunction: (value) => confirmPasswordValidator(
+                        value, passwordController.text),
                     passwordField: true,
                   ),
                   Padding(
@@ -225,10 +202,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
                         showCountryPicker(
                           context: context,
                           onSelect: (Country country) {
-                            setState(() => {
-                                  nationality = country.name,
-                                  nationalityController.text = country.name
-                                });
+                            setState(() =>
+                                nationalityController.text = country.name);
                           },
                         );
                       },
@@ -290,7 +265,6 @@ class _RegisterFighterState extends State<RegisterFighter> {
                               borderSide: BorderSide(color: Colors.white)),
                           labelStyle: TextStyle(color: Colors.grey),
                           hintText: 'Press to type...'),
-                      onChanged: (value) => bio = value,
                     ),
                   ),
                 ],
@@ -312,16 +286,16 @@ class _RegisterFighterState extends State<RegisterFighter> {
                           if (_formKey.currentState!.validate() == true)
                             {
                               registerFighter(
-                                  email,
-                                  password,
-                                  firstName,
-                                  lastName,
-                                  nationality,
+                                  emailController.text,
+                                  passwordController.text,
+                                  firstNameController.text,
+                                  lastNameController.text,
+                                  nationalityController.text,
                                   fighterType,
                                   genderValue,
                                   weightValue,
                                   fighterStatusValue,
-                                  bio)
+                                  bioController.text)
                             },
                         },
                     child: const Text(

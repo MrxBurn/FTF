@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/authentication/account_type.dart';
@@ -11,6 +12,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
+}
+
+//TODO: Differentiate between Fighter and Fan
+checkIfUserLoggedIn() {
+  if (FirebaseAuth.instance.currentUser != null) {
+    // signed in
+    print('Sunt logat maimuta');
+  } else {
+    // signed out
+  }
 }
 
 class MyApp extends StatelessWidget {

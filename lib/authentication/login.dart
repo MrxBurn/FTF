@@ -14,10 +14,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String email = '';
-
-  String password = '';
-
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
@@ -28,8 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   void loginFighter(String email, String password) async {
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) => print('Logged in user ${value.user?.uid}'));
+          .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
         showSnackBar(e.toString(), context);
@@ -79,13 +74,11 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     InputFieldWidget(
-                      fieldValue: email,
                       pLabelText: 'Email',
                       controller: emailController,
                       validatorFunction: (value) => emailValidation(value),
                     ),
                     InputFieldWidget(
-                      fieldValue: password,
                       pLabelText: 'Password',
                       controller: passwordController,
                       validatorFunction: (value) => fieldRequired(value),
@@ -105,7 +98,10 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: () => {
                                   if (_formKey.currentState!.validate() == true)
-                                    {loginFighter(email, password)}
+                                    {
+                                      loginFighter(emailController.text,
+                                          passwordController.text)
+                                    }
                                 },
                             child: const Text(
                               'Login',
