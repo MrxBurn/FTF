@@ -20,13 +20,18 @@ class _LoginPageState extends State<LoginPage> {
 
   final _formKey = GlobalKey<FormState>();
 
+  bool isLogingIn = false;
+
   //TODO: Implement redirection login for fighter or fan
   void loginFighter(String email, String password) async {
     try {
+      isLogingIn = true;
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      isLogingIn = false;
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
+        isLogingIn = false;
         showSnackBar(e.toString(), context);
       }
     }
@@ -99,14 +104,17 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () => {
                                   if (_formKey.currentState!.validate() == true)
                                     {
+                                      print(isLogingIn),
                                       loginFighter(emailController.text,
                                           passwordController.text)
                                     }
                                 },
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(fontSize: 16),
-                            )),
+                            child: isLogingIn == true
+                                ? const CircularProgressIndicator()
+                                : const Text(
+                                    'Login',
+                                    style: TextStyle(fontSize: 16),
+                                  )),
                       ),
                     )
                   ],
