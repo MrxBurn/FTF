@@ -29,8 +29,7 @@ class _RegisterFanState extends State<RegisterFan> {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  CollectionReference fanUsers =
-      FirebaseFirestore.instance.collection('fanUsers');
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   final _formKey = GlobalKey<FormState>();
 
@@ -40,34 +39,29 @@ class _RegisterFanState extends State<RegisterFan> {
   void registerFan(
       String email, String password, String userName, String firstName) async {
     try {
-      if (ModalRoute.of(context)?.settings.name == 'registerFighter') {
-        route = 'fighter';
-      } else if (ModalRoute.of(context)?.settings.name == 'registerFan') {
+      if (ModalRoute.of(context)?.settings.name == 'registerFan') {
         route = 'fan';
       }
-      fanUsers
-          .where('userName', isEqualTo: userName)
-          .get()
-          .then((doc) async => {
-                if (doc.docs.isNotEmpty)
-                  {showSnackBar('Username already exists', context)}
-                else
-                  {
-                    await FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                          email: email,
-                          password: password,
-                        )
-                        .then((value) => {
-                              fanUsers.doc(value.user?.uid).set({
-                                'firstName': firstName,
-                                'userName': userName,
-                                'route': route
-                              })
-                            })
-                    //TODO: Redirect to fan home page
-                  }
-              });
+      users.where('userName', isEqualTo: userName).get().then((doc) async => {
+            if (doc.docs.isNotEmpty)
+              {showSnackBar('Username already exists', context)}
+            else
+              {
+                await FirebaseAuth.instance
+                    .createUserWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    )
+                    .then((value) => {
+                          users.doc(value.user?.uid).set({
+                            'firstName': firstName,
+                            'userName': userName,
+                            'route': route
+                          })
+                        })
+                //TODO: Redirect to fan home page
+              }
+          });
     } on FirebaseAuthException catch (e) {
       authenticationError = e.message.toString();
       if (context.mounted) {

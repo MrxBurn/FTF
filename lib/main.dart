@@ -9,6 +9,7 @@ import 'package:ftf/authentication/register_fan.dart';
 import 'package:ftf/authentication/register_fighter.dart';
 import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
+import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 
 void main() async {
@@ -85,28 +86,48 @@ class _MyAppState extends State<MyApp> {
             textSelectionTheme:
                 const TextSelectionThemeData(cursorColor: Colors.white)),
         routes: {
-          '/fighterHome': (context) => const FighterHomePage(),
-          '/fanHome': (context) => const FanHomePage(),
+          'fighterHome': (context) => const FighterHomePage(),
+          'fanHome': (context) => const FanHomePage(),
           'accountType': (context) => const AccountType(),
           'registerFighter': (context) => const RegisterFighter(),
           'registerFan': (context) => const RegisterFan(),
           'loginPage': (context) => const LoginPage(),
           'fighterImageUpload': (context) => const FighterImageUpload()
         },
-        home: StreamBuilder<DocumentSnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('fanUsers')
+        home: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('users')
               .doc(currentUser?.uid)
-              .snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.hasData && currentUser != null) {
-              return const FanHomePage();
-            } else if (!snapshot.hasData && currentUser != null) {
-              return const FighterHomePage();
-            } else {
+              .get(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasData &&
+                !snapshot.data!.exists &&
+                currentUser == null) {
               return const LoginPage();
             }
+
+            if (snapshot.connectionState == ConnectionState.done &&
+                currentUser != null &&
+                snapshot.data!.get('route') == 'fan') {
+              return const FanHomePage();
+            }
+
+            if (snapshot.connectionState == ConnectionState.done &&
+                currentUser != null &&
+                snapshot.data!.get('route') == 'fighter') {
+              return const FighterHomePage();
+            }
+
+            return SizedBox(
+              child: Column(children: [
+                LogoHeader(backRequired: false),
+                const Center(child: CircularProgressIndicator())
+              ]),
+            );
           },
         ));
   }
 }
+
+//TODO: Implement login redirection on login button

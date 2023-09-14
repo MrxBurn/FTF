@@ -67,8 +67,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
 
   final _formKey = GlobalKey<FormState>();
 
-  CollectionReference fighterUsers =
-      FirebaseFirestore.instance.collection('fighterUsers');
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   bool isLoading = false;
 
@@ -88,15 +87,12 @@ class _RegisterFighterState extends State<RegisterFighter> {
     try {
       if (ModalRoute.of(context)?.settings.name == 'registerFighter') {
         route = 'fighter';
-      } else if (ModalRoute.of(context)?.settings.name == 'registerFan') {
-        route = 'fan';
       }
-
       isLoading = true;
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {
-                fighterUsers.doc(value.user?.uid).set({
+                users.doc(value.user?.uid).set({
                   'firstName': firstName,
                   'lastName': lastName,
                   'nationality': nationality,
