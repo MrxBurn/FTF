@@ -34,10 +34,17 @@ class _RegisterFanState extends State<RegisterFan> {
 
   final _formKey = GlobalKey<FormState>();
 
+  String route = '';
+
   String authenticationError = '';
   void registerFan(
       String email, String password, String userName, String firstName) async {
     try {
+      if (ModalRoute.of(context)?.settings.name == 'registerFighter') {
+        route = 'fighter';
+      } else if (ModalRoute.of(context)?.settings.name == 'registerFan') {
+        route = 'fan';
+      }
       fanUsers
           .where('userName', isEqualTo: userName)
           .get()
@@ -54,7 +61,8 @@ class _RegisterFanState extends State<RegisterFan> {
                         .then((value) => {
                               fanUsers.doc(value.user?.uid).set({
                                 'firstName': firstName,
-                                'userName': userName
+                                'userName': userName,
+                                'route': route
                               })
                             })
                     //TODO: Redirect to fan home page

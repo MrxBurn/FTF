@@ -72,6 +72,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
 
   bool isLoading = false;
 
+  String route = '';
+
   void registerFighter(
       String email,
       String password,
@@ -84,6 +86,12 @@ class _RegisterFighterState extends State<RegisterFighter> {
       String fighterStatus,
       String bio) async {
     try {
+      if (ModalRoute.of(context)?.settings.name == 'registerFighter') {
+        route = 'fighter';
+      } else if (ModalRoute.of(context)?.settings.name == 'registerFan') {
+        route = 'fan';
+      }
+
       isLoading = true;
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -96,7 +104,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   'gender': gender,
                   'weightClass': weightClass,
                   'fighterStatus': fighterStatus,
-                  'description': bio
+                  'description': bio,
+                  'route': route
                 })
               });
       await FirebaseAuth.instance
