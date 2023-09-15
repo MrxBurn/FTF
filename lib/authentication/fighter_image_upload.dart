@@ -32,29 +32,6 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
 
   String imageName = '';
 
-  uploadImage(ImageSource source) async {
-    try {
-      var image = await ImagePicker().pickImage(source: source);
-
-      if (image == null) return;
-
-      final imageTemporary = File(image.path);
-
-      imageName = image.name;
-
-      setState(() {
-        this.image = imageTemporary;
-      });
-    } on PlatformException catch (e) {
-      if (context.mounted) {
-        showSnackBar(e.toString(), context);
-      }
-    }
-    if (context.mounted) {
-      Navigator.pop(context);
-    }
-  }
-
   saveToFirebase(File? image) async {
     if (image != null) {
       Reference file =
@@ -76,6 +53,32 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
             firstName = doc['firstName'];
           })
         });
+
+    uploadImage(ImageSource source) async {
+      try {
+        var image = await ImagePicker().pickImage(source: source);
+
+        if (image == null) return;
+
+        final imageTemporary = File(image.path);
+
+        imageName = image.name;
+
+        setState(() {
+          this.image = imageTemporary;
+        });
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, 'fighterHome');
+        }
+      } on PlatformException catch (e) {
+        if (context.mounted) {
+          showSnackBar(e.toString(), context);
+        }
+      }
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -186,7 +189,10 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                       Center(
                         child: TextButton(
                             onPressed: () => {
-                                  // Navigator.pushNamed(context, 'homePageFigher'),
+                                  {
+                                    Navigator.pushReplacementNamed(
+                                        context, 'fighterHome')
+                                  }
                                 },
                             child: Text(
                               'Skip this step',

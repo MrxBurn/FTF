@@ -22,8 +22,6 @@ User? currentUser = FirebaseAuth.instance.currentUser;
 
 Widget initialWidget = const Placeholder();
 
-//TODO: Check if logic for login works
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 

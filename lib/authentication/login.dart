@@ -25,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
 
   var doc = FirebaseFirestore.instance.collection('users');
 
-  //TODO: Implement redirection login for fighter or fan
   void loginFighter(String email, String password) async {
     try {
       isLogingIn = true;
@@ -121,7 +120,6 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () => {
                                   if (_formKey.currentState!.validate() == true)
                                     {
-                                      print(isLogingIn),
                                       loginFighter(emailController.text,
                                           passwordController.text)
                                     }

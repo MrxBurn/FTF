@@ -59,9 +59,11 @@ class _RegisterFanState extends State<RegisterFan> {
                             'route': route
                           })
                         })
-                //TODO: Redirect to fan home page
               }
           });
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) => Navigator.pushReplacementNamed(context, 'fanHome'));
     } on FirebaseAuthException catch (e) {
       authenticationError = e.message.toString();
       if (context.mounted) {
