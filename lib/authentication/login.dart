@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/input_field_widget.dart';
@@ -22,12 +23,28 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isLogingIn = false;
 
+  var doc = FirebaseFirestore.instance.collection('users');
+
   //TODO: Implement redirection login for fighter or fan
   void loginFighter(String email, String password) async {
     try {
       isLogingIn = true;
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) => {
+                doc
+                    .doc(value.user?.uid)
+                    .get()
+                    .then((DocumentSnapshot value) => {
+                          if (value.get('route') == 'fighter')
+                            {
+                              Navigator.pushReplacementNamed(
+                                  context, 'fighterHome')
+                            },
+                          if (value.get('route') == 'fan')
+                            {Navigator.pushReplacementNamed(context, 'fanHome')}
+                        })
+              });
       isLogingIn = false;
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
