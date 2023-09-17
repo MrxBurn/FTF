@@ -7,6 +7,7 @@ import 'package:ftf/authentication/fighter_image_upload.dart';
 import 'package:ftf/authentication/login.dart';
 import 'package:ftf/authentication/register_fan.dart';
 import 'package:ftf/authentication/register_fighter.dart';
+import 'package:ftf/create_offer_page/create_offer_fighter.dart';
 import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -69,6 +70,9 @@ class _MyAppState extends State<MyApp> {
                 color: Colors.white,
               ),
             ),
+            inputDecorationTheme: const InputDecorationTheme(
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey))),
             fontFamily: 'Roboto',
             useMaterial3: true,
             colorScheme: const ColorScheme.dark(),
@@ -81,8 +85,10 @@ class _MyAppState extends State<MyApp> {
                   foregroundColor:
                       const MaterialStatePropertyAll(Colors.white)),
             ),
-            textSelectionTheme:
-                const TextSelectionThemeData(cursorColor: Colors.white)),
+            textSelectionTheme: const TextSelectionThemeData(
+                cursorColor: Colors.white,
+                selectionColor: Colors.white,
+                selectionHandleColor: Colors.white)),
         routes: {
           'fighterHome': (context) => const FighterHomePage(),
           'fanHome': (context) => const FanHomePage(),
@@ -90,7 +96,8 @@ class _MyAppState extends State<MyApp> {
           'registerFighter': (context) => const RegisterFighter(),
           'registerFan': (context) => const RegisterFan(),
           'loginPage': (context) => const LoginPage(),
-          'fighterImageUpload': (context) => const FighterImageUpload()
+          'fighterImageUpload': (context) => const FighterImageUpload(),
+          'createOfferFighter': (context) => const CreateOfferFighter()
         },
         home: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
@@ -127,5 +134,3 @@ class _MyAppState extends State<MyApp> {
         ));
   }
 }
-
-//TODO: Implement login redirection on login button

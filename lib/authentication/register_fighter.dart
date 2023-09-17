@@ -7,33 +7,8 @@ import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/general.dart';
+import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
-
-const List<String> genderList = <String>['Male', 'Female'];
-
-const List<String> weightList = <String>[
-  'Heavyweight',
-  'Cruiserweight',
-  'Light heavyweight',
-  'Super middleweight',
-  'Middleweight',
-  'Light middleweight',
-  'Welterweight',
-  'Light welterweight',
-  'Lightweight',
-  'Super featherweight',
-  'Featherweight',
-  'Super bantamweight',
-  'Bantamweight',
-  'Super flyweight',
-  'Flyweight',
-  'Light flyweight',
-  'Strawweight',
-];
-
-List<String> fighterTypeList = <String>['Boxer', 'MMA'];
-
-List<String> fighterStatusList = <String>['Professional', 'Amateur'];
 
 class RegisterFighter extends StatefulWidget {
   const RegisterFighter({super.key});

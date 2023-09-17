@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ftf/styles/styles.dart';
 
 class BlackButton extends StatelessWidget {
   final void Function()? onPressed;
@@ -14,14 +15,7 @@ class BlackButton extends StatelessWidget {
       width: 230,
       height: 60,
       child: Container(
-        decoration: BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.red.withOpacity(0.3),
-            spreadRadius: 1,
-            blurRadius: 7,
-            offset: const Offset(0, 4),
-          )
-        ]),
+        decoration: BoxDecoration(boxShadow: [containerShadowRed]),
         child: ElevatedButton(
             style: ButtonStyle(
               backgroundColor: const MaterialStatePropertyAll(Colors.black),
