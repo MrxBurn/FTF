@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
+import 'package:ftf/reusableWidgets/date_picker.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/search_input.dart';
@@ -18,9 +19,15 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   TextEditingController splitValue = TextEditingController(text: '0');
 
   TextEditingController opponentValue = TextEditingController(text: '0');
+
+  DateTime today = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     String searchValue = '';
+
+    TextEditingController pickerController = TextEditingController(
+        text: ('${today.day}-${today.month}-${today.year}').toString());
 
     return GestureDetector(
         onTapDown: (_) => FocusManager.instance.primaryFocus?.unfocus(),
@@ -146,6 +153,16 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   dropDownValue: weightList.first,
                   dropDownList: weightList,
                   dropDownName: 'Weight class*'),
+              DropDownWidget(
+                  //TODO: Implement fight date logic
+                  dropDownValue: weightList.first,
+                  dropDownList: weightList,
+                  dropDownName: 'Fight date*'),
+              DatePicker(
+                //TODO: Change date picker style
+                leadingText: 'Offer expiry date',
+                controller: pickerController,
+              )
             ]),
           ),
         ));
