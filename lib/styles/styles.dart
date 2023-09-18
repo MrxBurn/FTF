@@ -22,3 +22,5 @@ BoxShadow containerShadowWhite = BoxShadow(
   blurRadius: 7,
   offset: const Offset(0, 4),
 );
+
+EdgeInsets paddingLRT = const EdgeInsets.only(left: 24.0, right: 24, top: 16);
