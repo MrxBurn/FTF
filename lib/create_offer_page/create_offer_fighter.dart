@@ -17,7 +17,6 @@ class CreateOfferFighter extends StatefulWidget {
 }
 
 class _CreateOfferFighterState extends State<CreateOfferFighter> {
-  bool checked = false;
   TextEditingController splitValue = TextEditingController(text: '0');
 
   TextEditingController opponentValue = TextEditingController(text: '0');
@@ -26,17 +25,44 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   DateTime today = DateTime.now();
 
+  TextEditingController pickerController = TextEditingController();
+
   //TODO: Display file name when uploaded
 
   //TODO: Use Reusable login, register button in all occurences
 
+  String searchValue = 'mama';
+
+  bool fighterNotFoundChecked = false;
+  bool contractedChecked = false;
+
+  void onFighterNotFoundTick(bool? value) {
+    setState(() {
+      fighterNotFoundChecked = value!;
+      if (fighterNotFoundChecked == true) {
+        searchValue = '-';
+      } else {
+        searchValue = '';
+      }
+    });
+  }
+
+  //TODO: Implemnet this
+  void onContractedTick(bool? value) {
+    setState(() {
+      contractedChecked = value!;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pickerController = TextEditingController(
+        text: ('${today.day}-${today.month}-${today.year}').toString());
+  }
+
   @override
   Widget build(BuildContext context) {
-    String searchValue = '';
-
-    TextEditingController pickerController = TextEditingController(
-        text: ('${today.day}-${today.month}-${today.year}').toString());
-
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
         onPanDown: (_) {
@@ -68,7 +94,27 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   boxShadow: [containerShadowRed],
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
-                child: Text(searchValue),
+                child: Center(
+                  child: Text(
+                    searchValue,
+                    style: const TextStyle(fontSize: 28, color: Colors.red),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: paddingLRT,
+                child: const Text(
+                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                    textAlign: TextAlign.center,
+                    "Your Potential Opponent Doesn't Have FTF? No worries! You can still create your offer. Fill in the necessary information, and we'll generate a link for you to send to your potential opponent via social media."),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 24, right: 24),
+                child: CheckBoxWidget(
+                  checkValue: fighterNotFoundChecked,
+                  title: 'Fighter not found',
+                  onChanged: onFighterNotFoundTick,
+                ),
               ),
               const SizedBox(
                 height: 16,
@@ -86,9 +132,13 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Contract split',
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: contractedChecked == true
+                                  ? Colors.grey
+                                  : Colors.white),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -98,25 +148,39 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                                 SizedBox(
                                   width: 50,
                                   child: TextField(
+                                    readOnly: contractedChecked == true
+                                        ? true
+                                        : false,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
                                     controller: splitValue,
-                                    style: const TextStyle(
-                                        color: Colors.yellow, fontSize: 24),
+                                    style: TextStyle(
+                                        color: contractedChecked == true
+                                            ? Colors.grey
+                                            : Colors.yellow,
+                                        fontSize: 24),
                                   ),
                                 ),
                                 const SizedBox(
                                   height: 6,
                                 ),
-                                const Text(
+                                Text(
                                   'You',
-                                  style: TextStyle(fontSize: 12),
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: contractedChecked == true
+                                          ? Colors.grey
+                                          : Colors.white),
                                 ),
                               ],
                             ),
-                            const Text(
+                            Text(
                               '%',
-                              style: TextStyle(fontSize: 24),
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  color: contractedChecked == true
+                                      ? Colors.grey
+                                      : Colors.white),
                             ),
                             Column(
                               children: [
@@ -130,8 +194,11 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                                                 color: Colors.grey))),
                                     readOnly: true,
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: Colors.red, fontSize: 24),
+                                    style: TextStyle(
+                                        color: contractedChecked == true
+                                            ? Colors.grey
+                                            : Colors.red,
+                                        fontSize: 24),
                                   ),
                                 ),
                                 const SizedBox(
@@ -146,8 +213,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                           ],
                         ),
                         CheckBoxWidget(
-                          checkValue: checked,
+                          checkValue: contractedChecked,
                           title: 'N/A - Contracted',
+                          onChanged: onContractedTick,
                         )
                       ]),
                 ),

@@ -3,10 +3,13 @@
 import 'package:flutter/material.dart';
 
 class CheckBoxWidget extends StatefulWidget {
-  bool checkValue = false;
+  bool checkValue;
   String title;
 
-  CheckBoxWidget({Key? key, required this.checkValue, required this.title})
+  final Function? onChanged;
+
+  CheckBoxWidget(
+      {Key? key, required this.checkValue, required this.title, this.onChanged})
       : super(key: key);
 
   @override
@@ -23,9 +26,9 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
       title: Text(widget.title),
       value: widget.checkValue,
       onChanged: (newValue) {
-        setState(() {
-          widget.checkValue = newValue!;
-        });
+        if (widget.onChanged != null) {
+          widget.onChanged!(newValue);
+        }
       },
       controlAffinity: ListTileControlAffinity.leading,
     );
