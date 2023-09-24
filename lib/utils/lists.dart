@@ -24,4 +24,4 @@ List<String> fighterTypeList = <String>['Boxer', 'MMA'];
 
 List<String> fighterStatusList = <String>['Professional', 'Amateur'];
 
-List<String> rematchClause = ['Yes', 'No'];
+List<String> rematchClause = ['Yes', 'No', 'TBC'];

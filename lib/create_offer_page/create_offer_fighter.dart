@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
@@ -31,10 +32,27 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   //TODO: Use Reusable login, register button in all occurences
 
-  String searchValue = 'mama';
+  String searchValue = '';
 
   bool fighterNotFoundChecked = false;
   bool contractedChecked = false;
+
+  final CollectionReference _usersCollection =
+      FirebaseFirestore.instance.collection('users');
+
+  List fighterList = [];
+
+//TODO: Implement search
+  Future<void> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot =
+        await _usersCollection.where('route', isEqualTo: 'fighter').get();
+
+    // Get data from docs and convert map to List
+    fighterList = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    print(fighterList);
+  }
 
   void onFighterNotFoundTick(bool? value) {
     setState(() {
@@ -47,7 +65,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     });
   }
 
-  //TODO: Implemnet this
   void onContractedTick(bool? value) {
     setState(() {
       contractedChecked = value!;
@@ -82,6 +99,10 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
               SearchBarWidget(
                 searchValue: searchValue,
                 searchbarText: 'Search fighter...',
+              ),
+              TextButton(
+                onPressed: () => getData() /* TODO: Implement on submit */,
+                child: const Text('Test'),
               ),
               const SizedBox(
                 height: 16,
@@ -238,7 +259,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   dropDownList: weightList,
                   dropDownName: 'Fight date*'),
               DatePicker(
-                //TODO: Change date picker style
+                //TODO: Change date picker style - null-null-null if not picked anything
                 leadingText: 'Offer expiry date',
                 controller: pickerController,
               ),

@@ -18,7 +18,6 @@ class DatePicker extends StatefulWidget {
 class _DatePickerState extends State<DatePicker> {
   DateTime now = DateTime.now();
 
-//TODO: Implement picker
   @override
   Widget build(BuildContext context) {
     return Padding(
