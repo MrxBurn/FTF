@@ -8,6 +8,7 @@ import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/reusableWidgets/search_input.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/classes.dart';
 import 'package:ftf/utils/lists.dart';
 
 class CreateOfferFighter extends StatefulWidget {
@@ -40,18 +41,31 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   final CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('users');
 
-  List fighterList = [];
+  List<UserClass> fighterList = [];
 
-//TODO: Implement search
+//TODO: Implement search - try to cast to User
   Future<void> getData() async {
     // Get docs from collection reference
     QuerySnapshot querySnapshot =
         await _usersCollection.where('route', isEqualTo: 'fighter').get();
 
     // Get data from docs and convert map to List
-    fighterList = querySnapshot.docs.map((doc) => doc.data()).toList();
+    fighterList = querySnapshot.docs
+        .map((e) => UserClass(
+              weightClass: e['weightClass'],
+              firstName: e['firstName'],
+              lastName: e['lastName'],
+              fighterStatus: e['fighterStatus'],
+              route: e['route'],
+              nationality: e['nationality'],
+              gender: e['gender'],
+              description: e['description'],
+              fighterType: e['fighterType'],
+              profileImageURL: e['profileImageURL'],
+            ))
+        .toList();
 
-    print(fighterList);
+    print(fighterList[0].profileImageURL);
   }
 
   void onFighterNotFoundTick(bool? value) {
@@ -69,6 +83,13 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     setState(() {
       contractedChecked = value!;
     });
+  }
+
+  void onSearchBarTextChanged(String value) {
+    setState(() {
+      searchValue = value;
+    });
+    print(searchValue);
   }
 
   @override
@@ -93,16 +114,19 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                 'Send offer',
                 style: headerStyle,
               ),
+              TextButton(
+                onPressed: getData,
+                child: const Text('test'),
+              ),
               const SizedBox(
                 height: 16,
               ),
               SearchBarWidget(
+                onTap: getData,
+                suggestions: fighterList,
                 searchValue: searchValue,
                 searchbarText: 'Search fighter...',
-              ),
-              TextButton(
-                onPressed: () => getData() /* TODO: Implement on submit */,
-                child: const Text('Test'),
+                onChanged: onSearchBarTextChanged,
               ),
               const SizedBox(
                 height: 16,

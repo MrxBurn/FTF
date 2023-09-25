@@ -20,11 +20,11 @@ class FighterImageUpload extends StatefulWidget {
 class _FighterImageUploadState extends State<FighterImageUpload> {
   String firstName = '';
 
-  File? image;
+  File image = File('');
 
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   CollectionReference fighterUsers =
-      FirebaseFirestore.instance.collection('fighterUsers');
+      FirebaseFirestore.instance.collection('users');
 
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
@@ -78,6 +78,8 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
       if (context.mounted) {
         Navigator.pop(context);
       }
+
+      print(image);
     }
 
     return Scaffold(
@@ -161,10 +163,11 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                               )),
                         ],
                       ),
+                      //TODO: Fix image display here
                       image != null
                           ? Center(
                               child: CircleAvatar(
-                              backgroundImage: FileImage(image!),
+                              backgroundImage: FileImage(image),
                               radius: 100,
                             ))
                           : const Center(
