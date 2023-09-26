@@ -43,6 +43,10 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   List<UserClass> fighterList = [];
 
+  bool displaySuggestions = false;
+
+  ScrollController scrollController = ScrollController();
+
 //TODO: Implement search - try to cast to User
   Future<void> getData() async {
     // Get docs from collection reference
@@ -65,7 +69,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
             ))
         .toList();
 
-    print(fighterList[0].profileImageURL);
+    setState(() {
+      displaySuggestions = true;
+    });
   }
 
   void onFighterNotFoundTick(bool? value) {
@@ -87,9 +93,15 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   void onSearchBarTextChanged(String value) {
     setState(() {
-      searchValue = value;
+      final x = fighterList
+          .where((element) => element.firstName.contains(value))
+          .toList();
+      fighterList.clear();
+
+      fighterList.addAll(x);
+
+      print(fighterList);
     });
-    print(searchValue);
   }
 
   @override
@@ -105,23 +117,29 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         behavior: HitTestBehavior.opaque,
         onPanDown: (_) {
           FocusScope.of(context).requestFocus(FocusNode());
+          setState(() {
+            displaySuggestions = false;
+          });
         },
         child: Scaffold(
           body: SingleChildScrollView(
+            controller: scrollController,
             child: Column(children: [
               LogoHeader(backRequired: true),
               const Text(
                 'Send offer',
                 style: headerStyle,
               ),
-              TextButton(
-                onPressed: getData,
-                child: const Text('test'),
-              ),
+              // TextButton(
+              //   onPressed: getData,
+              //   child: const Text('test'),
+              // ),
               const SizedBox(
                 height: 16,
               ),
               SearchBarWidget(
+                scrollController: scrollController,
+                displaySuggestions: displaySuggestions,
                 onTap: getData,
                 suggestions: fighterList,
                 searchValue: searchValue,

@@ -78,8 +78,6 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
       if (context.mounted) {
         Navigator.pop(context);
       }
-
-      print(image);
     }
 
     return Scaffold(
