@@ -43,12 +43,15 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   List<UserClass> fighterList = [];
 
+  List<UserClass> queriedList = [];
+
   bool displaySuggestions = false;
 
   ScrollController scrollController = ScrollController();
 
 //TODO: Implement search - try to cast to User
   Future<void> getData() async {
+    queriedList.clear();
     // Get docs from collection reference
     QuerySnapshot querySnapshot =
         await _usersCollection.where('route', isEqualTo: 'fighter').get();
@@ -70,6 +73,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         .toList();
 
     setState(() {
+      queriedList.addAll(fighterList);
       displaySuggestions = true;
     });
   }
@@ -93,14 +97,16 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   void onSearchBarTextChanged(String value) {
     setState(() {
-      final x = fighterList
-          .where((element) => element.firstName.contains(value))
-          .toList();
-      fighterList.clear();
-
-      fighterList.addAll(x);
-
-      print(fighterList);
+      if (value.isNotEmpty) {
+        queriedList = fighterList
+            .where((element) =>
+                element.firstName.toLowerCase().contains(value.toLowerCase()) ||
+                element.lastName.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+      } else {
+        queriedList.clear();
+        getData();
+      }
     });
   }
 
@@ -113,257 +119,259 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onPanDown: (_) {
-          FocusScope.of(context).requestFocus(FocusNode());
-          setState(() {
-            displaySuggestions = false;
-          });
-        },
-        child: Scaffold(
-          body: SingleChildScrollView(
-            controller: scrollController,
-            child: Column(children: [
-              LogoHeader(backRequired: true),
-              const Text(
-                'Send offer',
-                style: headerStyle,
-              ),
-              // TextButton(
-              //   onPressed: getData,
-              //   child: const Text('test'),
-              // ),
-              const SizedBox(
-                height: 16,
-              ),
-              SearchBarWidget(
-                scrollController: scrollController,
-                displaySuggestions: displaySuggestions,
-                onTap: getData,
-                suggestions: fighterList,
-                searchValue: searchValue,
-                searchbarText: 'Search fighter...',
-                onChanged: onSearchBarTextChanged,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Container(
-                width: 205,
-                height: 68,
-                decoration: BoxDecoration(
-                  color: const Color(lighterBlack),
-                  boxShadow: [containerShadowRed],
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Center(
-                  child: Text(
-                    searchValue,
-                    style: const TextStyle(fontSize: 28, color: Colors.red),
+    return Scaffold(
+      body: SingleChildScrollView(
+        controller: scrollController,
+        child: Column(children: [
+          LogoHeader(backRequired: true),
+          const Text(
+            'Send offer',
+            style: headerStyle,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          SearchBarWidget(
+            scrollController: scrollController,
+            displaySuggestions: displaySuggestions,
+            onTap: getData,
+            suggestions: queriedList,
+            searchValue: searchValue,
+            searchbarText: 'Search fighter...',
+            onChanged: onSearchBarTextChanged,
+          ),
+          GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onPanDown: (_) {
+                FocusScope.of(context).requestFocus(FocusNode());
+                setState(() {
+                  displaySuggestions = false;
+                });
+              },
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 16,
                   ),
-                ),
-              ),
-              Padding(
-                padding: paddingLRT,
-                child: const Text(
-                    style: TextStyle(fontSize: 10, color: Colors.grey),
-                    textAlign: TextAlign.center,
-                    "Your Potential Opponent Doesn't Have FTF? No worries! You can still create your offer. Fill in the necessary information, and we'll generate a link for you to send to your potential opponent via social media."),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 24, right: 24),
-                child: CheckBoxWidget(
-                  checkValue: fighterNotFoundChecked,
-                  title: 'Fighter not found',
-                  onChanged: onFighterNotFoundTick,
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Container(
-                constraints: const BoxConstraints(
-                    minWidth: 350, maxWidth: 350, minHeight: 150),
-                decoration: BoxDecoration(
-                  color: const Color(lighterBlack),
-                  boxShadow: [containerShadowWhite],
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Contract split',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: contractedChecked == true
-                                  ? Colors.grey
-                                  : Colors.white),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  Container(
+                    width: 205,
+                    height: 68,
+                    decoration: BoxDecoration(
+                      color: const Color(lighterBlack),
+                      boxShadow: [containerShadowRed],
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        searchValue,
+                        style: const TextStyle(fontSize: 28, color: Colors.red),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: paddingLRT,
+                    child: const Text(
+                        style: TextStyle(fontSize: 10, color: Colors.grey),
+                        textAlign: TextAlign.center,
+                        "Your Potential Opponent Doesn't Have FTF? No worries! You can still create your offer. Fill in the necessary information, and we'll generate a link for you to send to your potential opponent via social media."),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 24, right: 24),
+                    child: CheckBoxWidget(
+                      checkValue: fighterNotFoundChecked,
+                      title: 'Fighter not found',
+                      onChanged: onFighterNotFoundTick,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Container(
+                    constraints: const BoxConstraints(
+                        minWidth: 350, maxWidth: 350, minHeight: 150),
+                    decoration: BoxDecoration(
+                      color: const Color(lighterBlack),
+                      boxShadow: [containerShadowWhite],
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: 50,
-                                  child: TextField(
-                                    readOnly: contractedChecked == true
-                                        ? true
-                                        : false,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
-                                    controller: splitValue,
-                                    style: TextStyle(
-                                        color: contractedChecked == true
-                                            ? Colors.grey
-                                            : Colors.yellow,
-                                        fontSize: 24),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                Text(
-                                  'You',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: contractedChecked == true
-                                          ? Colors.grey
-                                          : Colors.white),
-                                ),
-                              ],
-                            ),
                             Text(
-                              '%',
+                              'Contract split',
                               style: TextStyle(
-                                  fontSize: 24,
+                                  fontSize: 20,
                                   color: contractedChecked == true
                                       ? Colors.grey
                                       : Colors.white),
                             ),
-                            Column(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                SizedBox(
-                                  width: 50,
-                                  child: TextField(
-                                    controller: opponentValue,
-                                    decoration: const InputDecoration(
-                                        focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.grey))),
-                                    readOnly: true,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: contractedChecked == true
-                                            ? Colors.grey
-                                            : Colors.red,
-                                        fontSize: 24),
-                                  ),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      width: 50,
+                                      child: TextField(
+                                        readOnly: contractedChecked == true
+                                            ? true
+                                            : false,
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        controller: splitValue,
+                                        style: TextStyle(
+                                            color: contractedChecked == true
+                                                ? Colors.grey
+                                                : Colors.yellow,
+                                            fontSize: 24),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 6,
+                                    ),
+                                    Text(
+                                      'You',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: contractedChecked == true
+                                              ? Colors.grey
+                                              : Colors.white),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(
-                                  height: 6,
+                                Text(
+                                  '%',
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: contractedChecked == true
+                                          ? Colors.grey
+                                          : Colors.white),
                                 ),
-                                const Text(
-                                  'Opponent',
-                                  style: TextStyle(fontSize: 12),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      width: 50,
+                                      child: TextField(
+                                        controller: opponentValue,
+                                        decoration: const InputDecoration(
+                                            focusedBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey))),
+                                        readOnly: true,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: contractedChecked == true
+                                                ? Colors.grey
+                                                : Colors.red,
+                                            fontSize: 24),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 6,
+                                    ),
+                                    const Text(
+                                      'Opponent',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                        CheckBoxWidget(
-                          checkValue: contractedChecked,
-                          title: 'N/A - Contracted',
-                          onChanged: onContractedTick,
-                        )
-                      ]),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              DropDownWidget(
-                dropDownList: rematchClause,
-                dropDownValue: rematchClause.first,
-                dropDownName: 'Rematch clause*',
-              ),
-              DropDownWidget(
-                  dropDownValue: weightList.first,
-                  dropDownList: weightList,
-                  dropDownName: 'Weight class*'),
-              DropDownWidget(
-                  //TODO: Implement fight date logic
-                  dropDownValue: weightList.first,
-                  dropDownList: weightList,
-                  dropDownName: 'Fight date*'),
-              DatePicker(
-                //TODO: Change date picker style - null-null-null if not picked anything
-                leadingText: 'Offer expiry date',
-                controller: pickerController,
-              ),
-              Padding(
-                padding: paddingLRT,
-                child: TextFormField(
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(200),
-                  ],
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  controller: bioController,
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 25.0, horizontal: 10.0),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)),
-                      labelStyle: TextStyle(color: Colors.grey),
-                      hintText: 'Write a message...(200 characters)'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 24, right: 24, top: 16),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: ElevatedButton.icon(
-                    onPressed: () => {},
-                    label: const Text('Attach callout video'),
-                    icon: const Icon(Icons.attach_file),
+                            CheckBoxWidget(
+                              checkValue: contractedChecked,
+                              title: 'N/A - Contracted',
+                              onChanged: onContractedTick,
+                            )
+                          ]),
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: paddingLRT,
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.image,
-                      color: Colors.grey,
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: paddingLRT,
-                child: const Text(
-                    style: TextStyle(fontSize: 10, color: Colors.grey),
-                    textAlign: TextAlign.center,
-                    "Fans can vote and see your offer details, including messages and videos. Financials and market value will be privately discussed between you, your potential opponent, your manager/promoter, and your potential opponent's manager/promoter in our secure chat feature."),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              BlackRoundedButton(
-                isLoading: false /*TODO: Implement is loading */,
-                text: 'Send offer',
-                onPressed: () => {} /* TODO: Implement on submit */,
-              )
-            ]),
-          ),
-        ));
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  DropDownWidget(
+                    dropDownList: rematchClause,
+                    dropDownValue: rematchClause.first,
+                    dropDownName: 'Rematch clause*',
+                  ),
+                  DropDownWidget(
+                      dropDownValue: weightList.first,
+                      dropDownList: weightList,
+                      dropDownName: 'Weight class*'),
+                  DropDownWidget(
+                      //TODO: Implement fight date logic
+                      dropDownValue: weightList.first,
+                      dropDownList: weightList,
+                      dropDownName: 'Fight date*'),
+                  DatePicker(
+                    //TODO: Change date picker style - null-null-null if not picked anything
+                    leadingText: 'Offer expiry date',
+                    controller: pickerController,
+                  ),
+                  Padding(
+                    padding: paddingLRT,
+                    child: TextFormField(
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(200),
+                      ],
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      controller: bioController,
+                      decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 25.0, horizontal: 10.0),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          labelStyle: TextStyle(color: Colors.grey),
+                          hintText: 'Write a message...(200 characters)'),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 24, right: 24, top: 16),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: ElevatedButton.icon(
+                        onPressed: () => {},
+                        label: const Text('Attach callout video'),
+                        icon: const Icon(Icons.attach_file),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: paddingLRT,
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.image,
+                          color: Colors.grey,
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: paddingLRT,
+                    child: const Text(
+                        style: TextStyle(fontSize: 10, color: Colors.grey),
+                        textAlign: TextAlign.center,
+                        "Fans can vote and see your offer details, including messages and videos. Financials and market value will be privately discussed between you, your potential opponent, your manager/promoter, and your potential opponent's manager/promoter in our secure chat feature."),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  BlackRoundedButton(
+                    isLoading: false /*TODO: Implement is loading */,
+                    text: 'Send offer',
+                    onPressed: () => {} /* TODO: Implement on submit */,
+                  )
+                ],
+              ))
+        ]),
+      ),
+    );
   }
 }

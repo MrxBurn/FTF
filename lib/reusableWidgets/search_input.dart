@@ -46,25 +46,36 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           padding: const EdgeInsets.only(left: 24, right: 24),
           child: SizedBox(
             width: double.infinity,
-            height: widget.displaySuggestions ? 210 : 50,
+            height: widget.displaySuggestions ? 215 : 65,
             child: Column(
               children: [
-                TextField(
-                  controller: _textEditingController,
-                  decoration: InputDecoration(
-                    hintText: widget.searchbarText,
-                  ),
-                  onTap: () async {
-                    await widget.onTap();
+                Material(
+                  elevation: 10.0,
+                  shadowColor: Colors.red,
+                  child: TextField(
+                    controller: _textEditingController,
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(lighterBlack),
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: const Icon(Icons.arrow_downward),
+                        hintText: widget.searchbarText,
+                        border: const UnderlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          borderSide: BorderSide.none,
+                        )),
+                    onTap: () async {
+                      await widget.onTap();
 
-                    if (context.mounted) {
-                      widget.scrollController
-                          .jumpTo(MediaQuery.of(context).size.height / 2.5);
-                    }
-                  },
-                  onChanged: (value) {
-                    widget.onChanged(value);
-                  },
+                      if (context.mounted) {
+                        widget.scrollController
+                            .jumpTo(MediaQuery.of(context).size.height / 2.5);
+                      }
+                    },
+                    onChanged: (value) {
+                      widget.onChanged(value);
+                    },
+                  ),
                 ),
                 widget.displaySuggestions
                     ? FadeIn(
@@ -80,6 +91,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(15),
                                     bottomRight: Radius.circular(15))),
+
+                            //TODO: Implement on click of list tile to add in the fighter name box and store it for creating the offer
                             child: ListView.builder(
                                 itemCount: widget.suggestions.length,
                                 itemBuilder: (context, index) {
@@ -90,7 +103,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                       radius: 20,
                                     ),
                                     title: Text(
-                                        widget.suggestions[index].firstName),
+                                        widget.suggestions[index].firstName +
+                                            " " +
+                                            widget.suggestions[index].lastName),
                                     onTap: () {
                                       setState(() {});
                                     },
