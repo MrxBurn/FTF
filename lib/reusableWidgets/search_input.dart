@@ -7,8 +7,6 @@ import 'package:ftf/styles/styles.dart';
 class SearchBarWidget extends StatefulWidget {
   String searchbarText = '';
 
-  String searchValue;
-
   Function onTap;
 
   List suggestions;
@@ -19,17 +17,22 @@ class SearchBarWidget extends StatefulWidget {
 
   ScrollController scrollController;
 
+  Function onListTileTap;
+
+  Function onSelectedSuggestion;
+
   //TODO: Find a way to get the value from controller
 
   SearchBarWidget(
       {Key? key,
       required this.searchbarText,
-      required this.searchValue,
       required this.suggestions,
       required this.onTap,
       required this.onChanged,
       required this.displaySuggestions,
-      required this.scrollController})
+      required this.scrollController,
+      required this.onListTileTap,
+      required this.onSelectedSuggestion})
       : super(key: key);
 
   @override
@@ -107,7 +110,18 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                             " " +
                                             widget.suggestions[index].lastName),
                                     onTap: () {
-                                      setState(() {});
+                                      setState(() {
+                                        widget.onSelectedSuggestion(
+                                            widget.suggestions[index]);
+
+                                        widget.onListTileTap(widget
+                                                .suggestions[index].firstName +
+                                            " " +
+                                            widget.suggestions[index].lastName);
+
+                                        FocusScope.of(context).unfocus();
+                                        _textEditingController.clear();
+                                      });
                                     },
                                   );
                                 }),

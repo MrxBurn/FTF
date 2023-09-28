@@ -20,7 +20,7 @@ class FighterImageUpload extends StatefulWidget {
 class _FighterImageUploadState extends State<FighterImageUpload> {
   String firstName = '';
 
-  File image = File('');
+  File? image;
 
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   CollectionReference fighterUsers =
@@ -165,7 +165,7 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                       image != null
                           ? Center(
                               child: CircleAvatar(
-                              backgroundImage: FileImage(image),
+                              backgroundImage: FileImage(image!),
                               radius: 100,
                             ))
                           : const Center(

@@ -49,6 +49,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   ScrollController scrollController = ScrollController();
 
+  UserClass selectedSuggestion = UserClass();
+
 //TODO: Implement search - try to cast to User
   Future<void> getData() async {
     queriedList.clear();
@@ -86,6 +88,20 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       } else {
         searchValue = '';
       }
+    });
+  }
+
+  void onListTileTap(String value) {
+    setState(() {
+      searchValue = value;
+      displaySuggestions = false;
+    });
+  }
+
+  void onSelectedSuggestion(UserClass value) {
+    setState(() {
+      selectedSuggestion = value;
+      displaySuggestions = false;
     });
   }
 
@@ -132,11 +148,12 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
             height: 16,
           ),
           SearchBarWidget(
+            onListTileTap: onListTileTap,
+            onSelectedSuggestion: onSelectedSuggestion,
             scrollController: scrollController,
             displaySuggestions: displaySuggestions,
             onTap: getData,
             suggestions: queriedList,
-            searchValue: searchValue,
             searchbarText: 'Search fighter...',
             onChanged: onSearchBarTextChanged,
           ),
