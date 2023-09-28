@@ -7,6 +7,7 @@ import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/reusableWidgets/search_input.dart';
+import 'package:ftf/reusableWidgets/month_year_picker.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/classes.dart';
 import 'package:ftf/utils/lists.dart';
@@ -28,6 +29,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   DateTime today = DateTime.now();
 
   TextEditingController pickerController = TextEditingController();
+
+  TextEditingController yearController = TextEditingController();
 
   //TODO: Display file name when uploaded
 
@@ -316,14 +319,13 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                       dropDownValue: weightList.first,
                       dropDownList: weightList,
                       dropDownName: 'Weight class*'),
-                  DropDownWidget(
-                      //TODO: Implement fight date logic
-                      dropDownValue: weightList.first,
-                      dropDownList: weightList,
-                      dropDownName: 'Fight date*'),
+                  YearPickerWidget(
+                    leadingText: 'Fight date*',
+                    controller: yearController,
+                  ),
                   DatePicker(
                     //TODO: Change date picker style - null-null-null if not picked anything
-                    leadingText: 'Offer expiry date',
+                    leadingText: 'Offer expiry date*',
                     controller: pickerController,
                   ),
                   Padding(

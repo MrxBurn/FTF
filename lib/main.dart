@@ -12,6 +12,7 @@ import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
+            primaryColorDark: Colors.red,
             scaffoldBackgroundColor: Colors.black,
             textTheme: const TextTheme(
               bodyMedium: TextStyle(
@@ -88,7 +90,9 @@ class _MyAppState extends State<MyApp> {
             textSelectionTheme: const TextSelectionThemeData(
                 cursorColor: Colors.white,
                 selectionColor: Colors.white,
-                selectionHandleColor: Colors.white)),
+                selectionHandleColor: Colors.white),
+            datePickerTheme: const DatePickerThemeData(
+                backgroundColor: Color(lighterBlack))),
         routes: {
           'fighterHome': (context) => const FighterHomePage(),
           'fanHome': (context) => const FanHomePage(),
@@ -99,6 +103,9 @@ class _MyAppState extends State<MyApp> {
           'fighterImageUpload': (context) => const FighterImageUpload(),
           'createOfferFighter': (context) => const CreateOfferFighter()
         },
+        localizationsDelegates: const [
+          MonthYearPickerLocalizations.delegate,
+        ],
         home: FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
               .collection('users')
