@@ -56,43 +56,42 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-            primaryColorDark: Colors.red,
-            scaffoldBackgroundColor: Colors.black,
-            textTheme: const TextTheme(
-              bodyMedium: TextStyle(
-                color: Colors.white,
-              ),
-              bodyLarge: TextStyle(
-                color: Colors.white,
-              ),
-              bodySmall: TextStyle(
-                color: Colors.white,
-              ),
-              labelLarge: TextStyle(
-                color: Colors.white,
-              ),
+          primaryColor: Colors.black,
+          primaryColorDark: Colors.red,
+          scaffoldBackgroundColor: Colors.black,
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(
+              color: Colors.white,
             ),
-            inputDecorationTheme: const InputDecorationTheme(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey))),
-            fontFamily: 'Roboto',
-            useMaterial3: true,
-            colorScheme: const ColorScheme.dark(),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ButtonStyle(
-                  overlayColor:
-                      MaterialStatePropertyAll(Colors.red.withOpacity(0.2)),
-                  backgroundColor:
-                      const MaterialStatePropertyAll(Color(lighterBlack)),
-                  foregroundColor:
-                      const MaterialStatePropertyAll(Colors.white)),
+            bodyLarge: TextStyle(
+              color: Colors.white,
             ),
-            textSelectionTheme: const TextSelectionThemeData(
-                cursorColor: Colors.white,
-                selectionColor: Colors.white,
-                selectionHandleColor: Colors.white),
-            datePickerTheme: const DatePickerThemeData(
-                backgroundColor: Color(lighterBlack))),
+            bodySmall: TextStyle(
+              color: Colors.white,
+            ),
+            labelLarge: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          inputDecorationTheme: const InputDecorationTheme(
+              focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey))),
+          fontFamily: 'Roboto',
+          useMaterial3: true,
+          colorScheme: const ColorScheme.dark(),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                overlayColor:
+                    MaterialStatePropertyAll(Colors.red.withOpacity(0.2)),
+                backgroundColor:
+                    const MaterialStatePropertyAll(Color(lighterBlack)),
+                foregroundColor: const MaterialStatePropertyAll(Colors.white)),
+          ),
+          textSelectionTheme: const TextSelectionThemeData(
+              cursorColor: Colors.white,
+              selectionColor: Colors.white,
+              selectionHandleColor: Colors.white),
+        ),
         routes: {
           'fighterHome': (context) => const FighterHomePage(),
           'fanHome': (context) => const FanHomePage(),

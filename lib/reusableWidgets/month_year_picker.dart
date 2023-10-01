@@ -15,6 +15,43 @@ class YearPickerWidget extends StatefulWidget {
 }
 
 class _YearPickerWidgetState extends State<YearPickerWidget> {
+  Future<void> onPressed({
+    required BuildContext context,
+  }) async {
+    final monthSelected = await showMonthYearPicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2019),
+      lastDate: DateTime(2100),
+      builder: (context, child) {
+        //TODO: Implement on selected month and year
+        return Theme(
+            data: ThemeData(
+                colorScheme: ColorScheme.fromSeed(
+                    seedColor: Colors.black,
+                    brightness: Brightness.dark,
+                    background: Colors.black,
+                    surface: Colors.black,
+                    surfaceTint: Colors.black,
+                    tertiary: Colors.black,
+                    tertiaryContainer: Colors.black,
+                    primary: Colors.white, //cancel & ok buttons
+                    primaryContainer: Colors.black,
+                    onSecondary: Colors.black,
+                    secondary: Colors.yellow, //month selection
+                    secondaryContainer: Colors.black),
+                dialogTheme: const DialogTheme(
+                  backgroundColor: Colors.black,
+                ),
+                buttonTheme: const ButtonThemeData(buttonColor: Colors.red)),
+            child: child!);
+      },
+    );
+    setState(() {
+      widget.controller.text = '${monthSelected?.month}-${monthSelected?.year}';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,43 +71,8 @@ class _YearPickerWidgetState extends State<YearPickerWidget> {
                   contentPadding: EdgeInsets.zero,
                 ),
                 controller: widget.controller,
-                onTap: () => showMonthYearPicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2019),
-                    lastDate: DateTime(2100),
-                    builder: (context, child) {
-                      //TODO: Implement on selected month and year
-                      return Theme(
-                          data: ThemeData(
-                              colorScheme: ColorScheme.fromSeed(
-                                  seedColor: Colors.black,
-                                  brightness: Brightness.dark,
-                                  background: Colors.black,
-                                  surface: Colors.black,
-                                  surfaceTint: Colors.black,
-                                  tertiary: Colors.black,
-                                  tertiaryContainer: Colors.black,
-                                  primary: Colors.white, //cancel & ok buttons
-                                  primaryContainer: Colors.black,
-                                  onSecondary: Colors.black,
-                                  secondary: Colors.yellow, //month selection
-                                  secondaryContainer: Colors.black),
-                              dialogTheme: const DialogTheme(
-                                backgroundColor: Colors.black,
-                              ),
-                              buttonTheme: const ButtonThemeData(
-                                  buttonColor: Colors.red)),
-                          child: child!);
-                    })),
+                onTap: () => onPressed(context: context)),
           )
         ]));
   }
 }
-
-
-// YearPicker(
-//                   firstDate: DateTime.now(),
-//                   lastDate: DateTime(2100),
-//                   selectedDate: DateTime.now(),
-//                   onChanged: (date) {})

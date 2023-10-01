@@ -134,6 +134,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     super.initState();
     pickerController = TextEditingController(
         text: ('${today.day}-${today.month}-${today.year}').toString());
+
+    yearController = TextEditingController(
+        text: ('${today.month}-${today.year}').toString());
   }
 
   @override
