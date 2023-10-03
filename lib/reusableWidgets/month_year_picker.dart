@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:month_year_picker/month_year_picker.dart';
@@ -15,16 +17,17 @@ class YearPickerWidget extends StatefulWidget {
 }
 
 class _YearPickerWidgetState extends State<YearPickerWidget> {
+  DateTime now = DateTime.now();
+
   Future<void> onPressed({
     required BuildContext context,
   }) async {
     final monthSelected = await showMonthYearPicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2019),
+      initialDate: now,
+      firstDate: now,
       lastDate: DateTime(2100),
       builder: (context, child) {
-        //TODO: Implement on selected month and year
         return Theme(
             data: ThemeData(
                 colorScheme: ColorScheme.fromSeed(
@@ -48,7 +51,11 @@ class _YearPickerWidgetState extends State<YearPickerWidget> {
       },
     );
     setState(() {
-      widget.controller.text = '${monthSelected?.month}-${monthSelected?.year}';
+      if (monthSelected != null) {
+        widget.controller.text = '${monthSelected.month}-${monthSelected.year}';
+      } else {
+        widget.controller.text = '${now.month}-${now.year}';
+      }
     });
   }
 

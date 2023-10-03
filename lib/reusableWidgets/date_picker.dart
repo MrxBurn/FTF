@@ -18,6 +18,41 @@ class DatePicker extends StatefulWidget {
 class _DatePickerState extends State<DatePicker> {
   DateTime now = DateTime.now();
 
+  Future onPressed({required BuildContext context}) async {
+    DateTime? datePicked = await showDatePicker(
+        context: context,
+        initialDate: now,
+        firstDate: now,
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+              data: ThemeData().copyWith(
+                  colorScheme: ColorScheme.fromSeed(
+                      seedColor: Colors.black,
+                      brightness: Brightness.dark,
+                      background: Colors.black,
+                      surface: Colors.black,
+                      surfaceTint: Colors.black,
+                      tertiary: Colors.black,
+                      tertiaryContainer: Colors.black,
+                      primary: Colors.yellow, //cancel & ok buttons
+                      primaryContainer: Colors.black,
+                      onSecondary: Colors.black,
+                      // secondary: Colors.yellow, //month selection
+                      secondaryContainer: Colors.black)),
+              child: child!);
+        });
+
+    setState(() {
+      if (datePicked != null) {
+        widget.controller.text =
+            '${datePicked.day}-${datePicked.month}-${datePicked.year}';
+      } else {
+        widget.controller.text = now as String;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -32,37 +67,12 @@ class _DatePickerState extends State<DatePicker> {
           SizedBox(
               width: 100,
               child: TextField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.zero,
-                ),
-                controller: widget.controller,
-                onTap: () => showDatePicker(
-                    context: context,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2100),
-                    builder: (context, child) {
-                      return Theme(
-                          data: ThemeData().copyWith(
-                              colorScheme: ColorScheme.fromSeed(
-                                  seedColor: Colors.black,
-                                  brightness: Brightness.dark,
-                                  background: Colors.black,
-                                  surface: Colors.black,
-                                  surfaceTint: Colors.black,
-                                  tertiary: Colors.black,
-                                  tertiaryContainer: Colors.black,
-                                  primary: Colors.yellow, //cancel & ok buttons
-                                  primaryContainer: Colors.black,
-                                  onSecondary: Colors.black,
-                                  // secondary: Colors.yellow, //month selection
-                                  secondaryContainer: Colors.black)),
-                          child: child!);
-                    }).then(
-                  (value) => setState(() => widget.controller.text =
-                      '${value?.day}-${value?.month}-${value?.year}'),
-                ),
-              ))
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  controller: widget.controller,
+                  onTap: () => onPressed(context: context)))
         ],
       ),
     );

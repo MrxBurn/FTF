@@ -108,52 +108,53 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                               style: const ButtonStyle(
                                   splashFactory: NoSplash.splashFactory),
                               onPressed: () => showModalBottomSheet(
-                                  context: context,
-                                  builder: ((context) {
-                                    return SizedBox(
-                                      height: 100,
-                                      child: Column(
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () =>
-                                                uploadImage(ImageSource.camera),
-                                            style: ElevatedButton.styleFrom(
-                                                elevation: 0,
-                                                backgroundColor:
-                                                    Colors.transparent),
-                                            child: const Row(
-                                              children: [
-                                                Icon(Icons.camera_alt),
-                                                Text(
-                                                  'Camera',
-                                                  textAlign: TextAlign.left,
-                                                ),
-                                              ],
+                                    context: context,
+                                    builder: ((context) {
+                                      return SizedBox(
+                                        height: 100,
+                                        child: Column(
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () => uploadImage(
+                                                  ImageSource.camera),
+                                              style: ElevatedButton.styleFrom(
+                                                  elevation: 0,
+                                                  backgroundColor:
+                                                      Colors.transparent),
+                                              child: const Row(
+                                                children: [
+                                                  Icon(Icons.camera_alt),
+                                                  Text(
+                                                    'Camera',
+                                                    textAlign: TextAlign.left,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () => uploadImage(
-                                                ImageSource.gallery),
-                                            style: ElevatedButton.styleFrom(
-                                                elevation: 0,
-                                                backgroundColor:
-                                                    Colors.transparent),
-                                            child: const Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.image,
-                                                ),
-                                                Text(
-                                                  'Gallery',
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ],
+                                            ElevatedButton(
+                                              onPressed: () => uploadImage(
+                                                  ImageSource.gallery),
+                                              style: ElevatedButton.styleFrom(
+                                                  elevation: 0,
+                                                  backgroundColor:
+                                                      Colors.transparent),
+                                              child: const Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.image,
+                                                  ),
+                                                  Text(
+                                                    'Gallery',
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  })),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                                  ),
                               child: const Text(
                                 'Upload',
                                 style:

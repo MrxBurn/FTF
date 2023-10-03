@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +13,8 @@ import 'package:ftf/reusableWidgets/month_year_picker.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/classes.dart';
 import 'package:ftf/utils/lists.dart';
+import 'package:ftf/utils/snack_bar.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateOfferFighter extends StatefulWidget {
   const CreateOfferFighter({super.key});
@@ -54,7 +58,12 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   UserClass selectedSuggestion = UserClass();
 
-//TODO: Implement search - try to cast to User
+  String submitButton = 'Send offer';
+
+  String videoName = '';
+
+  File? video;
+
   Future<void> getData() async {
     queriedList.clear();
     // Get docs from collection reference
@@ -88,8 +97,10 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       fighterNotFoundChecked = value!;
       if (fighterNotFoundChecked == true) {
         searchValue = '-';
+        submitButton = 'Create offer';
       } else {
         searchValue = '';
+        submitButton = 'Send offer';
       }
     });
   }
@@ -139,6 +150,33 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         text: ('${today.month}-${today.year}').toString());
   }
 
+  void uploadVideo(ImageSource source) async {
+    try {
+      var video = await ImagePicker().pickVideo(source: source);
+
+      if (video == null) return;
+
+      final videoTemporary = File(video.path);
+
+      setState(() {
+        this.video = videoTemporary;
+        videoName = video.name;
+      });
+
+      if (context.mounted) {
+        Navigator.pushReplacementNamed(context, 'fighterHome');
+      }
+    } on PlatformException catch (e) {
+      if (context.mounted) {
+        showSnackBar(e.toString(), context);
+      }
+    }
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+  }
+
+//TODO: find out why the state only updates once for the name of video
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -327,7 +365,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                     controller: yearController,
                   ),
                   DatePicker(
-                    //TODO: Change date picker style - null-null-null if not picked anything
                     leadingText: 'Offer expiry date*',
                     controller: pickerController,
                   ),
@@ -358,7 +395,10 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: ElevatedButton.icon(
-                        onPressed: () => {},
+                        onPressed: () async {
+                          return await chooseUploadOption(
+                              context: context, uploadVideo: uploadVideo);
+                        },
                         label: const Text('Attach callout video'),
                         icon: const Icon(Icons.attach_file),
                       ),
@@ -366,11 +406,19 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   ),
                   Padding(
                     padding: paddingLRT,
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.image,
                           color: Colors.grey,
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            videoName,
+                            overflow: TextOverflow.ellipsis,
+                            style: bodyStyle,
+                          ),
                         )
                       ],
                     ),
@@ -387,7 +435,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   ),
                   BlackRoundedButton(
                     isLoading: false /*TODO: Implement is loading */,
-                    text: 'Send offer',
+                    text: submitButton,
                     onPressed: () => {} /* TODO: Implement on submit */,
                   )
                 ],
@@ -396,4 +444,51 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       ),
     );
   }
+}
+
+//TODO: Use this in fighter_image_upload.dart and move to separate file
+chooseUploadOption(
+    {required BuildContext context, required Function uploadVideo}) async {
+  await showModalBottomSheet(
+    context: context,
+    builder: ((context) {
+      return SizedBox(
+        height: 100,
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () => uploadVideo(ImageSource.camera),
+              style: ElevatedButton.styleFrom(
+                  elevation: 0, backgroundColor: Colors.transparent),
+              child: const Row(
+                children: [
+                  Icon(Icons.camera_alt),
+                  Text(
+                    'Camera',
+                    textAlign: TextAlign.left,
+                  ),
+                ],
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => uploadVideo(ImageSource.gallery),
+              style: ElevatedButton.styleFrom(
+                  elevation: 0, backgroundColor: Colors.transparent),
+              child: const Row(
+                children: [
+                  Icon(
+                    Icons.image,
+                  ),
+                  Text(
+                    'Gallery',
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }),
+  );
 }
