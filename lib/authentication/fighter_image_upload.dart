@@ -41,9 +41,14 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
 
       String imageURL = (await file.getDownloadURL()).toString();
 
-      await fighterUsers.doc(currentUser).update({'profileImageURL': imageURL});
+      await fighterUsers
+          .doc(currentUser)
+          .update({'profileImageURL': imageURL}).then((value) =>
+              Navigator.pushReplacementNamed(context, 'fighterHome'));
     }
   }
+
+  //TODO: implement dispose to get rid of memory leak error
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +72,6 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
         setState(() {
           this.image = imageTemporary;
         });
-        if (context.mounted) {
-          Navigator.pushReplacementNamed(context, 'fighterHome');
-        }
       } on PlatformException catch (e) {
         if (context.mounted) {
           showSnackBar(e.toString(), context);
@@ -162,7 +164,6 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                               )),
                         ],
                       ),
-                      //TODO: Fix image display here
                       image != null
                           ? Center(
                               child: CircleAvatar(

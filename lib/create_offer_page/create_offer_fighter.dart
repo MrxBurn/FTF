@@ -36,8 +36,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   TextEditingController yearController = TextEditingController();
 
-  //TODO: Display file name when uploaded
-
   //TODO: Use Reusable login, register button in all occurences
 
   String searchValue = '';
@@ -152,7 +150,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   void uploadVideo(ImageSource source) async {
     try {
-      var video = await ImagePicker().pickVideo(source: source);
+      var video = await ImagePicker()
+          .pickVideo(source: source, maxDuration: const Duration(seconds: 5));
 
       if (video == null) return;
 
@@ -162,10 +161,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         this.video = videoTemporary;
         videoName = video.name;
       });
-
-      if (context.mounted) {
-        Navigator.pushReplacementNamed(context, 'fighterHome');
-      }
     } on PlatformException catch (e) {
       if (context.mounted) {
         showSnackBar(e.toString(), context);
@@ -176,7 +171,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     }
   }
 
-//TODO: find out why the state only updates once for the name of video
+  //TODO: Implement video saving in firebase storage
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -392,36 +388,44 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 24, right: 24, top: 16),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: ElevatedButton.icon(
-                        onPressed: () async {
-                          return await chooseUploadOption(
-                              context: context, uploadVideo: uploadVideo);
-                        },
-                        label: const Text('Attach callout video'),
-                        icon: const Icon(Icons.attach_file),
-                      ),
+                    child: Row(
+                      children: [
+                        ElevatedButton.icon(
+                          onPressed: () => chooseUploadOption(
+                              context: context, uploadVideo: uploadVideo),
+                          label: const Text('Attach callout video'),
+                          icon: const Icon(Icons.attach_file),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        const Text(
+                          '(max. 5 seconds)',
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        )
+                      ],
                     ),
                   ),
                   Padding(
                     padding: paddingLRT,
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.image,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(
-                          width: 100,
-                          child: Text(
-                            videoName,
-                            overflow: TextOverflow.ellipsis,
-                            style: bodyStyle,
-                          ),
-                        )
-                      ],
-                    ),
+                    child: videoName.isNotEmpty
+                        ? Row(
+                            children: [
+                              const Icon(
+                                Icons.image,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(
+                                width: 100,
+                                child: Text(
+                                  videoName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: bodyStyle,
+                                ),
+                              )
+                            ],
+                          )
+                        : const SizedBox(),
                   ),
                   Padding(
                     padding: paddingLRT,
@@ -448,8 +452,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
 //TODO: Use this in fighter_image_upload.dart and move to separate file
 chooseUploadOption(
-    {required BuildContext context, required Function uploadVideo}) async {
-  await showModalBottomSheet(
+    {required BuildContext context,
+    required Function(ImageSource source) uploadVideo}) {
+  showModalBottomSheet(
     context: context,
     builder: ((context) {
       return SizedBox(

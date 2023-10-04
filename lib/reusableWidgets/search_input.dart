@@ -21,8 +21,6 @@ class SearchBarWidget extends StatefulWidget {
 
   Function onSelectedSuggestion;
 
-  //TODO: Find a way to get the value from controller
-
   SearchBarWidget(
       {Key? key,
       required this.searchbarText,
@@ -94,8 +92,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(15),
                                     bottomRight: Radius.circular(15))),
-
-                            //TODO: Implement on click of list tile to add in the fighter name box and store it for creating the offer
                             child: ListView.builder(
                                 itemCount: widget.suggestions.length,
                                 itemBuilder: (context, index) {
