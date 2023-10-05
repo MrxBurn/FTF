@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
 
 class BlackButton extends StatelessWidget {
-  final void Function()? onPressed;
+  final Function onPressed;
 
   final String text;
 
-  const BlackButton({Key? key, this.onPressed, required this.text})
+  const BlackButton({Key? key, required this.onPressed, required this.text})
       : super(key: key);
 
   @override
@@ -25,7 +25,7 @@ class BlackButton extends StatelessWidget {
                 ),
               ),
             ),
-            onPressed: onPressed,
+            onPressed: () => onPressed(),
             child: Text(
               text,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),

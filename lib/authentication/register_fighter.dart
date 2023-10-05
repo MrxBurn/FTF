@@ -92,7 +92,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
       String authenticationError = e.message.toString();
       if (context.mounted) {
         isLoading = false;
-        showSnackBar(authenticationError, context);
+        showSnackBar(text: authenticationError, context: context);
       }
     }
     firstNameController.clear();

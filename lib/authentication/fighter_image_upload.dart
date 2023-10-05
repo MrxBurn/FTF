@@ -74,7 +74,7 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
         });
       } on PlatformException catch (e) {
         if (context.mounted) {
-          showSnackBar(e.toString(), context);
+          showSnackBar(text: e.toString(), context: context);
         }
       }
       if (context.mounted) {

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
@@ -24,7 +26,7 @@ class CreateOfferFighter extends StatefulWidget {
 }
 
 class _CreateOfferFighterState extends State<CreateOfferFighter> {
-  TextEditingController splitValue = TextEditingController(text: '0');
+  TextEditingController yourValue = TextEditingController(text: '0');
 
   TextEditingController opponentValue = TextEditingController(text: '0');
 
@@ -61,6 +63,13 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   String videoName = '';
 
   File? video;
+
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+
+  final storageRef = FirebaseStorage.instance.ref();
+
+  CollectionReference fightOffers =
+      FirebaseFirestore.instance.collection('fightOffers');
 
   Future<void> getData() async {
     queriedList.clear();
@@ -163,7 +172,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       });
     } on PlatformException catch (e) {
       if (context.mounted) {
-        showSnackBar(e.toString(), context);
+        showSnackBar(text: e.toString(), context: context);
       }
     }
     if (context.mounted) {
@@ -172,6 +181,39 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   }
 
   //TODO: Implement video saving in firebase storage
+
+  saveToFirebase(File? video, String offerId) async {
+    if (video != null) {
+      Reference file = storageRef.child('calloutVideos/$offerId/$videoName');
+
+      await file.putFile(video);
+
+      String videoURL = (await file.getDownloadURL()).toString();
+
+      await fightOffers.doc(offerId).update({'calloutVideoURL': videoURL});
+    }
+  }
+
+//TODO: Fix reusable component so that it executes this function
+  void createOffer() {
+    print('casfas');
+    if (searchValue.isEmpty && !fighterNotFoundChecked) {
+      showSnackBar(
+          text: 'Please select fighter or tick fighter not found',
+          context: context,
+          duration: const Duration(seconds: 5));
+    }
+  }
+
+  onContractSplitChange(String value) {
+    const maxValue = 100;
+
+    setState(() {
+      yourValue.text = value;
+
+      opponentValue.text = (maxValue - int.parse(yourValue.text)).toString();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -277,12 +319,28 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                                             : false,
                                         textAlign: TextAlign.center,
                                         keyboardType: TextInputType.number,
-                                        controller: splitValue,
+                                        controller: yourValue,
                                         style: TextStyle(
                                             color: contractedChecked == true
                                                 ? Colors.grey
                                                 : Colors.yellow,
                                             fontSize: 24),
+                                        onChanged: (value) =>
+                                            onContractSplitChange(value),
+                                        onEditingComplete: () {
+                                          if (yourValue.text == '') {
+                                            setState(() {
+                                              yourValue.text = '0';
+                                            });
+                                          }
+                                        },
+                                        onTapOutside: (value) {
+                                          if (yourValue.text == '') {
+                                            setState(() {
+                                              yourValue.text = '0';
+                                            });
+                                          }
+                                        },
                                       ),
                                     ),
                                     const SizedBox(
@@ -440,7 +498,24 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   BlackRoundedButton(
                     isLoading: false /*TODO: Implement is loading */,
                     text: submitButton,
-                    onPressed: () => {} /* TODO: Implement on submit */,
+                    onPressed: () =>
+                        createOffer() /* TODO: Implement on submit */,
+                  ),
+                  Center(
+                    child: SizedBox(
+                      width: 150,
+                      height: 48,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 5,
+                            shadowColor: Colors.red,
+                          ),
+                          onPressed: () => createOffer(),
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(fontSize: 16),
+                          )),
+                    ),
                   )
                 ],
               ))

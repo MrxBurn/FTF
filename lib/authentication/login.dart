@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
         isLogingIn = false;
-        showSnackBar(e.toString(), context);
+        showSnackBar(text: e.toString(), context: context);
       }
     }
   }

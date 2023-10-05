@@ -44,7 +44,7 @@ class _RegisterFanState extends State<RegisterFan> {
       }
       users.where('userName', isEqualTo: userName).get().then((doc) async => {
             if (doc.docs.isNotEmpty)
-              {showSnackBar('Username already exists', context)}
+              {showSnackBar(text: 'Username already exists', context: context)}
             else
               {
                 await FirebaseAuth.instance
@@ -67,7 +67,7 @@ class _RegisterFanState extends State<RegisterFan> {
     } on FirebaseAuthException catch (e) {
       authenticationError = e.message.toString();
       if (context.mounted) {
-        showSnackBar(authenticationError, context);
+        showSnackBar(text: authenticationError, context: context);
       }
     }
 
