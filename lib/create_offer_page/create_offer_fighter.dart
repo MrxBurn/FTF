@@ -30,7 +30,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   TextEditingController opponentValue = TextEditingController(text: '0');
 
-  TextEditingController bioController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
 
   DateTime today = DateTime.now();
 
@@ -194,17 +194,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     }
   }
 
-//TODO: Fix reusable component so that it executes this function
-  void createOffer() {
-    print('casfas');
-    if (searchValue.isEmpty && !fighterNotFoundChecked) {
-      showSnackBar(
-          text: 'Please select fighter or tick fighter not found',
-          context: context,
-          duration: const Duration(seconds: 5));
-    }
-  }
-
   onContractSplitChange(String value) {
     const maxValue = 100;
 
@@ -217,6 +206,34 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   @override
   Widget build(BuildContext context) {
+    Object offer = {
+      'opponent': searchValue,
+      'fighterNotFoundChecked': fighterNotFoundChecked,
+      'contractedChecked': contractedChecked,
+      'yourSplitValue': yourValue,
+      'opponentSplitValue': opponentValue,
+      'rematchClaus': rematchClause,
+      'weightClass': weightList,
+      'fightDate': yearController,
+      'offerExpiryDate': pickerController,
+      'message': messageController,
+      'calloutVideoURL': '',
+      'like': 0,
+      'dislike': 0,
+    };
+
+    //TODO: Fix reusable component so that it executes this function
+    void createOffer(Object offer) {
+      if (searchValue.isEmpty && !fighterNotFoundChecked) {
+        showSnackBar(
+            text: 'Please select fighter or tick fighter not found',
+            context: context,
+            duration: const Duration(seconds: 5));
+      } else {
+        fightOffers.add({offer});
+      }
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         controller: scrollController,
@@ -430,7 +447,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                       ],
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
-                      controller: bioController,
+                      controller: messageController,
                       decoration: const InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 25.0, horizontal: 10.0),
@@ -499,24 +516,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                     isLoading: false /*TODO: Implement is loading */,
                     text: submitButton,
                     onPressed: () =>
-                        createOffer() /* TODO: Implement on submit */,
+                        createOffer(offer) /* TODO: Implement on submit */,
                   ),
-                  Center(
-                    child: SizedBox(
-                      width: 150,
-                      height: 48,
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 5,
-                            shadowColor: Colors.red,
-                          ),
-                          onPressed: () => createOffer(),
-                          child: const Text(
-                            'Register',
-                            style: TextStyle(fontSize: 16),
-                          )),
-                    ),
-                  )
                 ],
               ))
         ]),

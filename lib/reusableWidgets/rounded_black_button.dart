@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 class BlackRoundedButton extends StatelessWidget {
   bool isLoading;
 
-  Function? onPressed;
+  Function onPressed;
 
   String text;
 
   BlackRoundedButton(
-      {super.key, required this.isLoading, this.onPressed, required this.text});
+      {super.key,
+      required this.isLoading,
+      required this.onPressed,
+      required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class BlackRoundedButton extends StatelessWidget {
           elevation: 5,
           shadowColor: Colors.red,
         ),
-        onPressed: () => onPressed,
+        onPressed: () => onPressed(),
         child: isLoading == true
             ? const CircularProgressIndicator()
             : Text(
