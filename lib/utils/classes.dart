@@ -1,4 +1,5 @@
 class UserClass {
+  String uid;
   String weightClass;
   String firstName;
   String lastName;
@@ -11,7 +12,8 @@ class UserClass {
   String? profileImageURL;
 
   UserClass(
-      {this.weightClass = '',
+      {this.uid = '',
+      this.weightClass = '',
       this.firstName = '',
       this.lastName = '',
       this.fighterStatus = '',

@@ -45,6 +45,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   bool fighterNotFoundChecked = false;
   bool contractedChecked = false;
 
+  DateTime dateTimeExpirationDate = DateTime.now();
+
   final CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('users');
 
@@ -80,6 +82,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     // Get data from docs and convert map to List
     fighterList = querySnapshot.docs
         .map((e) => UserClass(
+              uid: e.id,
               weightClass: e['weightClass'],
               firstName: e['firstName'],
               lastName: e['lastName'],
@@ -206,31 +209,33 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   @override
   Widget build(BuildContext context) {
-    Object offer = {
+    Map<String, dynamic> offer = {
       'opponent': searchValue,
+      'opponentId': selectedSuggestion.uid,
       'fighterNotFoundChecked': fighterNotFoundChecked,
       'contractedChecked': contractedChecked,
-      'yourSplitValue': yourValue,
-      'opponentSplitValue': opponentValue,
-      'rematchClaus': rematchClause,
-      'weightClass': weightList,
-      'fightDate': yearController,
-      'offerExpiryDate': pickerController,
-      'message': messageController,
+      'yourSplitValue': int.parse(yourValue.text),
+      'opponentSplitValue': int.parse(opponentValue.text),
+      'rematchClause': rematchClause.first,
+      'weightClass': weightList.first,
+      'fightDate': yearController.text,
+      'offerExpiryDate': dateTimeExpirationDate,
+      'message': messageController.text,
       'calloutVideoURL': '',
       'like': 0,
       'dislike': 0,
     };
 
-    //TODO: Fix reusable component so that it executes this function
-    void createOffer(Object offer) {
+    void createOffer(Object offer) async {
       if (searchValue.isEmpty && !fighterNotFoundChecked) {
         showSnackBar(
             text: 'Please select fighter or tick fighter not found',
             context: context,
             duration: const Duration(seconds: 5));
       } else {
-        fightOffers.add({offer});
+        await fightOffers
+            .add(offer)
+            .then((value) => {saveToFirebase(video, value.id)});
       }
     }
 
@@ -348,6 +353,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                                           if (yourValue.text == '') {
                                             setState(() {
                                               yourValue.text = '0';
+                                              opponentValue.text = '0';
                                             });
                                           }
                                         },
@@ -355,6 +361,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                                           if (yourValue.text == '') {
                                             setState(() {
                                               yourValue.text = '0';
+                                              opponentValue.text = '0';
                                             });
                                           }
                                         },
@@ -437,7 +444,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   ),
                   DatePicker(
                     leadingText: 'Offer expiry date*',
-                    controller: pickerController,
+                    displayDate: pickerController,
+                    dateTimePicked: dateTimeExpirationDate,
                   ),
                   Padding(
                     padding: paddingLRT,

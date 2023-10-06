@@ -6,9 +6,15 @@ import 'package:ftf/styles/styles.dart';
 class DatePicker extends StatefulWidget {
   String leadingText = '';
 
-  TextEditingController controller;
+  TextEditingController displayDate;
 
-  DatePicker({Key? key, required this.leadingText, required this.controller})
+  DateTime dateTimePicked;
+
+  DatePicker(
+      {Key? key,
+      required this.leadingText,
+      required this.displayDate,
+      required this.dateTimePicked})
       : super(key: key);
 
   @override
@@ -45,10 +51,11 @@ class _DatePickerState extends State<DatePicker> {
 
     setState(() {
       if (datePicked != null) {
-        widget.controller.text =
+        widget.displayDate.text =
             '${datePicked.day}-${datePicked.month}-${datePicked.year}';
+        widget.dateTimePicked = datePicked;
       } else {
-        widget.controller.text = now as String;
+        widget.displayDate.text = now as String;
       }
     });
   }
@@ -71,7 +78,7 @@ class _DatePickerState extends State<DatePicker> {
                   decoration: const InputDecoration(
                     contentPadding: EdgeInsets.zero,
                   ),
-                  controller: widget.controller,
+                  controller: widget.displayDate,
                   onTap: () => onPressed(context: context)))
         ],
       ),
