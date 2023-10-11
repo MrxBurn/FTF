@@ -239,6 +239,14 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       }
     }
 
+    void createDynamicLink() {
+//TODO: implement logic for dynamic link
+
+      Navigator.pushNamed(context, 'dynamicLinkSummary');
+    }
+
+    print(fighterNotFoundChecked);
+
     return Scaffold(
       body: SingleChildScrollView(
         controller: scrollController,
@@ -521,11 +529,11 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                     height: 16,
                   ),
                   BlackRoundedButton(
-                    isLoading: false /*TODO: Implement is loading */,
-                    text: submitButton,
-                    onPressed: () =>
-                        createOffer(offer) /* TODO: Implement on submit */,
-                  ),
+                      isLoading: false /*TODO: Implement is loading */,
+                      text: submitButton,
+                      onPressed: fighterNotFoundChecked == true
+                          ? () => createDynamicLink()
+                          : () => createOffer(offer)),
                 ],
               ))
         ]),
