@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -239,13 +240,26 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       }
     }
 
-    void createDynamicLink() {
-//TODO: implement logic for dynamic link
+    Future<void> createDynamicLink() async {
+      //TODO: Implement for IOS
+      var fallbackURL =
+          Uri.parse('https://fightertofighter.wixsite.com/ftf-site');
 
-      Navigator.pushNamed(context, 'dynamicLinkSummary');
+      final dynamicLinkParams = DynamicLinkParameters(
+        link: Uri.parse("https://fighterTOfighter.com/"),
+
+        uriPrefix: "https://f2f.page.link",
+        androidParameters: AndroidParameters(
+            packageName: "com.ftf.ftf", fallbackUrl: fallbackURL),
+        // iosParameters: const IOSParameters(bundleId: "com.example.app.ios"),
+      );
+      final dynamicLink =
+          await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
+
+      print(dynamicLink);
+
+      // Navigator.pushNamed(context, 'dynamicLinkSummary');
     }
-
-    print(fighterNotFoundChecked);
 
     return Scaffold(
       body: SingleChildScrollView(
