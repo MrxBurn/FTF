@@ -25,7 +25,10 @@ class _FighterHomePageState extends State<FighterHomePage> {
           onPressed: () => FirebaseAuth.instance
               .signOut()
               .then((value) => Navigator.pushNamed(context, 'loginPage')),
-        )
+        ),
+        BlackButton(
+            text: 'View offer',
+            onPressed: () => Navigator.pushNamed(context, 'viewOffer'))
       ]),
     );
   }

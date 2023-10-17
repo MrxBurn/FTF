@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/authentication/account_type.dart';
 import 'package:ftf/authentication/fighter_image_upload.dart';
@@ -13,12 +14,34 @@ import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/view_offer_page/view_offer_page.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+
+  Uri deepLink = Uri();
+
+  // Check if you received the link via `getInitialLink` first
+  final PendingDynamicLinkData? initialLink =
+      await FirebaseDynamicLinks.instance.getInitialLink();
+
+  if (initialLink != null) {
+    deepLink = initialLink.link;
+    // Example of using the dynamic link to push the user to a different screen
+  }
+
+  FirebaseDynamicLinks.instance.onLink.listen(
+    (pendingDynamicLinkData) {
+      // Set up the `onLink` event listener next as it may be received here
+      deepLink = pendingDynamicLinkData.link;
+    },
+  );
+
+  runApp(MyApp(
+    link: deepLink,
+  ));
 }
 
 User? currentUser = FirebaseAuth.instance.currentUser;
@@ -26,7 +49,12 @@ User? currentUser = FirebaseAuth.instance.currentUser;
 Widget initialWidget = const Placeholder();
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  Uri? link;
+
+  MyApp({
+    Key? key,
+    required Uri link,
+  }) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -50,6 +78,13 @@ class _MyAppState extends State<MyApp> {
     }
 
     return initialWidget;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.link);
   }
 
   @override
@@ -102,7 +137,8 @@ class _MyAppState extends State<MyApp> {
           'loginPage': (context) => const LoginPage(),
           'fighterImageUpload': (context) => const FighterImageUpload(),
           'createOfferFighter': (context) => const CreateOfferFighter(),
-          'dynamicLinkSummary': (context) => const DynamicLinkSummary()
+          'dynamicLinkSummary': (context) => const DynamicLinkSummary(),
+          'viewOffer': (context) => const ViewOfferPage(),
         },
         localizationsDelegates: const [
           MonthYearPickerLocalizations.delegate,
@@ -125,11 +161,16 @@ class _MyAppState extends State<MyApp> {
                 snapshot.data!.get('route') == 'fan') {
               return const FanHomePage();
             }
-
             if (snapshot.connectionState == ConnectionState.done &&
                 currentUser != null &&
                 snapshot.data!.get('route') == 'fighter') {
               return const FighterHomePage();
+            }
+            if (snapshot.connectionState == ConnectionState.done &&
+                currentUser != null &&
+                snapshot.data!.get('route') == 'fighter' &&
+                widget.link != null) {
+              return const ViewOfferPage();
             }
 
             return SizedBox(

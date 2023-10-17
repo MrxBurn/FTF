@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
 
 class DropDownWidget extends StatefulWidget {
+  String dropDownValue;
+  List<String> dropDownList;
+  String dropDownName;
   DropDownWidget(
       {Key? key,
       required this.dropDownValue,
       required this.dropDownList,
       required this.dropDownName})
       : super(key: key);
-
-  String dropDownValue;
-  List<String> dropDownList;
-  String dropDownName;
 
   @override
   State<DropDownWidget> createState() => _DropDownWidgetState();
@@ -43,7 +42,7 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                 height: 2,
                 color: Colors.white,
               ),
-              onChanged: (String? value) {
+              onChanged: (value) {
                 setState(() {
                   widget.dropDownValue = value!;
                 });
