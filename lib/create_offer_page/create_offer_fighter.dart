@@ -235,13 +235,14 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
           Uri.parse('https://fightertofighter.wixsite.com/ftf-site');
 
       final dynamicLinkParams = DynamicLinkParameters(
-        link: Uri.parse("https://fighterTOfighter.com?offerId=$offerId"),
+        link: Uri.parse("https://fighterTOfighter.com/offerId=$offerId"),
 
         uriPrefix: "https://f2f.page.link",
         androidParameters: AndroidParameters(
             packageName: "com.ftf.ftf", fallbackUrl: fallbackURL),
         // iosParameters: const IOSParameters(bundleId: "com.example.app.ios"),
       );
+
       final dynamicLink =
           await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
 

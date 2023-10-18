@@ -21,27 +21,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  Uri deepLink = Uri();
-
-  // Check if you received the link via `getInitialLink` first
-  final PendingDynamicLinkData? initialLink =
-      await FirebaseDynamicLinks.instance.getInitialLink();
-
-  if (initialLink != null) {
-    deepLink = initialLink.link;
-    // Example of using the dynamic link to push the user to a different screen
-  }
-
-  FirebaseDynamicLinks.instance.onLink.listen(
-    (pendingDynamicLinkData) {
-      // Set up the `onLink` event listener next as it may be received here
-      deepLink = pendingDynamicLinkData.link;
-    },
-  );
-
-  runApp(MyApp(
-    link: deepLink,
-  ));
+  runApp(const MyApp());
 }
 
 User? currentUser = FirebaseAuth.instance.currentUser;
@@ -49,11 +29,8 @@ User? currentUser = FirebaseAuth.instance.currentUser;
 Widget initialWidget = const Placeholder();
 
 class MyApp extends StatefulWidget {
-  Uri? link;
-
-  MyApp({
+  const MyApp({
     Key? key,
-    required Uri link,
   }) : super(key: key);
 
   @override
@@ -61,6 +38,29 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initDynamicLink();
+  }
+
+  void initDynamicLink() async {
+    final PendingDynamicLinkData? initialLink =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+
+    var deepLink = initialLink?.link;
+    if (deepLink != null) {
+      // Navigator.pushNamed(context, 'viewOffer');
+    }
+
+    FirebaseDynamicLinks.instance.onLink.listen(
+      (pendingDynamicLinkData) {
+        var deepLink = pendingDynamicLinkData.link;
+      },
+    );
+  }
+
   Future<Widget> checkIfUserLoggedIn() async {
     if (currentUser != null) {
       await FirebaseFirestore.instance
@@ -78,13 +78,6 @@ class _MyAppState extends State<MyApp> {
     }
 
     return initialWidget;
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print(widget.link);
   }
 
   @override
@@ -166,12 +159,12 @@ class _MyAppState extends State<MyApp> {
                 snapshot.data!.get('route') == 'fighter') {
               return const FighterHomePage();
             }
-            if (snapshot.connectionState == ConnectionState.done &&
-                currentUser != null &&
-                snapshot.data!.get('route') == 'fighter' &&
-                widget.link != null) {
-              return const ViewOfferPage();
-            }
+            // if (snapshot.connectionState == ConnectionState.done &&
+            //     currentUser != null &&
+            //     snapshot.data!.get('route') == 'fighter' &&
+            //     widget.link != null) {
+            //   return const ViewOfferPage();
+            // }
 
             return SizedBox(
               child: Column(children: [
