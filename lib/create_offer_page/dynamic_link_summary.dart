@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/circle_navigation_button.dart';

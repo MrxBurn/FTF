@@ -1,7 +1,6 @@
+// ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
-import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
-import 'package:ftf/utils/lists.dart';
 
 class ViewOfferPage extends StatefulWidget {
   String? offerId;
