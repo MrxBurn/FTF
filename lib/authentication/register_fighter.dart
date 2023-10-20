@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/authentication/fighter_image_upload.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -11,7 +12,9 @@ import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
 
 class RegisterFighter extends StatefulWidget {
-  const RegisterFighter({super.key});
+  String? offerId;
+
+  RegisterFighter({super.key, this.offerId});
 
   @override
   State<RegisterFighter> createState() => _RegisterFighterState();
@@ -86,7 +89,10 @@ class _RegisterFighterState extends State<RegisterFighter> {
       isLoading = false;
 
       if (context.mounted) {
-        Navigator.pushNamed(context, 'fighterImageUpload');
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => FighterImageUpload(
+                  offerId: widget.offerId,
+                )));
       }
     } on FirebaseAuthException catch (e) {
       String authenticationError = e.message.toString();

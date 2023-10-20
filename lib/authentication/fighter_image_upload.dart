@@ -8,10 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/snack_bar.dart';
+import 'package:ftf/view_offer_page/view_offer_page.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FighterImageUpload extends StatefulWidget {
-  const FighterImageUpload({super.key});
+  String? offerId;
+
+  FighterImageUpload({super.key, this.offerId});
 
   @override
   State<FighterImageUpload> createState() => _FighterImageUploadState();
@@ -43,8 +46,17 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
 
       await fighterUsers
           .doc(currentUser)
-          .update({'profileImageURL': imageURL}).then((value) =>
-              Navigator.pushReplacementNamed(context, 'fighterHome'));
+          .update({'profileImageURL': imageURL}).then((value) => {
+                if (widget.offerId == null)
+                  {Navigator.pushReplacementNamed(context, 'fighterHome')}
+                else
+                  {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ViewOfferPage(
+                              offerId: widget.offerId,
+                            )))
+                  }
+              });
     }
   }
 
@@ -52,6 +64,8 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.offerId);
+
     var uid = firebaseAuth.currentUser?.uid;
     fighterUsers.doc(uid).get().then((DocumentSnapshot doc) => {
           setState(() {

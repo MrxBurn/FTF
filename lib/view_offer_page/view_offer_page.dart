@@ -4,30 +4,26 @@ import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/utils/lists.dart';
 
 class ViewOfferPage extends StatefulWidget {
-  const ViewOfferPage({super.key});
+  String? offerId;
+
+  ViewOfferPage({Key? key, this.offerId}) : super(key: key);
 
   @override
   State<ViewOfferPage> createState() => _ViewOfferPageState();
 }
 
 class _ViewOfferPageState extends State<ViewOfferPage> {
-  String rematchClauseValue = rematchClause.first;
-
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-
-    print(arguments['link']);
+    print(widget.offerId);
     return Scaffold(
       body: Column(
         children: [
-          LogoHeader(backRequired: true),
-          DropDownWidget(
-            dropDownList: rematchClause,
-            dropDownValue: rematchClauseValue,
-            dropDownName: 'Rematch clause*',
+          LogoHeader(
+            backRequired: true,
+            onPressed: () => Navigator.pushNamed(context, 'fighterHome'),
           ),
+          const Text('View offer page')
         ],
       ),
     );

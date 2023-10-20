@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,6 +30,8 @@ User? currentUser = FirebaseAuth.instance.currentUser;
 
 Widget initialWidget = const Placeholder();
 
+Uri? deepLink;
+
 class MyApp extends StatefulWidget {
   const MyApp({
     Key? key,
@@ -39,45 +43,31 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
+  void initState() async {
     // TODO: implement initState
     super.initState();
-    initDynamicLink();
+    await initDynamicLink();
   }
 
-  void initDynamicLink() async {
+  Future<void> initDynamicLink() async {
     final PendingDynamicLinkData? initialLink =
         await FirebaseDynamicLinks.instance.getInitialLink();
 
-    var deepLink = initialLink?.link;
-    if (deepLink != null) {
-      // Navigator.pushNamed(context, 'viewOffer');
+    print('initLink');
+
+    if (Platform.isIOS) {
+      FirebaseDynamicLinks.instance.onLink.listen(
+        (pendingDynamicLinkData) {
+          setState(() {
+            deepLink = pendingDynamicLinkData.link;
+          });
+        },
+      );
     }
 
-    FirebaseDynamicLinks.instance.onLink.listen(
-      (pendingDynamicLinkData) {
-        var deepLink = pendingDynamicLinkData.link;
-      },
-    );
-  }
-
-  Future<Widget> checkIfUserLoggedIn() async {
-    if (currentUser != null) {
-      await FirebaseFirestore.instance
-          .collection('fanUsers')
-          .doc(currentUser?.uid)
-          .get()
-          .then((value) => {
-                if (value.exists)
-                  {initialWidget = const FanHomePage()}
-                else
-                  {initialWidget = const FighterHomePage()}
-              });
-    } else {
-      initialWidget = const LoginPage();
-    }
-
-    return initialWidget;
+    setState(() {
+      deepLink = initialLink?.link;
+    });
   }
 
   @override
@@ -124,14 +114,14 @@ class _MyAppState extends State<MyApp> {
         routes: {
           'fighterHome': (context) => const FighterHomePage(),
           'fanHome': (context) => const FanHomePage(),
-          'accountType': (context) => const AccountType(),
-          'registerFighter': (context) => const RegisterFighter(),
+          'accountType': (context) => AccountType(),
+          'registerFighter': (context) => RegisterFighter(),
           'registerFan': (context) => const RegisterFan(),
-          'loginPage': (context) => const LoginPage(),
-          'fighterImageUpload': (context) => const FighterImageUpload(),
+          'loginPage': (context) => LoginPage(),
+          'fighterImageUpload': (context) => FighterImageUpload(),
           'createOfferFighter': (context) => const CreateOfferFighter(),
           'dynamicLinkSummary': (context) => const DynamicLinkSummary(),
-          'viewOffer': (context) => const ViewOfferPage(),
+          'viewOffer': (context) => ViewOfferPage(),
         },
         localizationsDelegates: const [
           MonthYearPickerLocalizations.delegate,
@@ -146,9 +136,19 @@ class _MyAppState extends State<MyApp> {
             if (snapshot.hasData &&
                 !snapshot.data!.exists &&
                 currentUser == null) {
-              return const LoginPage();
+              return LoginPage(
+                offerId: deepLink?.queryParameters['offerId'],
+              );
             }
-
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.data!.get('route') == 'fighter' &&
+                deepLink != null &&
+                deepLink.toString().contains('offerId') &&
+                currentUser != null) {
+              return ViewOfferPage(
+                offerId: deepLink?.queryParameters['offerId'],
+              );
+            }
             if (snapshot.connectionState == ConnectionState.done &&
                 currentUser != null &&
                 snapshot.data!.get('route') == 'fan') {
@@ -159,12 +159,6 @@ class _MyAppState extends State<MyApp> {
                 snapshot.data!.get('route') == 'fighter') {
               return const FighterHomePage();
             }
-            // if (snapshot.connectionState == ConnectionState.done &&
-            //     currentUser != null &&
-            //     snapshot.data!.get('route') == 'fighter' &&
-            //     widget.link != null) {
-            //   return const ViewOfferPage();
-            // }
 
             return SizedBox(
               child: Column(children: [

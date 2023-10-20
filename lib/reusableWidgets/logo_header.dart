@@ -5,8 +5,10 @@ import 'package:flutter_svg/svg.dart';
 
 class LogoHeader extends StatefulWidget {
   bool backRequired;
+  Function? onPressed;
 
-  LogoHeader({Key? key, required this.backRequired}) : super(key: key);
+  LogoHeader({Key? key, required this.backRequired, this.onPressed})
+      : super(key: key);
 
   @override
   State<LogoHeader> createState() => _LogoHeaderState();
@@ -26,7 +28,11 @@ class _LogoHeaderState extends State<LogoHeader> {
         ),
         widget.backRequired == true
             ? AppBar(
-                leading: const BackButton(),
+                leading: BackButton(
+                  onPressed: () => widget.onPressed != null
+                      ? widget.onPressed!()
+                      : Navigator.pop(context),
+                ),
                 backgroundColor: Colors.transparent,
                 elevation: 0,
               )

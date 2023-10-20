@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/authentication/account_type.dart';
 import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
@@ -8,7 +9,8 @@ import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/snack_bar.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  String? offerId;
+  LoginPage({super.key, this.offerId});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -82,7 +84,10 @@ class _LoginPageState extends State<LoginPage> {
                       style: const ButtonStyle(
                           splashFactory: NoSplash.splashFactory),
                       onPressed: () =>
-                          Navigator.pushNamed(context, 'accountType'),
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => AccountType(
+                                    offerId: widget.offerId,
+                                  ))),
                       child: const Text(
                         'Register',
                         style: TextStyle(color: Colors.red, fontSize: 16),
