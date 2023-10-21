@@ -235,7 +235,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
           Uri.parse('https://fightertofighter.wixsite.com/ftf-site');
 
       final dynamicLinkParams = DynamicLinkParameters(
-        link: Uri.parse("https://fighterTOfighter.com/offerId=$offerId"),
+        link: Uri.parse("https://fighterTOfighter.com?offerId=$offerId"),
 
         uriPrefix: "https://f2f.page.link",
         androidParameters: AndroidParameters(
@@ -246,11 +246,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       final dynamicLink =
           await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
 
-      print(dynamicLink);
-
       if (context.mounted) {
         Navigator.pushNamed(context, 'dynamicLinkSummary',
-            arguments: {'link': dynamicLink});
+            arguments: {'link': dynamicLink.toString()});
       }
     }
 

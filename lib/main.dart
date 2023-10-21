@@ -43,10 +43,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() async {
+  void initState() {
     // TODO: implement initState
     super.initState();
-    await initDynamicLink();
+    initDynamicLink();
   }
 
   Future<void> initDynamicLink() async {

@@ -66,8 +66,6 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.offerId);
-
     var uid = firebaseAuth.currentUser?.uid;
     fighterUsers.doc(uid).get().then((DocumentSnapshot doc) => {
           setState(() {
