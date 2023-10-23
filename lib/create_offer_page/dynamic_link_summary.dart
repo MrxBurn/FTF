@@ -34,7 +34,7 @@ class _DynamicLinkSummaryState extends State<DynamicLinkSummary> {
             Padding(
               padding: paddingLRT,
               child: const Text(
-                "Congratulations, your offer is on its way! Now, all that's left is to copy and share the generated link below with the fighter you want to receive the offer. When they join the app, you'll be one step closer to making this fight a reality.",
+                "Your offer is on its way! Copy the link below and send it privately to your potential opponent. They can accept, decline, or negotiate the offer upon downloading FTF.Then, ignite the excitement by publicly calling out your opponent, letting fight fans know there's an offer waiting for them in FTF! 🔥",
                 style: TextStyle(fontSize: 14),
                 textAlign: TextAlign.center,
               ),

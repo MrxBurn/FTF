@@ -53,8 +53,6 @@ class _MyAppState extends State<MyApp> {
     final PendingDynamicLinkData? initialLink =
         await FirebaseDynamicLinks.instance.getInitialLink();
 
-    print('initLink');
-
     if (Platform.isIOS) {
       FirebaseDynamicLinks.instance.onLink.listen(
         (pendingDynamicLinkData) {

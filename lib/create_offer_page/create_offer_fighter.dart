@@ -176,6 +176,10 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         this.video = videoTemporary;
         videoName = video.name;
       });
+      if (context.mounted) {
+        showSnackBar(
+            text: 'Video uploaded', context: context, color: Colors.green);
+      }
     } on PlatformException catch (e) {
       if (context.mounted) {
         showSnackBar(text: e.toString(), context: context);
@@ -217,7 +221,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'opponentId': selectedSuggestion.uid,
       'fighterNotFoundChecked': fighterNotFoundChecked,
       'contractedChecked': contractedChecked,
-      'yourSplitValue': int.parse(yourValue.text),
+      'creatorSplitValue': int.parse(yourValue.text),
       'opponentSplitValue': int.parse(opponentValue.text),
       'rematchClause': rematchClause.first,
       'weightClass': weightList.first,
@@ -227,6 +231,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'calloutVideoURL': '',
       'like': 0,
       'dislike': 0,
+      'createdBy': currentUser
     };
 
     Future<void> createDynamicLink(String offerId) async {
