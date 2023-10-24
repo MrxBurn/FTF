@@ -18,6 +18,7 @@ import 'package:ftf/utils/classes.dart';
 import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_player/video_player.dart';
 
 class CreateOfferFighter extends StatefulWidget {
   const CreateOfferFighter({super.key});
@@ -27,7 +28,10 @@ class CreateOfferFighter extends StatefulWidget {
 }
 
 class _CreateOfferFighterState extends State<CreateOfferFighter> {
-  TextEditingController yourValue = TextEditingController(text: '0');
+  VideoPlayerController? _videoController;
+  Future<void>? _initializeVideoPlayerFuture;
+
+  TextEditingController creatorValue = TextEditingController(text: '0');
 
   TextEditingController opponentValue = TextEditingController(text: '0');
 
@@ -163,6 +167,15 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         text: ('${today.month}-${today.year}').toString());
   }
 
+  @override
+  void dispose() {
+    // Ensure disposing of the VideoPlayerController to free up resources.
+    if (_videoController != null) {
+      _videoController!.dispose();
+    }
+    super.dispose();
+  }
+
   void uploadVideo(ImageSource source) async {
     try {
       var video = await ImagePicker()
@@ -175,6 +188,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       setState(() {
         this.video = videoTemporary;
         videoName = video.name;
+
+        _videoController = VideoPlayerController.file(this.video!);
+        _initializeVideoPlayerFuture = _videoController?.initialize();
       });
       if (context.mounted) {
         showSnackBar(
@@ -189,8 +205,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       Navigator.pop(context);
     }
   }
-
-  //TODO: Implement video saving in firebase storage
 
   saveToFirebase(File? video, String offerId) async {
     if (video != null) {
@@ -208,9 +222,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     const maxValue = 100;
 
     setState(() {
-      yourValue.text = value;
+      creatorValue.text = value;
 
-      opponentValue.text = (maxValue - int.parse(yourValue.text)).toString();
+      opponentValue.text = (maxValue - int.parse(creatorValue.text)).toString();
     });
   }
 
@@ -221,7 +235,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'opponentId': selectedSuggestion.uid,
       'fighterNotFoundChecked': fighterNotFoundChecked,
       'contractedChecked': contractedChecked,
-      'creatorSplitValue': int.parse(yourValue.text),
+      'creatorSplitValue': int.parse(creatorValue.text),
       'opponentSplitValue': int.parse(opponentValue.text),
       'rematchClause': rematchClause.first,
       'weightClass': weightList.first,
@@ -365,7 +379,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                                         : false,
                                     textAlign: TextAlign.center,
                                     keyboardType: TextInputType.number,
-                                    controller: yourValue,
+                                    controller: creatorValue,
                                     style: TextStyle(
                                         color: contractedChecked == true
                                             ? Colors.grey
@@ -374,17 +388,17 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                                     onChanged: (value) =>
                                         onContractSplitChange(value),
                                     onEditingComplete: () {
-                                      if (yourValue.text == '') {
+                                      if (creatorValue.text == '') {
                                         setState(() {
-                                          yourValue.text = '0';
+                                          creatorValue.text = '0';
                                           opponentValue.text = '0';
                                         });
                                       }
                                     },
                                     onTapOutside: (value) {
-                                      if (yourValue.text == '') {
+                                      if (creatorValue.text == '') {
                                         setState(() {
-                                          yourValue.text = '0';
+                                          creatorValue.text = '0';
                                           opponentValue.text = '0';
                                         });
                                       }
@@ -515,27 +529,79 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   ],
                 ),
               ),
-              Padding(
-                padding: paddingLRT,
-                child: videoName.isNotEmpty
-                    ? Row(
-                        children: [
-                          const Icon(
-                            Icons.image,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(
-                            width: 100,
-                            child: Text(
-                              videoName,
-                              overflow: TextOverflow.ellipsis,
-                              style: bodyStyle,
-                            ),
-                          )
-                        ],
-                      )
-                    : const SizedBox(),
-              ),
+              _videoController != null
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: TextButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      actions: [
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        FutureBuilder(
+                                          future: _initializeVideoPlayerFuture,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.done) {
+                                              return AspectRatio(
+                                                aspectRatio: _videoController!
+                                                    .value.aspectRatio,
+                                                child: VideoPlayer(
+                                                    _videoController
+                                                        as VideoPlayerController),
+                                              );
+                                            } else {
+                                              return const SizedBox();
+                                            }
+                                          },
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                              child: const Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            ElevatedButton.icon(
+                                                onPressed: () {
+                                                  _videoController?.play();
+                                                },
+                                                icon: const Icon(
+                                                  Icons.play_arrow,
+                                                  color: Colors.yellow,
+                                                ),
+                                                label: const Text(
+                                                  "Play",
+                                                  style: TextStyle(
+                                                      color: Colors.yellow),
+                                                )),
+                                          ],
+                                        )
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: const Text(
+                              'Press to review video',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  decoration: TextDecoration.underline),
+                            )),
+                      ),
+                    )
+                  : const SizedBox(),
               Padding(
                 padding: paddingLRT,
                 child: const Text(
