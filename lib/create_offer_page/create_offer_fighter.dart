@@ -28,6 +28,12 @@ class CreateOfferFighter extends StatefulWidget {
 }
 
 class _CreateOfferFighterState extends State<CreateOfferFighter> {
+  String rematchClause = rematchClauseList.first;
+
+  String fighterStatus = fighterStatusList.first;
+
+  String weight = weightList.first;
+
   VideoPlayerController? _videoController;
   Future<void>? _initializeVideoPlayerFuture;
 
@@ -42,8 +48,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   TextEditingController pickerController = TextEditingController();
 
   TextEditingController yearController = TextEditingController();
-
-  var fighterStatusValue = fighterStatusList.first;
 
   //TODO: Use Reusable login, register button in all occurences
 
@@ -79,6 +83,14 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   CollectionReference fightOffers =
       FirebaseFirestore.instance.collection('fightOffers');
+
+  _callback(String value) {
+    rematchClause = value;
+
+    fighterStatus = value;
+
+    weight = value;
+  }
 
   Future<void> getData() async {
     queriedList.clear();
@@ -228,6 +240,43 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     });
   }
 
+  Future<void> createDynamicLink(String offerId) async {
+    //TODO: Implement for IOS
+    var fallbackURL =
+        Uri.parse('https://fightertofighter.wixsite.com/ftf-site');
+
+    final dynamicLinkParams = DynamicLinkParameters(
+      link: Uri.parse("https://fighterTOfighter.com?offerId=$offerId"),
+
+      uriPrefix: "https://f2f.page.link",
+      androidParameters: AndroidParameters(
+          packageName: "com.ftf.ftf", fallbackUrl: fallbackURL),
+      // iosParameters: const IOSParameters(bundleId: "com.example.app.ios"),
+    );
+
+    final dynamicLink =
+        await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
+
+    if (context.mounted) {
+      Navigator.pushNamed(context, 'dynamicLinkSummary',
+          arguments: {'link': dynamicLink.toString()});
+    }
+  }
+
+  void createOffer(Object offer) async {
+    if (searchValue.isEmpty && !fighterNotFoundChecked) {
+      showSnackBar(
+          text: 'Please select fighter or tick fighter not found',
+          context: context,
+          duration: const Duration(seconds: 5));
+    } else {
+      await fightOffers.add(offer).then((value) => {
+            saveToFirebase(video, value.id),
+            if (fighterNotFoundChecked) {createDynamicLink(value.id)}
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> offer = {
@@ -237,53 +286,17 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'contractedChecked': contractedChecked,
       'creatorSplitValue': int.parse(creatorValue.text),
       'opponentSplitValue': int.parse(opponentValue.text),
-      'rematchClause': rematchClause.first,
-      'weightClass': weightList.first,
+      'rematchClause': rematchClause,
+      'weightClass': weight,
       'fightDate': yearController.text,
       'offerExpiryDate': dateTimeExpirationDate,
       'message': messageController.text,
       'calloutVideoURL': '',
       'like': 0,
       'dislike': 0,
-      'createdBy': currentUser
+      'createdBy': currentUser,
+      'fighterStatus': fighterStatus
     };
-
-    Future<void> createDynamicLink(String offerId) async {
-      //TODO: Implement for IOS
-      var fallbackURL =
-          Uri.parse('https://fightertofighter.wixsite.com/ftf-site');
-
-      final dynamicLinkParams = DynamicLinkParameters(
-        link: Uri.parse("https://fighterTOfighter.com?offerId=$offerId"),
-
-        uriPrefix: "https://f2f.page.link",
-        androidParameters: AndroidParameters(
-            packageName: "com.ftf.ftf", fallbackUrl: fallbackURL),
-        // iosParameters: const IOSParameters(bundleId: "com.example.app.ios"),
-      );
-
-      final dynamicLink =
-          await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
-
-      if (context.mounted) {
-        Navigator.pushNamed(context, 'dynamicLinkSummary',
-            arguments: {'link': dynamicLink.toString()});
-      }
-    }
-
-    void createOffer(Object offer) async {
-      if (searchValue.isEmpty && !fighterNotFoundChecked) {
-        showSnackBar(
-            text: 'Please select fighter or tick fighter not found',
-            context: context,
-            duration: const Duration(seconds: 5));
-      } else {
-        await fightOffers.add(offer).then((value) => {
-              saveToFirebase(video, value.id),
-              if (fighterNotFoundChecked) {createDynamicLink(value.id)}
-            });
-      }
-    }
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -468,16 +481,19 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                 height: 16,
               ),
               DropDownWidget(
-                dropDownList: rematchClause,
-                dropDownValue: rematchClause.first,
+                changeParentValue: _callback,
+                dropDownList: rematchClauseList,
+                dropDownValue: rematchClause,
                 dropDownName: 'Rematch clause*',
               ),
               DropDownWidget(
-                  dropDownValue: fighterStatusValue,
+                  changeParentValue: _callback,
+                  dropDownValue: fighterStatus,
                   dropDownList: fighterStatusList,
                   dropDownName: 'Fighter status*'),
               DropDownWidget(
-                  dropDownValue: weightList.first,
+                  changeParentValue: _callback,
+                  dropDownValue: weight,
                   dropDownList: weightList,
                   dropDownName: 'Weight class*'),
               YearPickerWidget(

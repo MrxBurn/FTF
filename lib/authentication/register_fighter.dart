@@ -23,7 +23,7 @@ class RegisterFighter extends StatefulWidget {
 }
 
 class _RegisterFighterState extends State<RegisterFighter> {
-  var genderValue = genderList.first;
+  String genderValue = genderList.first;
 
   var weightValue = weightList.first;
 
@@ -116,6 +116,13 @@ class _RegisterFighterState extends State<RegisterFighter> {
     nationalityController.clear();
 
     confirmPasswordController.clear();
+  }
+
+  _callback(String value) {
+    weightValue = value;
+    fighterStatusValue = value;
+    fighterType = value;
+    genderValue = value;
   }
 
   @override
@@ -213,18 +220,22 @@ class _RegisterFighterState extends State<RegisterFighter> {
                     ),
                   ),
                   DropDownWidget(
+                      changeParentValue: _callback,
                       dropDownValue: fighterType,
                       dropDownList: fighterTypeList,
                       dropDownName: 'Fighter type*'),
                   DropDownWidget(
+                      changeParentValue: _callback,
                       dropDownValue: genderValue,
                       dropDownList: genderList,
                       dropDownName: 'Gender*'),
                   DropDownWidget(
+                      changeParentValue: _callback,
                       dropDownValue: weightValue,
                       dropDownList: weightList,
                       dropDownName: 'Weight class*'),
                   DropDownWidget(
+                      changeParentValue: _callback,
                       dropDownValue: fighterStatusValue,
                       dropDownList: fighterStatusList,
                       dropDownName: 'Fighter status*'),
@@ -291,7 +302,9 @@ class _RegisterFighterState extends State<RegisterFighter> {
                                   weightValue,
                                   fighterStatusValue,
                                   bioController.text)
-                            },
+                            }
+                          else
+                            {print(genderValue)}
                         },
                     child: isLoading == true
                         ? const CircularProgressIndicator()

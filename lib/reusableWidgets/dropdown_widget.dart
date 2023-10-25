@@ -7,11 +7,13 @@ class DropDownWidget extends StatefulWidget {
   String dropDownValue;
   List<String> dropDownList;
   String dropDownName;
+  Function? changeParentValue;
   DropDownWidget(
       {Key? key,
       required this.dropDownValue,
       required this.dropDownList,
-      required this.dropDownName})
+      required this.dropDownName,
+      this.changeParentValue})
       : super(key: key);
 
   @override
@@ -45,6 +47,10 @@ class _DropDownWidgetState extends State<DropDownWidget> {
               onChanged: (value) {
                 setState(() {
                   widget.dropDownValue = value!;
+                  if (widget.changeParentValue != null) {
+                    print('mormanti');
+                    widget.changeParentValue!(value);
+                  }
                 });
               },
               items: widget.dropDownList
