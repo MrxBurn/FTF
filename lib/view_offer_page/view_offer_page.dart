@@ -51,6 +51,15 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
     data = res.data() as Map<String, dynamic>;
 
+    //TODO: Implement this
+    if (data['fighterNotFoundChecked'] == 'true' &&
+        currentUser != data['createdBy']) {
+      await FirebaseFirestore.instance
+          .collection('fightOffers')
+          .doc(widget.offerId)
+          .update({'opponentId': currentUser, 'opponent': 'Gageo'});
+    }
+
     return res.data() as Map<String, dynamic>;
   }
 
@@ -70,14 +79,6 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
             yearController.text = data['fightDate'].toString();
 
             _initializeVideoPlayerFuture = _videoController.initialize();
-
-            if (data['fighterNotFoundChecked'] == 'true' &&
-                currentUser != data['createdBy']) {
-              FirebaseFirestore.instance
-                  .collection('fightOffers')
-                  .doc(widget.offerId)
-                  .update({'opponentId': currentUser, 'opponent': 'Gageo'});
-            }
 
             return SingleChildScrollView(
               child: Column(children: [
