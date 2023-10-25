@@ -6,10 +6,13 @@ import 'package:month_year_picker/month_year_picker.dart';
 
 class YearPickerWidget extends StatefulWidget {
   String leadingText = '';
-
+  bool disabled;
   TextEditingController controller;
   YearPickerWidget(
-      {Key? key, required this.leadingText, required this.controller})
+      {Key? key,
+      required this.leadingText,
+      required this.controller,
+      this.disabled = false})
       : super(key: key);
 
   @override
@@ -78,7 +81,9 @@ class _YearPickerWidgetState extends State<YearPickerWidget> {
                   contentPadding: EdgeInsets.zero,
                 ),
                 controller: widget.controller,
-                onTap: () => onPressed(context: context)),
+                onTap: widget.disabled == false
+                    ? () => onPressed(context: context)
+                    : null),
           )
         ]));
   }

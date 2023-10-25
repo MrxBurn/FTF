@@ -118,13 +118,6 @@ class _RegisterFighterState extends State<RegisterFighter> {
     confirmPasswordController.clear();
   }
 
-  _callback(String value) {
-    weightValue = value;
-    fighterStatusValue = value;
-    fighterType = value;
-    genderValue = value;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,22 +213,22 @@ class _RegisterFighterState extends State<RegisterFighter> {
                     ),
                   ),
                   DropDownWidget(
-                      changeParentValue: _callback,
+                      changeParentValue: (v) => fighterType = v,
                       dropDownValue: fighterType,
                       dropDownList: fighterTypeList,
                       dropDownName: 'Fighter type*'),
                   DropDownWidget(
-                      changeParentValue: _callback,
+                      changeParentValue: (v) => genderValue = v,
                       dropDownValue: genderValue,
                       dropDownList: genderList,
                       dropDownName: 'Gender*'),
                   DropDownWidget(
-                      changeParentValue: _callback,
+                      changeParentValue: (v) => weightValue = v,
                       dropDownValue: weightValue,
                       dropDownList: weightList,
                       dropDownName: 'Weight class*'),
                   DropDownWidget(
-                      changeParentValue: _callback,
+                      changeParentValue: (v) => fighterStatusValue = v,
                       dropDownValue: fighterStatusValue,
                       dropDownList: fighterStatusList,
                       dropDownName: 'Fighter status*'),
@@ -303,8 +296,6 @@ class _RegisterFighterState extends State<RegisterFighter> {
                                   fighterStatusValue,
                                   bioController.text)
                             }
-                          else
-                            {print(genderValue)}
                         },
                     child: isLoading == true
                         ? const CircularProgressIndicator()

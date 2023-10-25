@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
 import 'package:ftf/reusableWidgets/date_picker.dart';
@@ -40,6 +41,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   bool fighterNotFoundChecked = false;
   bool contractedChecked = false;
 
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+
   Future<Map<String, dynamic>> getDocument() async {
     DocumentSnapshot res = await FirebaseFirestore.instance
         .collection('fightOffers')
@@ -67,6 +70,14 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
             yearController.text = data['fightDate'].toString();
 
             _initializeVideoPlayerFuture = _videoController.initialize();
+
+            if (data['fighterNotFoundChecked'] == 'true' &&
+                currentUser != data['createdBy']) {
+              FirebaseFirestore.instance
+                  .collection('fightOffers')
+                  .doc(widget.offerId)
+                  .update({'opponentId': currentUser, 'opponent': 'Gageo'});
+            }
 
             return SingleChildScrollView(
               child: Column(children: [
@@ -200,23 +211,31 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                       height: 16,
                     ),
                     DropDownWidget(
+                      disabled: true,
+                      changeParentValue: null,
                       dropDownList: rematchClauseList,
                       dropDownValue: data['rematchClause'],
                       dropDownName: 'Rematch clause*',
                     ),
                     DropDownWidget(
+                        disabled: true,
+                        changeParentValue: null,
                         dropDownValue: data['fighterStatus'],
                         dropDownList: fighterStatusList,
                         dropDownName: 'Fighter status*'),
                     DropDownWidget(
-                        dropDownValue: weightList.first,
+                        disabled: true,
+                        changeParentValue: null,
+                        dropDownValue: data['weightClass'],
                         dropDownList: weightList,
                         dropDownName: 'Weight class*'),
                     YearPickerWidget(
+                      disabled: true,
                       leadingText: 'Fight date*',
                       controller: yearController,
                     ),
                     DatePicker(
+                      disabled: true,
                       leadingText: 'Offer expiry date*',
                       displayDate: pickerController,
                       dateTimePicked: data['offerExpiryDate'].toDate(),
@@ -242,7 +261,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                             ),
                           )
                         : const SizedBox(),
-                    _videoController != null
+                    data['calloutVideoURL'] != null ||
+                            data['calloutVideoURL'] == ''
                         ? Padding(
                             padding: const EdgeInsets.only(left: 16),
                             child: Align(

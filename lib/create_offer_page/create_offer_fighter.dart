@@ -84,14 +84,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   CollectionReference fightOffers =
       FirebaseFirestore.instance.collection('fightOffers');
 
-  _callback(String value) {
-    rematchClause = value;
-
-    fighterStatus = value;
-
-    weight = value;
-  }
-
   Future<void> getData() async {
     queriedList.clear();
     // Get docs from collection reference
@@ -481,18 +473,18 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                 height: 16,
               ),
               DropDownWidget(
-                changeParentValue: _callback,
+                changeParentValue: (v) => rematchClause = v,
                 dropDownList: rematchClauseList,
                 dropDownValue: rematchClause,
                 dropDownName: 'Rematch clause*',
               ),
               DropDownWidget(
-                  changeParentValue: _callback,
+                  changeParentValue: (v) => fighterStatus = v,
                   dropDownValue: fighterStatus,
                   dropDownList: fighterStatusList,
                   dropDownName: 'Fighter status*'),
               DropDownWidget(
-                  changeParentValue: _callback,
+                  changeParentValue: (v) => weight = v,
                   dropDownValue: weight,
                   dropDownList: weightList,
                   dropDownName: 'Weight class*'),

@@ -10,11 +10,14 @@ class DatePicker extends StatefulWidget {
 
   DateTime dateTimePicked;
 
+  bool disabled;
+
   DatePicker(
       {Key? key,
       required this.leadingText,
       required this.displayDate,
-      required this.dateTimePicked})
+      required this.dateTimePicked,
+      this.disabled = false})
       : super(key: key);
 
   @override
@@ -79,7 +82,9 @@ class _DatePickerState extends State<DatePicker> {
                     contentPadding: EdgeInsets.zero,
                   ),
                   controller: widget.displayDate,
-                  onTap: () => onPressed(context: context)))
+                  onTap: widget.disabled == false
+                      ? () => onPressed(context: context)
+                      : null))
         ],
       ),
     );
