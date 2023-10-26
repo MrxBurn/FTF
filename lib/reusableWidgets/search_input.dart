@@ -106,18 +106,16 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                             " " +
                                             widget.suggestions[index].lastName),
                                     onTap: () {
-                                      setState(() {
-                                        widget.onSelectedSuggestion(
-                                            widget.suggestions[index]);
+                                      widget.onSelectedSuggestion(
+                                          widget.suggestions[index]);
 
-                                        widget.onListTileTap(widget
-                                                .suggestions[index].firstName +
-                                            " " +
-                                            widget.suggestions[index].lastName);
+                                      widget.onListTileTap(widget
+                                              .suggestions[index].firstName +
+                                          " " +
+                                          widget.suggestions[index].lastName);
 
-                                        FocusScope.of(context).unfocus();
-                                        _textEditingController.clear();
-                                      });
+                                      FocusScope.of(context).unfocus();
+                                      _textEditingController.clear();
                                     },
                                   );
                                 }),

@@ -34,6 +34,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   String weight = weightList.first;
 
+  DateTime actualExpiryDate = DateTime.now();
+
   VideoPlayerController? _videoController;
   Future<void>? _initializeVideoPlayerFuture;
 
@@ -55,8 +57,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   bool fighterNotFoundChecked = false;
   bool contractedChecked = false;
-
-  DateTime dateTimeExpirationDate = DateTime.now();
 
   final CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('users');
@@ -129,6 +129,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   void onListTileTap(String value) {
     setState(() {
       searchValue = value;
+      fighterNotFoundChecked = false;
       displaySuggestions = false;
     });
   }
@@ -136,6 +137,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   void onSelectedSuggestion(UserClass value) {
     setState(() {
       selectedSuggestion = value;
+      fighterNotFoundChecked = false;
       displaySuggestions = false;
     });
   }
@@ -281,7 +283,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'rematchClause': rematchClause,
       'weightClass': weight,
       'fightDate': yearController.text,
-      'offerExpiryDate': dateTimeExpirationDate,
+      'offerExpiryDate': actualExpiryDate,
       'message': messageController.text,
       'calloutVideoURL': '',
       'like': 0,
@@ -473,29 +475,37 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                 height: 16,
               ),
               DropDownWidget(
-                changeParentValue: (v) => rematchClause = v,
+                changeParentValue: (v) => {setState(() => rematchClause = v)},
                 dropDownList: rematchClauseList,
                 dropDownValue: rematchClause,
                 dropDownName: 'Rematch clause*',
               ),
               DropDownWidget(
-                  changeParentValue: (v) => fighterStatus = v,
+                  changeParentValue: (v) => {setState(() => fighterStatus = v)},
                   dropDownValue: fighterStatus,
                   dropDownList: fighterStatusList,
                   dropDownName: 'Fighter status*'),
               DropDownWidget(
-                  changeParentValue: (v) => weight = v,
+                  changeParentValue: (v) => {setState(() => weight = v)},
                   dropDownValue: weight,
                   dropDownList: weightList,
                   dropDownName: 'Weight class*'),
               YearPickerWidget(
+                callback: (v) => {
+                  setState(() => yearController.text = '${v.month}-${v.year}')
+                },
                 leadingText: 'Fight date*',
                 controller: yearController,
               ),
               DatePicker(
                 leadingText: 'Offer expiry date*',
                 displayDate: pickerController,
-                dateTimePicked: dateTimeExpirationDate,
+                callback: (v) => {
+                  setState(() {
+                    pickerController.text = '${v.day}-${v.month}-${v.year}';
+                    actualExpiryDate = v;
+                  })
+                },
               ),
               Padding(
                 padding: paddingLRT,

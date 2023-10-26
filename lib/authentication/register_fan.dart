@@ -39,9 +39,6 @@ class _RegisterFanState extends State<RegisterFan> {
   void registerFan(
       String email, String password, String userName, String firstName) async {
     try {
-      if (ModalRoute.of(context)?.settings.name == 'registerFan') {
-        route = 'fan';
-      }
       users.where('userName', isEqualTo: userName).get().then((doc) async => {
             if (doc.docs.isNotEmpty)
               {showSnackBar(text: 'Username already exists', context: context)}
@@ -56,7 +53,7 @@ class _RegisterFanState extends State<RegisterFan> {
                           users.doc(value.user?.uid).set({
                             'firstName': firstName,
                             'userName': userName,
-                            'route': route
+                            'route': 'fan'
                           })
                         })
               }

@@ -65,9 +65,6 @@ class _RegisterFighterState extends State<RegisterFighter> {
       String fighterStatus,
       String bio) async {
     try {
-      if (ModalRoute.of(context)?.settings.name == 'registerFighter') {
-        route = 'fighter';
-      }
       isLoading = true;
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -81,7 +78,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   'weightClass': weightClass,
                   'fighterStatus': fighterStatus,
                   'description': bio,
-                  'route': route,
+                  'route': 'fighter',
                   'profileImageURL': ''
                 })
               });
@@ -213,22 +210,29 @@ class _RegisterFighterState extends State<RegisterFighter> {
                     ),
                   ),
                   DropDownWidget(
-                      changeParentValue: (v) => fighterType = v,
+                      changeParentValue: (v) => {
+                            setState(() => fighterType = v),
+                          },
                       dropDownValue: fighterType,
                       dropDownList: fighterTypeList,
                       dropDownName: 'Fighter type*'),
                   DropDownWidget(
-                      changeParentValue: (v) => genderValue = v,
+                      changeParentValue: (v) => {
+                            setState(() => genderValue = v),
+                          },
                       dropDownValue: genderValue,
                       dropDownList: genderList,
                       dropDownName: 'Gender*'),
                   DropDownWidget(
-                      changeParentValue: (v) => weightValue = v,
+                      changeParentValue: (v) =>
+                          {setState(() => weightValue = v)},
                       dropDownValue: weightValue,
                       dropDownList: weightList,
                       dropDownName: 'Weight class*'),
                   DropDownWidget(
-                      changeParentValue: (v) => fighterStatusValue = v,
+                      changeParentValue: (v) => {
+                            setState(() => fighterStatusValue = v),
+                          },
                       dropDownValue: fighterStatusValue,
                       dropDownList: fighterStatusList,
                       dropDownName: 'Fighter status*'),

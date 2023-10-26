@@ -51,9 +51,10 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
     data = res.data() as Map<String, dynamic>;
 
-    //TODO: Implement this
-    if (data['fighterNotFoundChecked'] == 'true' &&
-        currentUser != data['createdBy']) {
+    if (data['fighterNotFoundChecked'] == true &&
+        currentUser != data['createdBy'] &&
+        data['opponentId'] == '') {
+      print('adevarat');
       await FirebaseFirestore.instance
           .collection('fightOffers')
           .doc(widget.offerId)
@@ -70,8 +71,10 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
         future: getDocument(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            _videoController = VideoPlayerController.networkUrl(
-                Uri.parse(data['calloutVideoURL']));
+            if (data['calloutVideoURL'] != '') {
+              _videoController = VideoPlayerController.networkUrl(
+                  Uri.parse(data['calloutVideoURL']));
+            }
             DateTime firebaseDate = data['offerExpiryDate'].toDate();
 
             pickerController.text =
@@ -231,6 +234,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                         dropDownList: weightList,
                         dropDownName: 'Weight class*'),
                     YearPickerWidget(
+                      callback: (v) {},
                       disabled: true,
                       leadingText: 'Fight date*',
                       controller: yearController,
@@ -239,7 +243,10 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                       disabled: true,
                       leadingText: 'Offer expiry date*',
                       displayDate: pickerController,
-                      dateTimePicked: data['offerExpiryDate'].toDate(),
+                      callback: (v) => {
+                        setState(() => pickerController.text =
+                            data['offerExpiryDate'].toDate())
+                      },
                     ),
                     data['messasge'] == ''
                         ? Padding(
@@ -262,6 +269,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                             ),
                           )
                         : const SizedBox(),
+
+                    //TODO: FIx null error here
                     data['calloutVideoURL'] != null ||
                             data['calloutVideoURL'] == ''
                         ? Padding(

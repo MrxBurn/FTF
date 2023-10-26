@@ -50,10 +50,10 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                   ? (value) {
                       setState(() {
                         widget.dropDownValue = value!;
-                        if (widget.changeParentValue != null) {
-                          widget.changeParentValue!(value);
-                        }
                       });
+                      if (widget.changeParentValue != null) {
+                        widget.changeParentValue!(value ?? '');
+                      }
                     }
                   : null,
               items: widget.dropDownList

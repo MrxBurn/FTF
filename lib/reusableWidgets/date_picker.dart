@@ -8,7 +8,7 @@ class DatePicker extends StatefulWidget {
 
   TextEditingController displayDate;
 
-  DateTime dateTimePicked;
+  Function(DateTime) callback;
 
   bool disabled;
 
@@ -16,7 +16,7 @@ class DatePicker extends StatefulWidget {
       {Key? key,
       required this.leadingText,
       required this.displayDate,
-      required this.dateTimePicked,
+      required this.callback,
       this.disabled = false})
       : super(key: key);
 
@@ -52,15 +52,11 @@ class _DatePickerState extends State<DatePicker> {
               child: child!);
         });
 
-    setState(() {
-      if (datePicked != null) {
-        widget.displayDate.text =
-            '${datePicked.day}-${datePicked.month}-${datePicked.year}';
-        widget.dateTimePicked = datePicked;
-      } else {
-        widget.displayDate.text = now as String;
-      }
-    });
+    if (datePicked != null) {
+      widget.callback(datePicked);
+    } else {
+      widget.callback(now);
+    }
   }
 
   @override

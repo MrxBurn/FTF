@@ -8,12 +8,14 @@ class YearPickerWidget extends StatefulWidget {
   String leadingText = '';
   bool disabled;
   TextEditingController controller;
-  YearPickerWidget(
-      {Key? key,
-      required this.leadingText,
-      required this.controller,
-      this.disabled = false})
-      : super(key: key);
+  Function(DateTime) callback;
+  YearPickerWidget({
+    Key? key,
+    required this.leadingText,
+    required this.controller,
+    this.disabled = false,
+    required this.callback,
+  }) : super(key: key);
 
   @override
   State<YearPickerWidget> createState() => _YearPickerWidgetState();
@@ -53,13 +55,12 @@ class _YearPickerWidgetState extends State<YearPickerWidget> {
             child: child!);
       },
     );
-    setState(() {
-      if (monthSelected != null) {
-        widget.controller.text = '${monthSelected.month}-${monthSelected.year}';
-      } else {
-        widget.controller.text = '${now.month}-${now.year}';
-      }
-    });
+
+    if (monthSelected != null) {
+      widget.callback(monthSelected);
+    } else {
+      widget.callback(now);
+    }
   }
 
   @override
