@@ -240,11 +240,13 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         Uri.parse('https://fightertofighter.wixsite.com/ftf-site');
 
     final dynamicLinkParams = DynamicLinkParameters(
-      link: Uri.parse("https://fighterTOfighter.com?offerId=$offerId"),
+      link: Uri.parse(
+          "https://fightertofighter.wixsite.com/ftf-site?offerId=$offerId"),
 
       uriPrefix: "https://f2f.page.link",
-      androidParameters: AndroidParameters(
-          packageName: "com.ftf.ftf", fallbackUrl: fallbackURL),
+      androidParameters: const AndroidParameters(
+        packageName: "com.ftf.ftf",
+      ),
       // iosParameters: const IOSParameters(bundleId: "com.example.app.ios"),
     );
 
