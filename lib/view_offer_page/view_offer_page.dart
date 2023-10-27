@@ -38,6 +38,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
   ScrollController scrollController = ScrollController();
 
+  String opponentName = '';
+
   bool fighterNotFoundChecked = false;
   bool contractedChecked = false;
 
@@ -54,11 +56,14 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
     if (data['fighterNotFoundChecked'] == true &&
         currentUser != data['createdBy'] &&
         data['opponentId'] == '') {
-      print('adevarat');
       await FirebaseFirestore.instance
           .collection('fightOffers')
           .doc(widget.offerId)
           .update({'opponentId': currentUser, 'opponent': 'Gageo'});
+
+      setState(() {
+        opponentName = data['opponent'];
+      });
     }
 
     return res.data() as Map<String, dynamic>;
@@ -74,14 +79,13 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
             if (data['calloutVideoURL'] != '') {
               _videoController = VideoPlayerController.networkUrl(
                   Uri.parse(data['calloutVideoURL']));
+              _initializeVideoPlayerFuture = _videoController.initialize();
             }
             DateTime firebaseDate = data['offerExpiryDate'].toDate();
 
             pickerController.text =
                 '${firebaseDate.day}-${firebaseDate.month}-${firebaseDate.year}';
             yearController.text = data['fightDate'].toString();
-
-            _initializeVideoPlayerFuture = _videoController.initialize();
 
             return SingleChildScrollView(
               child: Column(children: [
@@ -112,7 +116,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                       ),
                       child: Center(
                         child: Text(
-                          data['opponent'],
+                          snapshot.data['opponent'],
                           style:
                               const TextStyle(fontSize: 28, color: Colors.red),
                         ),
@@ -248,7 +252,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                             data['offerExpiryDate'].toDate())
                       },
                     ),
-                    data['messasge'] == ''
+                    data['messasge'] != null
                         ? Padding(
                             padding: paddingLRT,
                             child: TextFormField(
@@ -269,10 +273,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                             ),
                           )
                         : const SizedBox(),
-
-                    //TODO: FIx null error here
-                    data['calloutVideoURL'] != null ||
-                            data['calloutVideoURL'] == ''
+                    data['calloutVideoURL'] != ''
                         ? Padding(
                             padding: const EdgeInsets.only(left: 16),
                             child: Align(
