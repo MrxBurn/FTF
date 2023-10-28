@@ -45,6 +45,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
+  bool buttonsVisible = false;
+
   Future<Map<String, dynamic>> getDocument() async {
     DocumentSnapshot res = await FirebaseFirestore.instance
         .collection('fightOffers')
@@ -81,11 +83,25 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                   Uri.parse(data['calloutVideoURL']));
               _initializeVideoPlayerFuture = _videoController.initialize();
             }
+            if (snapshot.data['negotationValues'].length == 1 &&
+                currentUser == snapshot.data['createdBy']) {
+              buttonsVisible = false;
+            } else {
+              buttonsVisible = true;
+            }
+
             DateTime firebaseDate = data['offerExpiryDate'].toDate();
 
             pickerController.text =
                 '${firebaseDate.day}-${firebaseDate.month}-${firebaseDate.year}';
             yearController.text = data['fightDate'].toString();
+
+            creatorValue.text =
+                snapshot.data['negotationValues'][0]['creatorValue'].toString();
+
+            opponentValue.text = snapshot.data['negotationValues'][0]
+                    ['opponentValue']
+                .toString();
 
             return SingleChildScrollView(
               child: Column(children: [
@@ -351,6 +367,29 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                             ),
                           )
                         : const SizedBox(),
+                    buttonsVisible
+                        ? Column(
+                            children: [
+                              Padding(
+                                padding: paddingLRT,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(
+                                        onPressed: () {},
+                                        child: const Text('1')),
+                                    ElevatedButton(
+                                        onPressed: () {},
+                                        child: const Text('2'))
+                                  ],
+                                ),
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {}, child: const Text('3'))
+                            ],
+                          )
+                        : const SizedBox()
                   ],
                 ),
               ]),

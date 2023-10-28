@@ -84,6 +84,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   CollectionReference fightOffers =
       FirebaseFirestore.instance.collection('fightOffers');
 
+  List negotationValues = [];
+
   Future<void> getData() async {
     queriedList.clear();
     // Get docs from collection reference
@@ -243,7 +245,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       link: Uri.parse(
           "https://fightertofighter.wixsite.com/ftf-site?offerId=$offerId"),
 
-      uriPrefix: "https://f2f.page.link",
+      uriPrefix: "https://f2foffer.page.link",
       androidParameters: const AndroidParameters(
         packageName: "com.ftf.ftf",
       ),
@@ -266,6 +268,10 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
           context: context,
           duration: const Duration(seconds: 5));
     } else {
+      negotationValues.add({
+        'creatorValue': int.parse(creatorValue.text),
+        'opponentValue': int.parse(opponentValue.text)
+      });
       await fightOffers.add(offer).then((value) => {
             saveToFirebase(video, value.id),
             if (fighterNotFoundChecked) {createDynamicLink(value.id)}
@@ -280,8 +286,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'opponentId': selectedSuggestion.uid,
       'fighterNotFoundChecked': fighterNotFoundChecked,
       'contractedChecked': contractedChecked,
-      'creatorSplitValue': int.parse(creatorValue.text),
-      'opponentSplitValue': int.parse(opponentValue.text),
       'rematchClause': rematchClause,
       'weightClass': weight,
       'fightDate': yearController.text,
@@ -291,7 +295,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'like': 0,
       'dislike': 0,
       'createdBy': currentUser,
-      'fighterStatus': fighterStatus
+      'fighterStatus': fighterStatus,
+      'negotationValues': negotationValues,
+      'status': "PENDING"
     };
 
     return Scaffold(

@@ -32,7 +32,7 @@ class _FighterHomePageState extends State<FighterHomePage> {
             text: 'View offer',
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ViewOfferPage(
-                      offerId: 'Qegu60cvl3bEj4Yub57v',
+                      offerId: 'PgobptAtv9GADLQnOfmL',
                     ))))
       ]),
     );
