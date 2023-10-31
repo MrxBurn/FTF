@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
+import 'package:ftf/reusableWidgets/contract_split.dart';
 import 'package:ftf/reusableWidgets/date_picker.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -147,6 +148,12 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   void onContractedTick(bool? value) {
     setState(() {
       contractedChecked = value!;
+      if (opponentValue.text != '0' ||
+          opponentValue.text != '' && creatorValue.text != '0' ||
+          creatorValue.text != '') {
+        opponentValue.text = '0';
+        creatorValue.text = '0';
+      }
     });
   }
 
@@ -279,6 +286,13 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     }
   }
 
+  void onEditingComplete() {
+    setState(() {
+      creatorValue.text = '0';
+      opponentValue.text = '0';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> offer = {
@@ -360,125 +374,13 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
               const SizedBox(
                 height: 16,
               ),
-              Container(
-                constraints: const BoxConstraints(
-                    minWidth: 350, maxWidth: 350, minHeight: 150),
-                decoration: BoxDecoration(
-                  color: const Color(lighterBlack),
-                  boxShadow: [containerShadowWhite],
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Contract split',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: contractedChecked == true
-                                  ? Colors.grey
-                                  : Colors.white),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: 50,
-                                  child: TextField(
-                                    readOnly: contractedChecked == true
-                                        ? true
-                                        : false,
-                                    textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
-                                    controller: creatorValue,
-                                    style: TextStyle(
-                                        color: contractedChecked == true
-                                            ? Colors.grey
-                                            : Colors.yellow,
-                                        fontSize: 24),
-                                    onChanged: (value) =>
-                                        onContractSplitChange(value),
-                                    onEditingComplete: () {
-                                      if (creatorValue.text == '') {
-                                        setState(() {
-                                          creatorValue.text = '0';
-                                          opponentValue.text = '0';
-                                        });
-                                      }
-                                    },
-                                    onTapOutside: (value) {
-                                      if (creatorValue.text == '') {
-                                        setState(() {
-                                          creatorValue.text = '0';
-                                          opponentValue.text = '0';
-                                        });
-                                      }
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                Text(
-                                  'You',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: contractedChecked == true
-                                          ? Colors.grey
-                                          : Colors.white),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              '%',
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  color: contractedChecked == true
-                                      ? Colors.grey
-                                      : Colors.white),
-                            ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: 50,
-                                  child: TextField(
-                                    controller: opponentValue,
-                                    decoration: const InputDecoration(
-                                        focusedBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.grey))),
-                                    readOnly: true,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: contractedChecked == true
-                                            ? Colors.grey
-                                            : Colors.red,
-                                        fontSize: 24),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                const Text(
-                                  'Opponent',
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        CheckBoxWidget(
-                          checkValue: contractedChecked,
-                          title: 'N/A - Contracted',
-                          onChanged: onContractedTick,
-                        )
-                      ]),
-                ),
-              ),
+              ContractSplit(
+                  contractedChecked: contractedChecked,
+                  creatorValue: creatorValue,
+                  onTickChanged: (v) => onContractedTick(v),
+                  opponentValue: opponentValue,
+                  onContractSplitChange: onContractSplitChange,
+                  onEditingComplete: onEditingComplete),
               const SizedBox(
                 height: 16,
               ),

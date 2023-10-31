@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
+import 'package:ftf/reusableWidgets/contract_split.dart';
 import 'package:ftf/reusableWidgets/date_picker.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -26,9 +27,15 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   VideoPlayerController _videoController = VideoPlayerController.asset('');
   Future<void>? _initializeVideoPlayerFuture;
 
-  TextEditingController creatorValue = TextEditingController(text: '0');
+  TextEditingController initialCreatorValue = TextEditingController(text: '0');
 
-  TextEditingController opponentValue = TextEditingController(text: '0');
+  TextEditingController initialOpponentValue = TextEditingController(text: '0');
+
+  TextEditingController negotiateCreatorValue =
+      TextEditingController(text: '0');
+
+  TextEditingController negotiateOpponentValue =
+      TextEditingController(text: '0');
 
   TextEditingController messageController = TextEditingController();
 
@@ -46,6 +53,37 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
   bool buttonsVisible = false;
+
+  void onContractedTick(bool? value) {
+    setState(() {
+      contractedChecked = value!;
+      if (negotiateOpponentValue.text != '0' ||
+          negotiateOpponentValue.text != '' &&
+              negotiateCreatorValue.text != '0' ||
+          negotiateCreatorValue.text != '') {
+        negotiateOpponentValue.text = '0';
+        negotiateCreatorValue.text = '0';
+      }
+    });
+  }
+
+  onContractSplitChange(String value) {
+    const maxValue = 100;
+
+    setState(() {
+      negotiateCreatorValue.text = value;
+
+      negotiateOpponentValue.text =
+          (maxValue - int.parse(negotiateCreatorValue.text)).toString();
+    });
+  }
+
+  void onEditingComplete() {
+    setState(() {
+      negotiateCreatorValue.text = '0';
+      negotiateOpponentValue.text = '0';
+    });
+  }
 
   Future<Map<String, dynamic>> getDocument() async {
     DocumentSnapshot res = await FirebaseFirestore.instance
@@ -96,12 +134,14 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                 '${firebaseDate.day}-${firebaseDate.month}-${firebaseDate.year}';
             yearController.text = data['fightDate'].toString();
 
-            creatorValue.text =
+            initialCreatorValue.text =
                 snapshot.data['negotationValues'][0]['creatorValue'].toString();
 
-            opponentValue.text = snapshot.data['negotationValues'][0]
+            initialOpponentValue.text = snapshot.data['negotationValues'][0]
                     ['opponentValue']
                 .toString();
+
+            messageController.text = snapshot.data['message'];
 
             return SingleChildScrollView(
               child: Column(children: [
@@ -175,7 +215,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                           readOnly: true,
                                           textAlign: TextAlign.center,
                                           keyboardType: TextInputType.number,
-                                          controller: creatorValue,
+                                          controller: initialCreatorValue,
                                           style: const TextStyle(
                                               color: Colors.yellow,
                                               fontSize: 24),
@@ -201,7 +241,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                       SizedBox(
                                         width: 50,
                                         child: TextField(
-                                          controller: opponentValue,
+                                          controller: initialOpponentValue,
                                           decoration: const InputDecoration(
                                               focusedBorder:
                                                   UnderlineInputBorder(
@@ -268,10 +308,11 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                             data['offerExpiryDate'].toDate())
                       },
                     ),
-                    data['messasge'] != null
+                    snapshot.data['message'] != ''
                         ? Padding(
                             padding: paddingLRT,
                             child: TextFormField(
+                              readOnly: true,
                               keyboardType: TextInputType.multiline,
                               maxLines: null,
                               controller: messageController,
@@ -377,16 +418,34 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     ElevatedButton(
-                                        onPressed: () {},
-                                        child: const Text('1')),
+                                      onPressed: () {},
+                                      child: const Text(
+                                        'Approve',
+                                        style: TextStyle(color: Colors.green),
+                                      ),
+                                    ),
                                     ElevatedButton(
                                         onPressed: () {},
-                                        child: const Text('2'))
+                                        child: const Text(
+                                          'Decline',
+                                          style: TextStyle(color: Colors.red),
+                                        ))
                                   ],
                                 ),
                               ),
                               ElevatedButton(
-                                  onPressed: () {}, child: const Text('3'))
+                                  onPressed: () => openNegotationDialog(
+                                      context,
+                                      contractedChecked,
+                                      negotiateCreatorValue,
+                                      negotiateOpponentValue,
+                                      (v) => onContractedTick(v),
+                                      onContractSplitChange,
+                                      onEditingComplete),
+                                  child: const Text(
+                                    'Negotiate',
+                                    style: TextStyle(color: Colors.yellow),
+                                  ))
                             ],
                           )
                         : const SizedBox()
@@ -401,4 +460,31 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
       ),
     );
   }
+}
+
+//TODO: implement this in a different page
+void openNegotationDialog(
+  BuildContext context,
+  bool contractedChecked,
+  TextEditingController negotiateCreatorValue,
+  TextEditingController negotiateOpponentValue,
+  Function onTickChanged,
+  Function onContractSplitChange,
+  Function onEditingComplete,
+) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actions: [
+            ContractSplit(
+                contractedChecked: contractedChecked,
+                creatorValue: negotiateCreatorValue,
+                onTickChanged: onTickChanged,
+                opponentValue: negotiateOpponentValue,
+                onContractSplitChange: onContractSplitChange,
+                onEditingComplete: onEditingComplete)
+          ],
+        );
+      });
 }
