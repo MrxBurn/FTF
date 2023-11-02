@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
 import 'package:ftf/styles/styles.dart';
@@ -9,6 +11,10 @@ class ContractSplit extends StatefulWidget {
   Function onTickChanged;
   Function onContractSplitChange;
   Function onEditingComplete;
+  double minWidth;
+  double maxWidth;
+  double minHeight;
+  bool readOnly;
 
   ContractSplit(
       {super.key,
@@ -17,7 +23,11 @@ class ContractSplit extends StatefulWidget {
       required this.onTickChanged,
       required this.opponentValue,
       required this.onContractSplitChange,
-      required this.onEditingComplete});
+      required this.onEditingComplete,
+      this.maxWidth = 350,
+      this.minHeight = 150,
+      this.minWidth = 350,
+      this.readOnly = false});
 
   @override
   State<ContractSplit> createState() => _ContractSplitState();
@@ -27,8 +37,10 @@ class _ContractSplitState extends State<ContractSplit> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints:
-          const BoxConstraints(minWidth: 350, maxWidth: 350, minHeight: 150),
+      constraints: BoxConstraints(
+          minWidth: widget.minWidth,
+          maxWidth: widget.maxWidth,
+          minHeight: widget.minHeight),
       decoration: BoxDecoration(
         color: const Color(lighterBlack),
         boxShadow: [containerShadowWhite],
@@ -53,7 +65,10 @@ class _ContractSplitState extends State<ContractSplit> {
                   SizedBox(
                     width: 50,
                     child: TextField(
-                      readOnly: widget.contractedChecked == true ? true : false,
+                      readOnly:
+                          widget.readOnly || widget.contractedChecked == true
+                              ? true
+                              : false,
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
                       controller: widget.creatorValue,

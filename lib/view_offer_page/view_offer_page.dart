@@ -57,32 +57,30 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   void onContractedTick(bool? value) {
     setState(() {
       contractedChecked = value!;
-      if (negotiateOpponentValue.text != '0' ||
-          negotiateOpponentValue.text != '' &&
-              negotiateCreatorValue.text != '0' ||
-          negotiateCreatorValue.text != '') {
-        negotiateOpponentValue.text = '0';
-        negotiateCreatorValue.text = '0';
-      }
     });
+    if (negotiateOpponentValue.text != '0' ||
+        negotiateOpponentValue.text != '' &&
+            negotiateCreatorValue.text != '0' ||
+        negotiateCreatorValue.text != '') {
+      negotiateOpponentValue.text = '0';
+      negotiateCreatorValue.text = '0';
+    }
   }
 
   onContractSplitChange(String value) {
     const maxValue = 100;
 
-    setState(() {
-      negotiateCreatorValue.text = value;
+    negotiateCreatorValue.text = value;
 
-      negotiateOpponentValue.text =
-          (maxValue - int.parse(negotiateCreatorValue.text)).toString();
-    });
+    negotiateOpponentValue.text =
+        (maxValue - int.parse(negotiateCreatorValue.text)).toString();
   }
 
   void onEditingComplete() {
-    setState(() {
-      negotiateCreatorValue.text = '0';
-      negotiateOpponentValue.text = '0';
-    });
+    // setState(() {
+    negotiateCreatorValue.text = '0';
+    negotiateOpponentValue.text = '0';
+    // });
   }
 
   Future<Map<String, dynamic>> getDocument() async {
@@ -112,52 +110,53 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: getDocument(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (data['calloutVideoURL'] != '') {
-              _videoController = VideoPlayerController.networkUrl(
-                  Uri.parse(data['calloutVideoURL']));
-              _initializeVideoPlayerFuture = _videoController.initialize();
-            }
-            if (snapshot.data['negotationValues'].length == 1 &&
-                currentUser == snapshot.data['createdBy']) {
-              buttonsVisible = false;
-            } else {
-              buttonsVisible = true;
-            }
+        body: FutureBuilder(
+            future: getDocument(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (data['calloutVideoURL'] != '') {
+                  _videoController = VideoPlayerController.networkUrl(
+                      Uri.parse(data['calloutVideoURL']));
+                  _initializeVideoPlayerFuture = _videoController.initialize();
+                }
+                if (snapshot.data['negotationValues'].length == 1 &&
+                    currentUser == snapshot.data['createdBy']) {
+                  buttonsVisible = false;
+                } else {
+                  buttonsVisible = true;
+                }
 
-            DateTime firebaseDate = data['offerExpiryDate'].toDate();
+                DateTime firebaseDate = data['offerExpiryDate'].toDate();
 
-            pickerController.text =
-                '${firebaseDate.day}-${firebaseDate.month}-${firebaseDate.year}';
-            yearController.text = data['fightDate'].toString();
+                pickerController.text =
+                    '${firebaseDate.day}-${firebaseDate.month}-${firebaseDate.year}';
+                yearController.text = data['fightDate'].toString();
 
-            initialCreatorValue.text =
-                snapshot.data['negotationValues'][0]['creatorValue'].toString();
+                initialCreatorValue.text = snapshot.data['negotationValues'][0]
+                        ['creatorValue']
+                    .toString();
 
-            initialOpponentValue.text = snapshot.data['negotationValues'][0]
-                    ['opponentValue']
-                .toString();
+                initialOpponentValue.text = snapshot.data['negotationValues'][0]
+                        ['opponentValue']
+                    .toString();
 
-            messageController.text = snapshot.data['message'];
+                messageController.text = snapshot.data['message'];
 
-            return SingleChildScrollView(
-              child: Column(children: [
-                LogoHeader(
-                  backRequired: true,
-                  onPressed: () => Navigator.pushNamed(context, 'fighterHome'),
-                ),
-                const Text(
-                  'View offer',
-                  style: headerStyle,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Column(
-                  children: [
+                return SingleChildScrollView(
+                    child: Column(children: [
+                  LogoHeader(
+                    backRequired: true,
+                    onPressed: () =>
+                        Navigator.pushNamed(context, 'fighterHome'),
+                  ),
+                  const Text(
+                    'View offer',
+                    style: headerStyle,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Column(children: [
                     const SizedBox(
                       height: 16,
                     ),
@@ -181,96 +180,14 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                     const SizedBox(
                       height: 16,
                     ),
-                    Container(
-                      constraints: const BoxConstraints(
-                          minWidth: 350, maxWidth: 350, minHeight: 150),
-                      decoration: BoxDecoration(
-                        color: const Color(lighterBlack),
-                        boxShadow: [containerShadowWhite],
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Contract split',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: contractedChecked == true
-                                        ? Colors.grey
-                                        : Colors.white),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        width: 50,
-                                        child: TextField(
-                                          readOnly: true,
-                                          textAlign: TextAlign.center,
-                                          keyboardType: TextInputType.number,
-                                          controller: initialCreatorValue,
-                                          style: const TextStyle(
-                                              color: Colors.yellow,
-                                              fontSize: 24),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-                                      const Text(
-                                        'You',
-                                        style: TextStyle(
-                                            fontSize: 12, color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                  const Text(
-                                    '%',
-                                    style: TextStyle(
-                                        fontSize: 24, color: Colors.white),
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        width: 50,
-                                        child: TextField(
-                                          controller: initialOpponentValue,
-                                          decoration: const InputDecoration(
-                                              focusedBorder:
-                                                  UnderlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.grey))),
-                                          readOnly: true,
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: Colors.red, fontSize: 24),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-                                      const Text(
-                                        'Opponent',
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              CheckBoxWidget(
-                                checkValue: data['contractedChecked'],
-                                title: 'N/A - Contracted',
-                              )
-                            ]),
-                      ),
-                    ),
+                    ContractSplit(
+                        readOnly: true,
+                        contractedChecked: contractedChecked,
+                        creatorValue: initialCreatorValue,
+                        onTickChanged: (value) => value,
+                        opponentValue: initialOpponentValue,
+                        onContractSplitChange: () {},
+                        onEditingComplete: () {}),
                     const SizedBox(
                       height: 16,
                     ),
@@ -434,14 +351,14 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                 ),
                               ),
                               ElevatedButton(
-                                  onPressed: () => openNegotationDialog(
+                                  onPressed: () => showAlerDialog(
                                       context,
                                       contractedChecked,
                                       negotiateCreatorValue,
                                       negotiateOpponentValue,
-                                      (v) => onContractedTick(v),
                                       onContractSplitChange,
-                                      onEditingComplete),
+                                      onEditingComplete,
+                                      (value) => onContractedTick(value)),
                                   child: const Text(
                                     'Negotiate',
                                     style: TextStyle(color: Colors.yellow),
@@ -449,21 +366,19 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                             ],
                           )
                         : const SizedBox()
-                  ],
-                ),
-              ]),
-            );
-          } else {
-            return const CircularProgressIndicator();
-          }
-        },
-      ),
-    );
+                  ])
+                ]));
+              } else {
+                return const CircularProgressIndicator();
+              }
+            }));
   }
 }
 
-//TODO: implement this in a different page
-void openNegotationDialog(
+//TODO: update this values after chanign them in dialog
+//Update array
+//Expand the widget to width of dialog
+void showAlerDialog(
   BuildContext context,
   bool contractedChecked,
   TextEditingController negotiateCreatorValue,
@@ -475,16 +390,37 @@ void openNegotationDialog(
   showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          actions: [
-            ContractSplit(
+        return StatefulBuilder(builder: (context, alertState) {
+          return AlertDialog(
+            actions: [
+              ContractSplit(
                 contractedChecked: contractedChecked,
                 creatorValue: negotiateCreatorValue,
-                onTickChanged: onTickChanged,
+                onTickChanged: (value) => {
+                  alertState(
+                    () => {
+                      contractedChecked = value as bool,
+                      if (contractedChecked)
+                        {
+                          negotiateCreatorValue.text = '0',
+                          negotiateOpponentValue.text = '0'
+                        }
+                    },
+                  )
+                },
                 opponentValue: negotiateOpponentValue,
-                onContractSplitChange: onContractSplitChange,
-                onEditingComplete: onEditingComplete)
-          ],
-        );
+                onContractSplitChange: (value) => {
+                  alertState(() => {
+                        negotiateCreatorValue.text = value,
+                        negotiateOpponentValue.text =
+                            (100 - int.parse(negotiateCreatorValue.text))
+                                .toString()
+                      })
+                },
+                onEditingComplete: () {},
+              )
+            ],
+          );
+        });
       });
 }
