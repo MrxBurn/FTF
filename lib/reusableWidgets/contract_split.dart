@@ -15,6 +15,7 @@ class ContractSplit extends StatefulWidget {
   double maxWidth;
   double minHeight;
   bool readOnly;
+  bool checkBoxRequired;
 
   ContractSplit(
       {super.key,
@@ -27,7 +28,8 @@ class ContractSplit extends StatefulWidget {
       this.maxWidth = 350,
       this.minHeight = 150,
       this.minWidth = 350,
-      this.readOnly = false});
+      this.readOnly = false,
+      this.checkBoxRequired = true});
 
   @override
   State<ContractSplit> createState() => _ContractSplitState();
@@ -140,11 +142,13 @@ class _ContractSplitState extends State<ContractSplit> {
               ),
             ],
           ),
-          CheckBoxWidget(
-            checkValue: widget.contractedChecked,
-            title: 'N/A - Contracted',
-            onChanged: widget.onTickChanged,
-          )
+          widget.checkBoxRequired
+              ? CheckBoxWidget(
+                  checkValue: widget.contractedChecked,
+                  title: 'N/A - Contracted',
+                  onChanged: widget.onTickChanged,
+                )
+              : const SizedBox()
         ]),
       ),
     );

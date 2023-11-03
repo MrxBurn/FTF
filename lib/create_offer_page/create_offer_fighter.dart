@@ -277,7 +277,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     } else {
       negotationValues.add({
         'creatorValue': int.parse(creatorValue.text),
-        'opponentValue': int.parse(opponentValue.text)
+        'opponentValue': int.parse(opponentValue.text),
+        'createdAt': DateTime.now()
       });
       await fightOffers.add(offer).then((value) => {
             saveToFirebase(video, value.id),

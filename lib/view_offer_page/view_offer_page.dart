@@ -91,13 +91,22 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
     data = res.data() as Map<String, dynamic>;
 
+    DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(currentUser)
+        .get();
+
     if (data['fighterNotFoundChecked'] == true &&
         currentUser != data['createdBy'] &&
         data['opponentId'] == '') {
       await FirebaseFirestore.instance
           .collection('fightOffers')
           .doc(widget.offerId)
-          .update({'opponentId': currentUser, 'opponent': 'Gageo'});
+          .update({
+        'opponentId': currentUser,
+        'opponent': userData['firstName'] + " " + userData['lastName']
+      });
 
       setState(() {
         opponentName = data['opponent'];
@@ -105,6 +114,23 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
     }
 
     return res.data() as Map<String, dynamic>;
+  }
+
+  List updatedNegotiationValues = [];
+
+  Future<void> updateNegotiationValues(
+      int creatorValue, int opponentValue) async {
+    updatedNegotiationValues.add({
+      'creatorValue': creatorValue,
+      'opponentValue': opponentValue,
+      'createdAt': DateTime.now()
+    });
+    await FirebaseFirestore.instance
+        .collection('fightOffers')
+        .doc(widget.offerId)
+        .update({
+      'negotationValues': FieldValue.arrayUnion(updatedNegotiationValues)
+    });
   }
 
   @override
@@ -358,7 +384,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                       negotiateOpponentValue,
                                       onContractSplitChange,
                                       onEditingComplete,
-                                      (value) => onContractedTick(value)),
+                                      (value) => onContractedTick(value),
+                                      updateNegotiationValues),
                                   child: const Text(
                                     'Negotiate',
                                     style: TextStyle(color: Colors.yellow),
@@ -375,9 +402,6 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   }
 }
 
-//TODO: update this values after chanign them in dialog
-//Update array
-//Expand the widget to width of dialog
 void showAlerDialog(
   BuildContext context,
   bool contractedChecked,
@@ -386,41 +410,79 @@ void showAlerDialog(
   Function onTickChanged,
   Function onContractSplitChange,
   Function onEditingComplete,
+  Function updateValues,
 ) {
   showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, alertState) {
-          return AlertDialog(
-            actions: [
-              ContractSplit(
-                contractedChecked: contractedChecked,
-                creatorValue: negotiateCreatorValue,
-                onTickChanged: (value) => {
-                  alertState(
-                    () => {
-                      contractedChecked = value as bool,
-                      if (contractedChecked)
-                        {
-                          negotiateCreatorValue.text = '0',
-                          negotiateOpponentValue.text = '0'
-                        }
-                    },
-                  )
-                },
-                opponentValue: negotiateOpponentValue,
-                onContractSplitChange: (value) => {
-                  alertState(() => {
-                        negotiateCreatorValue.text = value,
-                        negotiateOpponentValue.text =
-                            (100 - int.parse(negotiateCreatorValue.text))
-                                .toString()
-                      })
-                },
-                onEditingComplete: () {},
-              )
-            ],
-          );
+          return Dialog(
+              child: SizedBox(
+            height: 220,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ContractSplit(
+                  checkBoxRequired: false,
+                  contractedChecked: contractedChecked,
+                  creatorValue: negotiateCreatorValue,
+                  onTickChanged: (value) => {
+                    alertState(
+                      () => {
+                        contractedChecked = value as bool,
+                        if (contractedChecked)
+                          {
+                            negotiateCreatorValue.text = '0',
+                            negotiateOpponentValue.text = '0'
+                          }
+                      },
+                    )
+                  },
+                  opponentValue: negotiateOpponentValue,
+                  onContractSplitChange: (value) => {
+                    alertState(() => {
+                          negotiateCreatorValue.text = value,
+                          negotiateOpponentValue.text =
+                              (100 - int.parse(negotiateCreatorValue.text))
+                                  .toString()
+                        })
+                  },
+                  onEditingComplete: () {},
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () => {
+                            updateValues(
+                              int.parse(negotiateCreatorValue.text),
+                              int.parse(negotiateOpponentValue.text),
+                            ),
+                            Navigator.pushNamed(context, 'fighterHome'),
+                          },
+                          child: const Text(
+                            'Send',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ));
         });
       });
 }
