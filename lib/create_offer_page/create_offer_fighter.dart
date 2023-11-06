@@ -253,9 +253,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
           "https://fightertofighter.wixsite.com/ftf-site?offerId=$offerId"),
 
       uriPrefix: "https://f2foffer.page.link",
-      androidParameters: const AndroidParameters(
-        packageName: "com.ftf.ftf",
-      ),
+      androidParameters: AndroidParameters(
+          packageName: "com.ftf.ftf", fallbackUrl: fallbackURL),
       // iosParameters: const IOSParameters(bundleId: "com.example.app.ios"),
     );
 

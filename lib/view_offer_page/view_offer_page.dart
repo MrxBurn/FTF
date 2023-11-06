@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
-import 'package:ftf/reusableWidgets/checkbox.dart';
 import 'package:ftf/reusableWidgets/contract_split.dart';
 import 'package:ftf/reusableWidgets/date_picker.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
