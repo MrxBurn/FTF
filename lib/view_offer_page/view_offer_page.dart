@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
 import 'package:ftf/reusableWidgets/contract_split.dart';
 import 'package:ftf/reusableWidgets/date_picker.dart';
@@ -129,7 +130,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
         .collection('fightOffers')
         .doc(widget.offerId)
         .update({
-      'negotationValues': FieldValue.arrayUnion(updatedNegotiationValues)
+      'negotiationValues': FieldValue.arrayUnion(updatedNegotiationValues)
     });
   }
 
@@ -145,7 +146,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                       Uri.parse(data['calloutVideoURL']));
                   _initializeVideoPlayerFuture = _videoController.initialize();
                 }
-                if (snapshot.data['negotationValues'].length == 1 &&
+                if (snapshot.data['negotiationValues'].length == 1 &&
                     currentUser == snapshot.data['createdBy']) {
                   buttonsVisible = false;
                 } else {
@@ -158,12 +159,12 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                     '${firebaseDate.day}-${firebaseDate.month}-${firebaseDate.year}';
                 yearController.text = data['fightDate'].toString();
 
-                initialCreatorValue.text = snapshot.data['negotationValues'][0]
+                initialCreatorValue.text = snapshot.data['negotiationValues'][0]
                         ['creatorValue']
                     .toString();
 
-                initialOpponentValue.text = snapshot.data['negotationValues'][0]
-                        ['opponentValue']
+                initialOpponentValue.text = snapshot.data['negotiationValues']
+                        [0]['opponentValue']
                     .toString();
 
                 messageController.text = snapshot.data['message'];
@@ -214,6 +215,15 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                         opponentValue: initialOpponentValue,
                         onContractSplitChange: () {},
                         onEditingComplete: () {}),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    snapshot.data['negotiationValues'].length > 1
+                        ? BlackButton(
+                            onPressed: () => showNegotiationHistory(
+                                context, snapshot.data['negotiationValues']),
+                            text: 'Review negotiations ')
+                        : const SizedBox(),
                     const SizedBox(
                       height: 16,
                     ),
@@ -477,6 +487,105 @@ void showAlerDialog(
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ));
+        });
+      });
+}
+
+void showNegotiationHistory(BuildContext context, List negotiations) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, alertState) {
+          return Dialog(
+              child: SizedBox(
+            height: 450,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Offer creator',
+                        style: TextStyle(fontSize: 18, color: Colors.yellow),
+                      ),
+                      Text(
+                        'Opponent',
+                        style: TextStyle(fontSize: 18, color: Colors.red),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 300,
+                  child: ListView.separated(
+                      itemCount: negotiations.length,
+                      separatorBuilder: (context, index) => const SizedBox(
+                            height: 8,
+                          ),
+                      itemBuilder: (context, index) {
+                        DateTime creationTime =
+                            negotiations[index]['createdAt'].toDate();
+
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 16.0, right: 16),
+                          child: Container(
+                            height: 60,
+                            decoration: const BoxDecoration(
+                                color: Color(black),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                        negotiations[index]['creatorValue']
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.yellow)),
+                                    const Text(
+                                      '%',
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    ),
+                                    Text(
+                                        negotiations[index]['opponentValue']
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 18, color: Colors.red)),
+                                  ],
+                                ),
+                                Text(
+                                    '${creationTime.day}-${creationTime.month}-${creationTime.year} - ${TimeOfDay.fromDateTime(creationTime).format(context)}')
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text(
+                        'Close',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 )

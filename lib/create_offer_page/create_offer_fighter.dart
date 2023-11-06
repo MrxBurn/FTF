@@ -85,7 +85,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   CollectionReference fightOffers =
       FirebaseFirestore.instance.collection('fightOffers');
 
-  List negotationValues = [];
+  List negotiationValues = [];
 
   Future<void> getData() async {
     queriedList.clear();
@@ -275,7 +275,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
           context: context,
           duration: const Duration(seconds: 5));
     } else {
-      negotationValues.add({
+      negotiationValues.add({
         'creatorValue': int.parse(creatorValue.text),
         'opponentValue': int.parse(opponentValue.text),
         'createdAt': DateTime.now()
@@ -311,7 +311,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'dislike': 0,
       'createdBy': currentUser,
       'fighterStatus': fighterStatus,
-      'negotationValues': negotationValues,
+      'negotiationValues': negotiationValues,
       'status': "PENDING"
     };
 
