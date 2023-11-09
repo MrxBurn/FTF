@@ -179,11 +179,6 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
                 var y = snapshot.data['negotiationValues'].toList();
 
-                print(snapshot.data['negotiationValues'].sort((a, b) {
-                  return ((a['createdAt'] as Timestamp)
-                      .compareTo(b['createdAt'] as Timestamp));
-                }));
-
                 return SingleChildScrollView(
                     child: Column(children: [
                   LogoHeader(
@@ -237,7 +232,9 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                     snapshot.data['negotiationValues'].length > 1
                         ? BlackButton(
                             onPressed: () => showNegotiationHistory(
-                                context, snapshot.data['negotiationValues']),
+                                context,
+                                snapshot.data['negotiationValues'].reversed
+                                    .toList()),
                             text: 'Review negotiations ')
                         : const SizedBox(),
                     const SizedBox(
