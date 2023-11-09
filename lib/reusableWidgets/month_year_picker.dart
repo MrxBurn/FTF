@@ -9,13 +9,15 @@ class YearPickerWidget extends StatefulWidget {
   bool disabled;
   TextEditingController controller;
   Function(DateTime) callback;
-  YearPickerWidget({
-    Key? key,
-    required this.leadingText,
-    required this.controller,
-    this.disabled = false,
-    required this.callback,
-  }) : super(key: key);
+  EdgeInsets padding;
+  YearPickerWidget(
+      {Key? key,
+      required this.leadingText,
+      required this.controller,
+      this.disabled = false,
+      required this.callback,
+      this.padding = const EdgeInsets.only(left: 24.0, right: 24)})
+      : super(key: key);
 
   @override
   State<YearPickerWidget> createState() => _YearPickerWidgetState();
@@ -66,7 +68,7 @@ class _YearPickerWidgetState extends State<YearPickerWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(left: 24.0, right: 24),
+        padding: widget.padding,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(

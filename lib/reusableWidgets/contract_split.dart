@@ -16,6 +16,7 @@ class ContractSplit extends StatefulWidget {
   double minHeight;
   bool readOnly;
   bool checkBoxRequired;
+  String title;
 
   ContractSplit(
       {super.key,
@@ -29,7 +30,8 @@ class ContractSplit extends StatefulWidget {
       this.minHeight = 150,
       this.minWidth = 350,
       this.readOnly = false,
-      this.checkBoxRequired = true});
+      this.checkBoxRequired = true,
+      this.title = 'Contract split'});
 
   @override
   State<ContractSplit> createState() => _ContractSplitState();
@@ -52,7 +54,7 @@ class _ContractSplitState extends State<ContractSplit> {
         padding: const EdgeInsets.all(15.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            'Contract split',
+            widget.title,
             style: TextStyle(
                 fontSize: 20,
                 color: widget.contractedChecked == true

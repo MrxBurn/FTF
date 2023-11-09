@@ -9,13 +9,15 @@ class DropDownWidget extends StatefulWidget {
   String dropDownName;
   Function(String value)? changeParentValue;
   bool disabled;
+  EdgeInsets padding;
   DropDownWidget(
       {Key? key,
       required this.dropDownValue,
       required this.dropDownList,
       required this.dropDownName,
       this.changeParentValue,
-      this.disabled = false})
+      this.disabled = false,
+      this.padding = const EdgeInsets.only(left: 24.0, right: 24)})
       : super(key: key);
 
   @override
@@ -26,16 +28,13 @@ class _DropDownWidgetState extends State<DropDownWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(left: 24.0, right: 24),
+        padding: widget.padding,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               widget.dropDownName,
               style: bodyStyle,
-            ),
-            const SizedBox(
-              width: 50,
             ),
             DropdownButton<String>(
               value: widget.dropDownValue,
@@ -60,7 +59,10 @@ class _DropDownWidgetState extends State<DropDownWidget> {
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(
+                    value,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 );
               }).toList(),
             ),

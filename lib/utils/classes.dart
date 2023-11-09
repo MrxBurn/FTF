@@ -24,3 +24,19 @@ class UserClass {
       this.fighterType = '',
       this.profileImageURL});
 }
+
+class NegotiationValuesClass {
+  DateTime? createdAt;
+  int creatorValue;
+  String fightDate;
+  int opponentValue;
+  String weightClass;
+
+  NegotiationValuesClass({
+    this.createdAt,
+    this.creatorValue = 0,
+    this.fightDate = '',
+    this.opponentValue = 0,
+    this.weightClass = '',
+  });
+}

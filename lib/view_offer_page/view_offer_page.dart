@@ -9,6 +9,7 @@ import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/month_year_picker.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/classes.dart';
 import 'package:ftf/utils/lists.dart';
 import 'package:video_player/video_player.dart';
 
@@ -42,6 +43,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   TextEditingController pickerController = TextEditingController();
 
   TextEditingController yearController = TextEditingController();
+
+  TextEditingController alertYearController = TextEditingController();
 
   ScrollController scrollController = ScrollController();
 
@@ -118,12 +121,14 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
   List updatedNegotiationValues = [];
 
-  Future<void> updateNegotiationValues(
-      int creatorValue, int opponentValue) async {
+  Future<void> updateNegotiationValues(int creatorValue, int opponentValue,
+      String weight, String fightDate) async {
     updatedNegotiationValues.add({
       'creatorValue': creatorValue,
       'opponentValue': opponentValue,
-      'createdAt': DateTime.now()
+      'createdAt': DateTime.now(),
+      'fightDate': fightDate,
+      'weightClass': weight
     });
     await FirebaseFirestore.instance
         .collection('fightOffers')
@@ -156,17 +161,28 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
                 pickerController.text =
                     '${firebaseDate.day}-${firebaseDate.month}-${firebaseDate.year}';
-                yearController.text = data['fightDate'].toString();
-
-                initialCreatorValue.text = snapshot.data['negotiationValues'][0]
-                        ['creatorValue']
+                yearController.text = snapshot
+                    .data['negotiationValues'].last['fightDate']
                     .toString();
 
-                initialOpponentValue.text = snapshot.data['negotiationValues']
-                        [0]['opponentValue']
+                alertYearController.text = yearController.text;
+
+                initialCreatorValue.text = snapshot
+                    .data['negotiationValues'].last['creatorValue']
+                    .toString();
+
+                initialOpponentValue.text = snapshot
+                    .data['negotiationValues'].last['opponentValue']
                     .toString();
 
                 messageController.text = snapshot.data['message'];
+
+                var y = snapshot.data['negotiationValues'].toList();
+
+                print(snapshot.data['negotiationValues'].sort((a, b) {
+                  return ((a['createdAt'] as Timestamp)
+                      .compareTo(b['createdAt'] as Timestamp));
+                }));
 
                 return SingleChildScrollView(
                     child: Column(children: [
@@ -207,6 +223,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                       height: 16,
                     ),
                     ContractSplit(
+                        title: 'Contract split - latest offer',
                         readOnly: true,
                         contractedChecked: contractedChecked,
                         creatorValue: initialCreatorValue,
@@ -242,7 +259,9 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                     DropDownWidget(
                         disabled: true,
                         changeParentValue: null,
-                        dropDownValue: data['weightClass'],
+                        dropDownValue: snapshot
+                            .data['negotiationValues'].last['weightClass']
+                            .toString(),
                         dropDownList: weightList,
                         dropDownName: 'Weight class*'),
                     YearPickerWidget(
@@ -394,7 +413,11 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                       onContractSplitChange,
                                       onEditingComplete,
                                       (value) => onContractedTick(value),
-                                      updateNegotiationValues),
+                                      updateNegotiationValues,
+                                      snapshot.data['negotiationValues']
+                                          .last['weightClass']
+                                          .toString(),
+                                      alertYearController),
                                   child: const Text(
                                     'Negotiate',
                                     style: TextStyle(color: Colors.yellow),
@@ -412,26 +435,28 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 }
 
 void showAlerDialog(
-  BuildContext context,
-  bool contractedChecked,
-  TextEditingController negotiateCreatorValue,
-  TextEditingController negotiateOpponentValue,
-  Function onTickChanged,
-  Function onContractSplitChange,
-  Function onEditingComplete,
-  Function updateValues,
-) {
+    BuildContext context,
+    bool contractedChecked,
+    TextEditingController negotiateCreatorValue,
+    TextEditingController negotiateOpponentValue,
+    Function onTickChanged,
+    Function onContractSplitChange,
+    Function onEditingComplete,
+    Function updateValues,
+    String dropdownValue,
+    TextEditingController alertYearController) {
   showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, alertState) {
           return Dialog(
               child: SizedBox(
-            height: 220,
+            height: 350,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ContractSplit(
+                  title: 'Contract split',
                   checkBoxRequired: false,
                   contractedChecked: contractedChecked,
                   creatorValue: negotiateCreatorValue,
@@ -458,6 +483,22 @@ void showAlerDialog(
                   },
                   onEditingComplete: () {},
                 ),
+                DropDownWidget(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    changeParentValue: (v) =>
+                        {alertState(() => dropdownValue = v)},
+                    dropDownValue: dropdownValue,
+                    dropDownList: weightList,
+                    dropDownName: 'Weight class*'),
+                YearPickerWidget(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  callback: (v) => {
+                    alertState(
+                        () => alertYearController.text = '${v.month}-${v.year}')
+                  },
+                  leadingText: 'Fight date*',
+                  controller: alertYearController,
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
@@ -475,9 +516,10 @@ void showAlerDialog(
                         TextButton(
                           onPressed: () => {
                             updateValues(
-                              int.parse(negotiateCreatorValue.text),
-                              int.parse(negotiateOpponentValue.text),
-                            ),
+                                int.parse(negotiateCreatorValue.text),
+                                int.parse(negotiateOpponentValue.text),
+                                dropdownValue,
+                                alertYearController.text),
                             Navigator.pushNamed(context, 'fighterHome'),
                           },
                           child: const Text(
@@ -526,7 +568,8 @@ void showNegotiationHistory(BuildContext context, List negotiations) {
                 SizedBox(
                   height: 300,
                   child: ListView.separated(
-                      itemCount: negotiations.length,
+                      itemCount:
+                          negotiations.length < 5 ? negotiations.length : 5,
                       separatorBuilder: (context, index) => const SizedBox(
                             height: 8,
                           ),
@@ -537,13 +580,14 @@ void showNegotiationHistory(BuildContext context, List negotiations) {
                         return Padding(
                           padding: const EdgeInsets.only(left: 16.0, right: 16),
                           child: Container(
-                            height: 60,
+                            height: 110,
                             decoration: const BoxDecoration(
                                 color: Color(black),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Row(
                                   mainAxisAlignment:
@@ -568,7 +612,11 @@ void showNegotiationHistory(BuildContext context, List negotiations) {
                                   ],
                                 ),
                                 Text(
-                                    '${creationTime.day}-${creationTime.month}-${creationTime.year} - ${TimeOfDay.fromDateTime(creationTime).format(context)}')
+                                    'Created at: ${creationTime.day}-${creationTime.month}-${creationTime.year} - ${TimeOfDay.fromDateTime(creationTime).format(context)}'),
+                                Text(
+                                    'Weight class: ${negotiations[index]['weightClass']}'),
+                                Text(
+                                    'Fight date: ${negotiations[index]['fightDate']}')
                               ],
                             ),
                           ),
