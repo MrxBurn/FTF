@@ -17,6 +17,10 @@ class ContractSplit extends StatefulWidget {
   bool readOnly;
   bool checkBoxRequired;
   String title;
+  String creator;
+  String opponent;
+  Color creatorColour;
+  Color opponentColour;
 
   ContractSplit(
       {super.key,
@@ -31,7 +35,11 @@ class ContractSplit extends StatefulWidget {
       this.minWidth = 350,
       this.readOnly = false,
       this.checkBoxRequired = true,
-      this.title = 'Contract split'});
+      this.title = 'Contract split',
+      this.creator = 'Creator',
+      this.opponent = 'Opponent',
+      this.creatorColour = Colors.yellow,
+      this.opponentColour = Colors.red});
 
   @override
   State<ContractSplit> createState() => _ContractSplitState();
@@ -79,7 +87,7 @@ class _ContractSplitState extends State<ContractSplit> {
                       style: TextStyle(
                           color: widget.contractedChecked == true
                               ? Colors.grey
-                              : Colors.yellow,
+                              : widget.creatorColour,
                           fontSize: 24),
                       onChanged: (value) => widget.onContractSplitChange(value),
                       onEditingComplete: () {
@@ -98,7 +106,7 @@ class _ContractSplitState extends State<ContractSplit> {
                     height: 6,
                   ),
                   Text(
-                    'You',
+                    widget.creator,
                     style: TextStyle(
                         fontSize: 12,
                         color: widget.contractedChecked == true
@@ -129,16 +137,16 @@ class _ContractSplitState extends State<ContractSplit> {
                       style: TextStyle(
                           color: widget.contractedChecked == true
                               ? Colors.grey
-                              : Colors.red,
+                              : widget.opponentColour,
                           fontSize: 24),
                     ),
                   ),
                   const SizedBox(
                     height: 6,
                   ),
-                  const Text(
-                    'Opponent',
-                    style: TextStyle(fontSize: 12),
+                  Text(
+                    widget.opponent,
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ],
               ),

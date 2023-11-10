@@ -9,8 +9,8 @@ import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/month_year_picker.dart';
 import 'package:ftf/styles/styles.dart';
-import 'package:ftf/utils/classes.dart';
 import 'package:ftf/utils/lists.dart';
+import 'package:ftf/utils/snack_bar.dart';
 import 'package:video_player/video_player.dart';
 
 class ViewOfferPage extends StatefulWidget {
@@ -138,6 +138,25 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
     });
   }
 
+  Future<void> onDeclineAlertSubmitted() async {
+    await FirebaseFirestore.instance
+        .collection('fightOffers')
+        .doc(widget.offerId)
+        .update({'status': 'DECLINED'});
+  }
+
+  Future<void> onApproveButtonPressed() async {
+    await FirebaseFirestore.instance
+        .collection('fightOffers')
+        .doc(widget.offerId)
+        .update({'status': 'APPROVED'});
+    if (context.mounted) {
+      Navigator.pushNamed(context, 'fighterHome');
+      showSnackBar(
+          text: 'Offer approved!', context: context, color: Colors.green);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,8 +195,6 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                     .toString();
 
                 messageController.text = snapshot.data['message'];
-
-                var y = snapshot.data['negotiationValues'].toList();
 
                 return SingleChildScrollView(
                     child: Column(children: [
@@ -386,14 +403,15 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () => onApproveButtonPressed(),
                                       child: const Text(
                                         'Approve',
                                         style: TextStyle(color: Colors.green),
                                       ),
                                     ),
                                     ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () => showDeclineAlert(
+                                            context, onDeclineAlertSubmitted),
                                         child: const Text(
                                           'Decline',
                                           style: TextStyle(color: Colors.red),
@@ -453,6 +471,10 @@ void showAlerDialog(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ContractSplit(
+                  creator: 'Opponent',
+                  opponent: 'Creator',
+                  creatorColour: Colors.red,
+                  opponentColour: Colors.grey,
                   title: 'Contract split',
                   checkBoxRequired: false,
                   contractedChecked: contractedChecked,
@@ -518,6 +540,10 @@ void showAlerDialog(
                                 dropdownValue,
                                 alertYearController.text),
                             Navigator.pushNamed(context, 'fighterHome'),
+                            showSnackBar(
+                                color: Colors.green,
+                                text: 'Negotiation sent!',
+                                context: context)
                           },
                           child: const Text(
                             'Send',
@@ -637,5 +663,51 @@ void showNegotiationHistory(BuildContext context, List negotiations) {
             ),
           ));
         });
+      });
+}
+
+void showDeclineAlert(BuildContext context, Function onSubmit) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 8.0, right: 8, top: 32, bottom: 8),
+            child: SizedBox(
+              height: 100,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Are you sure you want to decline the offer?',
+                      textAlign: TextAlign.center,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: Colors.grey),
+                            )),
+                        TextButton(
+                            onPressed: () => {
+                                  onSubmit(),
+                                  Navigator.pushNamed(context, 'fighterHome'),
+                                  showSnackBar(
+                                      color: Colors.green,
+                                      text: 'Offer declined!',
+                                      context: context)
+                                },
+                            child: const Text('Yes',
+                                style: TextStyle(color: Colors.red))),
+                      ],
+                    )
+                  ]),
+            ),
+          ),
+        );
       });
 }
