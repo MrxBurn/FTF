@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
+import 'package:ftf/reusableWidgets/checkbox.dart';
 import 'package:ftf/reusableWidgets/contract_split.dart';
 import 'package:ftf/reusableWidgets/date_picker.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
@@ -57,6 +58,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
   bool buttonsVisible = false;
 
+  bool dialogContractedChecked = false;
+
   void onContractedTick(bool? value) {
     setState(() {
       contractedChecked = value!;
@@ -80,10 +83,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   }
 
   void onEditingComplete() {
-    // setState(() {
     negotiateCreatorValue.text = '0';
     negotiateOpponentValue.text = '0';
-    // });
   }
 
   Future<Map<String, dynamic>> getDocument() async {
@@ -122,13 +123,14 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   List updatedNegotiationValues = [];
 
   Future<void> updateNegotiationValues(int creatorValue, int opponentValue,
-      String weight, String fightDate) async {
+      String weight, String fightDate, bool contractedChecked) async {
     updatedNegotiationValues.add({
       'creatorValue': creatorValue,
       'opponentValue': opponentValue,
       'createdAt': DateTime.now(),
       'fightDate': fightDate,
-      'weightClass': weight
+      'weightClass': weight,
+      'contractedChecked': contractedChecked
     });
     await FirebaseFirestore.instance
         .collection('fightOffers')
@@ -237,7 +239,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                     ContractSplit(
                         title: 'Contract split - latest offer',
                         readOnly: true,
-                        contractedChecked: contractedChecked,
+                        contractedChecked: snapshot.data['negotiationValues']
+                            .last['contractedChecked'],
                         creatorValue: initialCreatorValue,
                         onTickChanged: (value) => value,
                         opponentValue: initialOpponentValue,
@@ -450,23 +453,24 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 }
 
 void showAlerDialog(
-    BuildContext context,
-    bool contractedChecked,
-    TextEditingController negotiateCreatorValue,
-    TextEditingController negotiateOpponentValue,
-    Function onTickChanged,
-    Function onContractSplitChange,
-    Function onEditingComplete,
-    Function updateValues,
-    String dropdownValue,
-    TextEditingController alertYearController) {
+  BuildContext context,
+  bool contractedChecked,
+  TextEditingController negotiateCreatorValue,
+  TextEditingController negotiateOpponentValue,
+  Function onTickChanged,
+  Function onContractSplitChange,
+  Function onEditingComplete,
+  Function updateValues,
+  String dropdownValue,
+  TextEditingController alertYearController,
+) {
   showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, alertState) {
           return Dialog(
               child: SizedBox(
-            height: 350,
+            height: 400,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -476,13 +480,12 @@ void showAlerDialog(
                   creatorColour: Colors.red,
                   opponentColour: Colors.grey,
                   title: 'Contract split',
-                  checkBoxRequired: false,
                   contractedChecked: contractedChecked,
                   creatorValue: negotiateCreatorValue,
                   onTickChanged: (value) => {
                     alertState(
                       () => {
-                        contractedChecked = value as bool,
+                        contractedChecked = value,
                         if (contractedChecked)
                           {
                             negotiateCreatorValue.text = '0',
@@ -538,7 +541,8 @@ void showAlerDialog(
                                 int.parse(negotiateCreatorValue.text),
                                 int.parse(negotiateOpponentValue.text),
                                 dropdownValue,
-                                alertYearController.text),
+                                alertYearController.text,
+                                contractedChecked),
                             Navigator.pushNamed(context, 'fighterHome'),
                             showSnackBar(
                                 color: Colors.green,

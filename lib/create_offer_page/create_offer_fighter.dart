@@ -279,7 +279,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         'opponentValue': int.parse(opponentValue.text),
         'createdAt': DateTime.now(),
         'fightDate': yearController.text,
-        'weightClass': weight
+        'weightClass': weight,
+        'contractedChecked': contractedChecked
       });
       await fightOffers.add(offer).then((value) => {
             saveToFirebase(video, value.id),
@@ -301,7 +302,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'opponent': searchValue,
       'opponentId': selectedSuggestion.uid,
       'fighterNotFoundChecked': fighterNotFoundChecked,
-      'contractedChecked': contractedChecked,
       'rematchClause': rematchClause,
       'offerExpiryDate': actualExpiryDate,
       'message': messageController.text,
