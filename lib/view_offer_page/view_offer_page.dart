@@ -60,6 +60,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
   bool dialogContractedChecked = false;
 
+  Color negotiateInputColour = Colors.yellow;
+
   void onContractedTick(bool? value) {
     setState(() {
       contractedChecked = value!;
@@ -176,6 +178,12 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                   buttonsVisible = false;
                 } else {
                   buttonsVisible = true;
+                }
+
+                if (currentUser != snapshot.data['createdBy']) {
+                  negotiateInputColour = Colors.red;
+                } else {
+                  negotiateInputColour = Colors.yellow;
                 }
 
                 DateTime firebaseDate = data['offerExpiryDate'].toDate();
@@ -435,7 +443,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                       snapshot.data['negotiationValues']
                                           .last['weightClass']
                                           .toString(),
-                                      alertYearController),
+                                      alertYearController,
+                                      negotiateInputColour),
                                   child: const Text(
                                     'Negotiate',
                                     style: TextStyle(color: Colors.yellow),
@@ -453,17 +462,17 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 }
 
 void showAlerDialog(
-  BuildContext context,
-  bool contractedChecked,
-  TextEditingController negotiateCreatorValue,
-  TextEditingController negotiateOpponentValue,
-  Function onTickChanged,
-  Function onContractSplitChange,
-  Function onEditingComplete,
-  Function updateValues,
-  String dropdownValue,
-  TextEditingController alertYearController,
-) {
+    BuildContext context,
+    bool contractedChecked,
+    TextEditingController negotiateCreatorValue,
+    TextEditingController negotiateOpponentValue,
+    Function onTickChanged,
+    Function onContractSplitChange,
+    Function onEditingComplete,
+    Function updateValues,
+    String dropdownValue,
+    TextEditingController alertYearController,
+    Color color) {
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -475,9 +484,9 @@ void showAlerDialog(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ContractSplit(
-                  creator: 'Opponent',
-                  opponent: 'Creator',
-                  creatorColour: Colors.red,
+                  creator: 'You',
+                  opponent: 'Opponent',
+                  creatorColour: color,
                   opponentColour: Colors.grey,
                   title: 'Contract split',
                   contractedChecked: contractedChecked,
@@ -607,7 +616,7 @@ void showNegotiationHistory(BuildContext context, List negotiations) {
                         return Padding(
                           padding: const EdgeInsets.only(left: 16.0, right: 16),
                           child: Container(
-                            height: 110,
+                            height: 120,
                             decoration: const BoxDecoration(
                                 color: Color(black),
                                 borderRadius:
@@ -643,7 +652,17 @@ void showNegotiationHistory(BuildContext context, List negotiations) {
                                 Text(
                                     'Weight class: ${negotiations[index]['weightClass']}'),
                                 Text(
-                                    'Fight date: ${negotiations[index]['fightDate']}')
+                                    'Fight date: ${negotiations[index]['fightDate']}'),
+                                negotiations[index]['contractedChecked'] == true
+                                    ? const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.check_box),
+                                          Text('N/A - Contracted'),
+                                        ],
+                                      )
+                                    : const SizedBox()
                               ],
                             ),
                           ),
