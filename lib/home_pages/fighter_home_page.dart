@@ -15,26 +15,35 @@ class _FighterHomePageState extends State<FighterHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        LogoHeader(backRequired: false),
-        BlackButton(
-          text: 'Create offer',
-          onPressed: () => Navigator.pushNamed(context, 'createOfferFighter'),
-        ),
-        BlackButton(
-          text: 'Log out',
-          onPressed: () => FirebaseAuth.instance
-              .signOut()
-              .then((value) => Navigator.pushNamed(context, 'loginPage')),
-        ),
-        BlackButton(
+      body: Column(
+        children: [
+          LogoHeader(backRequired: false),
+          BlackButton(
+            text: 'Create offer',
+            onPressed: () => Navigator.pushNamed(context, 'createOfferFighter'),
+          ),
+          BlackButton(
+            text: 'Log out',
+            onPressed: () => FirebaseAuth.instance
+                .signOut()
+                .then((value) => Navigator.pushNamed(context, 'loginPage')),
+          ),
+          BlackButton(
             //TODO: remove hard coded value
             text: 'View offer',
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
                 builder: (context) => ViewOfferPage(
-                      offerId: 'jq2O99tlAlJkvd53FKus',
-                    ))))
-      ]),
+                  offerId: 'jq2O99tlAlJkvd53FKus',
+                ),
+              ),
+            ),
+          ),
+          BlackButton(
+              text: 'Dashboard',
+              onPressed: () => Navigator.pushNamed(context, 'dashboard')),
+        ],
+      ),
     );
   }
 }

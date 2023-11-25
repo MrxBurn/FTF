@@ -12,6 +12,7 @@ import 'package:ftf/authentication/register_fan.dart';
 import 'package:ftf/authentication/register_fighter.dart';
 import 'package:ftf/create_offer_page/create_offer_fighter.dart';
 import 'package:ftf/create_offer_page/dynamic_link_summary.dart';
+import 'package:ftf/dashboard/dashboard_page.dart';
 import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -119,6 +120,7 @@ class _MyAppState extends State<MyApp> {
           'createOfferFighter': (context) => const CreateOfferFighter(),
           'dynamicLinkSummary': (context) => const DynamicLinkSummary(),
           'viewOffer': (context) => ViewOfferPage(),
+          'dashboard': (context) => const DashboardPage()
         },
         localizationsDelegates: const [
           MonthYearPickerLocalizations.delegate,
