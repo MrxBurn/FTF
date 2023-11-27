@@ -19,6 +19,9 @@ class DreamOpponents extends StatelessWidget {
           decoration: const BoxDecoration(color: Color(lighterBlack)),
           child: Column(
             children: [
+              const SizedBox(
+                height: 8,
+              ),
               const Text(
                 'Dream opponents',
                 style: TextStyle(fontSize: 16, color: Colors.red),
@@ -42,36 +45,38 @@ class DreamOpponentsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 300,
-      height: 180,
+      height: 100,
       child: ListView.builder(
           itemCount: opponentsList.length,
           itemBuilder: (context, idx) {
             return Card(
-                child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(opponentsList[idx]['image']),
-                ),
-                const SizedBox(
-                  width: 24,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      opponentsList[idx]['name'],
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      opponentsList[idx]['category'],
-                      style: const TextStyle(fontSize: 10, color: Colors.grey),
-                    ),
-                  ],
-                )
-              ],
-            ));
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(opponentsList[idx]['image']),
+                  ),
+                  const SizedBox(
+                    width: 24,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        opponentsList[idx]['name'],
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        opponentsList[idx]['category'],
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.grey),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
           }),
     );
   }
