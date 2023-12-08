@@ -42,6 +42,9 @@ class _FighterHomePageState extends State<FighterHomePage> {
           BlackButton(
               text: 'Dashboard',
               onPressed: () => Navigator.pushNamed(context, 'dashboard')),
+          BlackButton(
+              text: 'My offers',
+              onPressed: () => Navigator.pushNamed(context, 'myOffers')),
         ],
       ),
     );
