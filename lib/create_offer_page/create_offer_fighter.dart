@@ -283,6 +283,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         'contractedChecked': contractedChecked
       });
       await fightOffers.add(offer).then((value) => {
+            value.update({'offerId': value.id}),
             saveToFirebase(video, value.id),
             if (fighterNotFoundChecked) {createDynamicLink(value.id)}
           });

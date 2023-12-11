@@ -35,46 +35,45 @@ class OfferCard extends StatelessWidget {
       ),
       child: Card(
           child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8, top: 6),
-        child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                creator,
-                style: const TextStyle(color: Colors.yellow),
-              ),
-              Text(opponent, style: const TextStyle(color: Colors.red))
-            ],
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                creatorValue,
-                style: const TextStyle(color: Colors.yellow),
-              ),
-              const Text('VS'),
-              Text(
-                opponentValue,
-                style: const TextStyle(color: Colors.red),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 6,
-          ),
-          Text(weightClass),
-          Text(fighterStatus),
-          Text(
-            fightDate,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ]),
-      )),
+              padding: const EdgeInsets.only(left: 8.0, right: 8, top: 6),
+              child: Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      creator,
+                      style: const TextStyle(color: Colors.yellow),
+                    ),
+                    Text(opponent, style: const TextStyle(color: Colors.red))
+                  ],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      creatorValue,
+                      style: const TextStyle(color: Colors.yellow),
+                    ),
+                    const Text('VS'),
+                    Text(
+                      opponentValue,
+                      style: const TextStyle(color: Colors.red),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Text(weightClass),
+                Text(fighterStatus),
+                Text(
+                  fightDate,
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ]))),
     );
   }
 }
