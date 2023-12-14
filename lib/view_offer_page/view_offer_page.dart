@@ -175,6 +175,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                 if (snapshot.data['negotiationValues'].length == 1 &&
                     currentUser == snapshot.data['createdBy']) {
                   buttonsVisible = false;
+                } else if (snapshot.data['status'] != 'PENDING') {
+                  buttonsVisible = false;
                 } else {
                   buttonsVisible = true;
                 }
@@ -244,6 +246,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                       height: 16,
                     ),
                     ContractSplit(
+                        creator: data['creator'],
+                        opponent: data['opponent'],
                         title: 'Contract split - latest offer',
                         readOnly: true,
                         contractedChecked: snapshot.data['negotiationValues']
@@ -261,7 +265,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                             onPressed: () => showNegotiationHistory(
                                 context,
                                 snapshot.data['negotiationValues'].reversed
-                                    .toList()),
+                                    .toList(),
+                                data),
                             text: 'Review negotiations ')
                         : const SizedBox(),
                     const SizedBox(
@@ -573,7 +578,8 @@ void showAlerDialog(
       });
 }
 
-void showNegotiationHistory(BuildContext context, List negotiations) {
+void showNegotiationHistory(
+    BuildContext context, List negotiations, Map<String, dynamic> data) {
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -584,18 +590,19 @@ void showNegotiationHistory(BuildContext context, List negotiations) {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Offer creator',
-                        style: TextStyle(fontSize: 18, color: Colors.yellow),
+                        data['creator'],
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.yellow),
                       ),
                       Text(
-                        'Opponent',
-                        style: TextStyle(fontSize: 18, color: Colors.red),
+                        data['opponent'],
+                        style: const TextStyle(fontSize: 18, color: Colors.red),
                       )
                     ],
                   ),

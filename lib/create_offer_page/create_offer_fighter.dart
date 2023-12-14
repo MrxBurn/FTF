@@ -282,11 +282,28 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         'weightClass': weight,
         'contractedChecked': contractedChecked
       });
+      DocumentSnapshot<Map<String, dynamic>> loggedInUserObject =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(currentUser)
+              .get();
       await fightOffers.add(offer).then((value) => {
-            value.update({'offerId': value.id}),
+            value.update({
+              'offerId': value.id,
+              'creator':
+                  '${loggedInUserObject['firstName']} ${loggedInUserObject['lastName']}'
+            }),
             saveToFirebase(video, value.id),
             if (fighterNotFoundChecked) {createDynamicLink(value.id)}
           });
+
+      if (context.mounted) {
+        Navigator.pushNamed(context, 'fighterHome');
+        showSnackBar(
+            text: 'Offer successfully created!',
+            context: context,
+            color: Colors.green);
+      }
     }
   }
 
