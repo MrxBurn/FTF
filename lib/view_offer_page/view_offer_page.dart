@@ -9,6 +9,7 @@ import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/month_year_picker.dart';
 import 'package:ftf/styles/styles.dart';
+
 import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
 import 'package:video_player/video_player.dart';
@@ -141,22 +142,15 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
     });
   }
 
-  Future<void> onDeclineAlertSubmitted() async {
+  Future<void> onApproveOrDeclinePressed(String status) async {
     await FirebaseFirestore.instance
         .collection('fightOffers')
         .doc(widget.offerId)
-        .update({'status': 'DECLINED'});
-  }
-
-  Future<void> onApproveButtonPressed() async {
-    await FirebaseFirestore.instance
-        .collection('fightOffers')
-        .doc(widget.offerId)
-        .update({'status': 'APPROVED'});
+        .update({'status': status});
     if (context.mounted) {
       Navigator.pushNamed(context, 'fighterHome');
       showSnackBar(
-          text: 'Offer approved!', context: context, color: Colors.green);
+          text: 'Offer status changed!', context: context, color: Colors.green);
     }
   }
 
@@ -418,7 +412,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     ElevatedButton(
-                                      onPressed: () => onApproveButtonPressed(),
+                                      onPressed: () =>
+                                          onApproveOrDeclinePressed('DECLINED'),
                                       child: const Text(
                                         'Approve',
                                         style: TextStyle(color: Colors.green),
@@ -426,7 +421,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                     ),
                                     ElevatedButton(
                                         onPressed: () => showDeclineAlert(
-                                            context, onDeclineAlertSubmitted),
+                                            context, onApproveOrDeclinePressed),
                                         child: const Text(
                                           'Decline',
                                           style: TextStyle(color: Colors.red),

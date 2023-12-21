@@ -33,3 +33,6 @@ String? confirmPasswordValidator(String? value, String? password) {
   }
   return null;
 }
+
+String imgPlaceholder =
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png';

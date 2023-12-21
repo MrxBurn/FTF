@@ -95,6 +95,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
     // Get data from docs and convert map to List
     fighterList = querySnapshot.docs
+        .where((element) => element.id != currentUser)
         .map((e) => UserClass(
               uid: e.id,
               weightClass: e['weightClass'],
@@ -239,7 +240,10 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     setState(() {
       creatorValue.text = value;
 
-      opponentValue.text = (maxValue - int.parse(creatorValue.text)).toString();
+      if (creatorValue.text.isNotEmpty) {
+        opponentValue.text =
+            (maxValue - int.parse(creatorValue.text)).toString();
+      }
     });
   }
 

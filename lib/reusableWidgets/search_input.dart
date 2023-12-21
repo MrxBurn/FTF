@@ -3,6 +3,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/general.dart';
 
 class SearchBarWidget extends StatefulWidget {
   String searchbarText = '';
@@ -97,8 +98,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                 itemBuilder: (context, index) {
                                   return ListTile(
                                     leading: CircleAvatar(
-                                      backgroundImage: NetworkImage(widget
-                                          .suggestions[index].profileImageURL),
+                                      backgroundImage: widget.suggestions[index]
+                                              .profileImageURL.isNotEmpty
+                                          ? NetworkImage(widget
+                                              .suggestions[index]
+                                              .profileImageURL)
+                                          : NetworkImage(imgPlaceholder),
                                       radius: 20,
                                     ),
                                     title: Text(

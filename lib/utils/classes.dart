@@ -40,3 +40,5 @@ class NegotiationValuesClass {
     this.weightClass = '',
   });
 }
+
+enum OfferStatus { approved, declined, pending }

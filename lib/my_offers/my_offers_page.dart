@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,7 @@ import 'package:ftf/view_offer_page/view_offer_page.dart';
 class MyOffersPage extends StatelessWidget {
   MyOffersPage({super.key});
 
-  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+  final String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
   late DocumentSnapshot<Map<String, dynamic>> userData;
 
@@ -480,7 +482,7 @@ class MyOffersPage extends StatelessWidget {
                                           height: 150,
                                           child: ListView.separated(
                                             scrollDirection: Axis.horizontal,
-                                            itemCount: agreedFights.length,
+                                            itemCount: declinedFights.length,
                                             separatorBuilder:
                                                 (context, index) =>
                                                     const SizedBox(
@@ -568,7 +570,7 @@ class MyOffersPage extends StatelessWidget {
                                   : const SizedBox(),
                             ]),
                           ),
-                        )
+                        ),
                       ])
                     : Column(
                         children: [

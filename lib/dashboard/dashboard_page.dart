@@ -5,9 +5,7 @@ import 'package:ftf/dashboard/dashboard_components/most_liked_offers.dart';
 import 'package:ftf/dashboard/dashboard_components/number_followers.dart';
 import 'package:ftf/dashboard/dashboard_components/offers_engagement.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
-
-String imgPlaceholder =
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png';
+import 'package:ftf/utils/general.dart';
 
 List opponentList = [
   {
