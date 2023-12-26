@@ -17,7 +17,7 @@ import 'package:video_player/video_player.dart';
 class ViewOfferPage extends StatefulWidget {
   String? offerId;
 
-  ViewOfferPage({Key? key, this.offerId}) : super(key: key);
+  ViewOfferPage({super.key, this.offerId});
 
   @override
   State<ViewOfferPage> createState() => _ViewOfferPageState();

@@ -6,8 +6,7 @@ class BlackButton extends StatelessWidget {
 
   final String text;
 
-  const BlackButton({Key? key, required this.onPressed, required this.text})
-      : super(key: key);
+  const BlackButton({super.key, required this.onPressed, required this.text});
 
   @override
   Widget build(BuildContext context) {

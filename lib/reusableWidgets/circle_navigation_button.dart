@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 
 class CircleNavigationButton extends StatelessWidget {
   CircleNavigationButton(
-      {Key? key,
+      {super.key,
       required this.onPressed,
       required this.icon,
-      required this.color})
-      : super(key: key);
+      required this.color});
 
   Function onPressed;
   Widget icon;

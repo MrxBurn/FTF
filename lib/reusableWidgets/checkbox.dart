@@ -9,8 +9,10 @@ class CheckBoxWidget extends StatefulWidget {
   final Function? onChanged;
 
   CheckBoxWidget(
-      {Key? key, required this.checkValue, required this.title, this.onChanged})
-      : super(key: key);
+      {super.key,
+      required this.checkValue,
+      required this.title,
+      this.onChanged});
 
   @override
   State<CheckBoxWidget> createState() => _CheckBoxWidgetState();

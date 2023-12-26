@@ -11,14 +11,13 @@ class DropDownWidget extends StatefulWidget {
   bool disabled;
   EdgeInsets padding;
   DropDownWidget(
-      {Key? key,
+      {super.key,
       required this.dropDownValue,
       required this.dropDownList,
       required this.dropDownName,
       this.changeParentValue,
       this.disabled = false,
-      this.padding = const EdgeInsets.only(left: 24.0, right: 24)})
-      : super(key: key);
+      this.padding = const EdgeInsets.only(left: 24.0, right: 24)});
 
   @override
   State<DropDownWidget> createState() => _DropDownWidgetState();

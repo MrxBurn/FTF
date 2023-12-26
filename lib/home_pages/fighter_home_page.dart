@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
-import 'package:ftf/view_offer_page/view_offer_page.dart';
 
 class FighterHomePage extends StatefulWidget {
   const FighterHomePage({super.key});
@@ -29,22 +28,14 @@ class _FighterHomePageState extends State<FighterHomePage> {
                 .then((value) => Navigator.pushNamed(context, 'loginPage')),
           ),
           BlackButton(
-            //TODO: remove hard coded value
-            text: 'View offer',
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ViewOfferPage(
-                  offerId: 'jq2O99tlAlJkvd53FKus',
-                ),
-              ),
-            ),
-          ),
-          BlackButton(
               text: 'Dashboard',
               onPressed: () => Navigator.pushNamed(context, 'dashboard')),
           BlackButton(
               text: 'My offers',
               onPressed: () => Navigator.pushNamed(context, 'myOffers')),
+          BlackButton(
+              text: 'Fighter discussions',
+              onPressed: () => Navigator.pushNamed(context, 'fighterForum')),
         ],
       ),
     );

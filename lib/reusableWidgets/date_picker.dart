@@ -13,12 +13,11 @@ class DatePicker extends StatefulWidget {
   bool disabled;
 
   DatePicker(
-      {Key? key,
+      {super.key,
       required this.leadingText,
       required this.displayDate,
       required this.callback,
-      this.disabled = false})
-      : super(key: key);
+      this.disabled = false});
 
   @override
   State<DatePicker> createState() => _DatePickerState();

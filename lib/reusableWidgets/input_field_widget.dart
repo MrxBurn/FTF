@@ -14,13 +14,12 @@ class InputFieldWidget extends StatelessWidget {
   bool? passwordField;
 
   InputFieldWidget(
-      {Key? key,
+      {super.key,
       this.controller,
       // required this.fieldValue,
       required this.pLabelText,
       this.validatorFunction,
-      this.passwordField})
-      : super(key: key);
+      this.passwordField});
 
   @override
   Widget build(BuildContext context) {

@@ -23,7 +23,7 @@ class SearchBarWidget extends StatefulWidget {
   Function onSelectedSuggestion;
 
   SearchBarWidget(
-      {Key? key,
+      {super.key,
       required this.searchbarText,
       required this.suggestions,
       required this.onTap,
@@ -31,8 +31,7 @@ class SearchBarWidget extends StatefulWidget {
       required this.displaySuggestions,
       required this.scrollController,
       required this.onListTileTap,
-      required this.onSelectedSuggestion})
-      : super(key: key);
+      required this.onSelectedSuggestion});
 
   @override
   State<SearchBarWidget> createState() => _SearchBarWidgetState();
