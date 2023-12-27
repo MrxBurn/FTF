@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/custom_image_header.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DiscussionPage extends StatelessWidget {
   const DiscussionPage(
@@ -8,19 +9,20 @@ class DiscussionPage extends StatelessWidget {
       required this.title,
       required this.body,
       required this.subTitle,
-      required this.links});
+      required this.links,
+      required this.imagePath});
 
   final String title;
   final String body;
   final String subTitle;
-  final Map links;
+  final List<Map<String, String>> links;
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(children: [
-        CustomImageHeader(
-            backRequired: true, imagePath: 'assets/illustrations/pension.jpg'),
+        CustomImageHeader(backRequired: true, imagePath: imagePath),
         const SizedBox(
           height: 16,
         ),
@@ -52,13 +54,33 @@ class DiscussionPage extends StatelessWidget {
               const Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'For more insights',
+                  'For more insights (links):',
                   style: TextStyle(fontSize: 14),
                 ),
               ),
+              const SizedBox(
+                height: 8,
+              ),
               Column(
-                children: links.entries.map((e) {}).toList() as List<Widget>,
-              )
+                  children: links.map((e) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: InkWell(
+                      onTap: () => {launchUrl(Uri.parse(e['url']!))},
+                      child: Text(
+                        e['name']!,
+                        style: const TextStyle(
+                          color: Colors.yellow,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList())
             ],
           ),
         ),
