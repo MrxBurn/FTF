@@ -38,10 +38,13 @@ class DiscussionCard extends StatelessWidget {
             const SizedBox(
               height: 12,
             ),
-            Text(
-              description,
-              style: const TextStyle(color: Colors.grey, fontSize: 12),
-              textAlign: TextAlign.left,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                description,
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+                textAlign: TextAlign.left,
+              ),
             )
           ],
         ),

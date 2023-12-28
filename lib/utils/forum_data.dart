@@ -1,5 +1,6 @@
 List threads = [
   {
+    'collection': 'pension',
     'title': 'Pension Planning',
     'imagePath': 'assets/illustrations/pension.jpg',
     'description':
@@ -24,6 +25,7 @@ List threads = [
     ]
   },
   {
+    'collection': 'fighterManagement',
     'title': 'Fighter Management Tips',
     'imagePath': 'assets/illustrations/management.jpg',
     'description':
@@ -52,6 +54,7 @@ List threads = [
     ]
   },
   {
+    'collection': 'nutrition',
     'title': 'Nutrition for Performance',
     'imagePath': 'assets/illustrations/nutrition.jpg',
     'description':
@@ -80,6 +83,7 @@ List threads = [
     ]
   },
   {
+    'collection': 'promotion',
     'title': 'Promotion Insights',
     'imagePath': 'assets/illustrations/promotion.jpeg',
     'description':

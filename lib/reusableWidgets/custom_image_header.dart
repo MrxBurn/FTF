@@ -1,14 +1,11 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class CustomImageHeader extends StatelessWidget {
-  bool backRequired;
-  Function? onPressed;
-  String imagePath;
+  final bool backRequired;
+  final Function? onPressed;
+  final String imagePath;
 
-  CustomImageHeader(
+  const CustomImageHeader(
       {super.key,
       required this.backRequired,
       this.onPressed,
