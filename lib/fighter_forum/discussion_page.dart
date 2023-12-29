@@ -55,16 +55,20 @@ class _DiscussionPageState extends State<DiscussionPage> {
       'firstName': userData['firstName'],
       'lastName': userData['lastName'],
       'createdAt': DateTime.now(),
+      'profileImage': userData['profileImageURL']
     });
 
     setState(() {
       isLoading = false;
       controller.clear();
       isTextFieldTapped = false;
+
+      //Re-fetch comments on submit
+      future = getComments();
     });
   }
 
-  late Future<List<Map<String, dynamic>>> getComments1;
+  late Future<List<Map<String, dynamic>>> future;
 
   Future<List<Map<String, dynamic>>> getComments() async {
     var comments = await FirebaseFirestore.instance
@@ -79,7 +83,7 @@ class _DiscussionPageState extends State<DiscussionPage> {
 
   @override
   void initState() {
-    getComments1 = getComments();
+    future = getComments();
     super.initState();
   }
 
@@ -183,6 +187,9 @@ class _DiscussionPageState extends State<DiscussionPage> {
                             onPressed: () => {
                                   setState(() {
                                     isTextFieldTapped = false;
+                                    controller.clear();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
                                   })
                                 },
                             child: const Text(
@@ -207,7 +214,10 @@ class _DiscussionPageState extends State<DiscussionPage> {
                       ],
                     )
                   : const SizedBox(),
-              CommentsSection(getComments: getComments)
+              CommentsSection(getComments: future),
+              const SizedBox(
+                height: 8,
+              ),
             ],
           ),
         ),
