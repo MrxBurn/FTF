@@ -36,6 +36,9 @@ class _FighterHomePageState extends State<FighterHomePage> {
           BlackButton(
               text: 'Fighter discussions',
               onPressed: () => Navigator.pushNamed(context, 'fighterForum')),
+          BlackButton(
+              text: 'News & Events',
+              onPressed: () => Navigator.pushNamed(context, 'newsEvents')),
         ],
       ),
     );

@@ -5,7 +5,6 @@ import 'package:ftf/fighter_forum/comments_section.dart';
 import 'package:ftf/reusableWidgets/custom_image_header.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:math' as math;
 
 class DiscussionPage extends StatefulWidget {
   const DiscussionPage(
