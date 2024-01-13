@@ -3,33 +3,33 @@ import 'package:flutter_svg/svg.dart';
 import 'package:ftf/news_and_events/get_events.dart';
 import 'package:intl/intl.dart';
 
-class MMAEvents extends StatefulWidget {
-  const MMAEvents({super.key});
+class BoxingEvents extends StatefulWidget {
+  const BoxingEvents({super.key});
 
   @override
-  State<MMAEvents> createState() => _MMAEventsState();
+  State<BoxingEvents> createState() => BoxingEventsState();
 }
 
-class _MMAEventsState extends State<MMAEvents> {
+class BoxingEventsState extends State<BoxingEvents> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getEvents('mma_mixed_martial_arts'),
+        future: getEvents('boxing_boxing'),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return SizedBox(
-              width: 100,
+              width: 225,
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset('assets/icons/mma_glove.svg'),
+                      SvgPicture.asset('assets/icons/boxing_glove.svg'),
                       const SizedBox(
                         width: 6,
                       ),
                       const Text(
-                        'MMA',
+                        'Boxing',
                         style: TextStyle(fontSize: 16),
                       )
                     ],
@@ -38,7 +38,7 @@ class _MMAEventsState extends State<MMAEvents> {
                     height: 200,
                     child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: snapshot.data.length,
+                        itemCount: snapshot.data[0]['events'].length,
                         itemBuilder: (BuildContext context, idx) {
                           return SizedBox(
                             width: 115,
@@ -48,24 +48,30 @@ class _MMAEventsState extends State<MMAEvents> {
                                 children: [
                                   Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          snapshot.data[idx]['home_team'],
-                                          style: const TextStyle(
-                                              color: Colors.yellow),
+                                        Flexible(
+                                          child: Text(
+                                            snapshot.data[0]['events'][idx]
+                                                ['home_team'],
+                                            style: const TextStyle(
+                                                color: Colors.yellow),
+                                          ),
                                         ),
                                         const Text('vs'),
-                                        Text(
-                                          snapshot.data[idx]['away_team'],
-                                          style: const TextStyle(
-                                              color: Colors.red),
+                                        Flexible(
+                                          child: Text(
+                                            snapshot.data[0]['events'][idx]
+                                                ['away_team'],
+                                            style: const TextStyle(
+                                                color: Colors.red),
+                                          ),
                                         )
                                       ]),
                                   const Spacer(),
                                   Text(DateFormat("hh:mm:ss - dd-MM-yyyy")
-                                      .format(DateTime.parse(
-                                          snapshot.data[idx]['commence_time'])))
+                                      .format(DateTime.parse(snapshot.data[0]
+                                          ['events'][idx]['commence_time'])))
                                 ],
                               ),
                             ),

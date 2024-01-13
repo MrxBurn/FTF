@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ftf/news_and_events/instagram_embedded.dart';
+import 'package:ftf/news_and_events/boxing_events.dart';
+import 'package:ftf/news_and_events/fighters_data.dart';
 import 'package:ftf/news_and_events/mma_events.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 
@@ -9,12 +10,21 @@ class NewsAndEventsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          LogoHeader(backRequired: true),
-          const InstagramEmbedded(),
-          const MMAEvents()
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            LogoHeader(backRequired: true),
+            const FightersData(),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // MMAEvents(),
+                BoxingEvents(),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
