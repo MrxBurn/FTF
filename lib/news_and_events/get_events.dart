@@ -13,9 +13,9 @@ Map<String, dynamic> queryParameters = {
       "${DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now())}Z",
 };
 
-Future<List<dynamic>> getEvents(String type) async {
+Future<List<dynamic>> getEvents(String type, String colleciton) async {
   DocumentReference<Map<String, dynamic>> firebase =
-      FirebaseFirestore.instance.collection('boxingEvents').doc('events');
+      FirebaseFirestore.instance.collection(colleciton).doc('events');
 
   List resultList = [];
 

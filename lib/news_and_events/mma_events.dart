@@ -14,11 +14,11 @@ class _MMAEventsState extends State<MMAEvents> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getEvents('mma_mixed_martial_arts'),
+        future: getEvents('mma_mixed_martial_arts', 'mmaEvents'),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return SizedBox(
-              width: 100,
+              width: 225,
               child: Column(
                 children: [
                   Row(
@@ -35,37 +35,53 @@ class _MMAEventsState extends State<MMAEvents> {
                     ],
                   ),
                   SizedBox(
-                    height: 200,
+                    height: 215,
+                    width: 190,
                     child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: snapshot.data.length,
+                        itemCount: snapshot.data[0]['events'].length,
                         itemBuilder: (BuildContext context, idx) {
                           return SizedBox(
-                            width: 115,
-                            height: 95,
+                            height: 85,
                             child: Card(
                               child: Column(
                                 children: [
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text(
-                                          snapshot.data[idx]['home_team'],
+                                  Row(children: [
+                                    SizedBox(
+                                      width: 80,
+                                      child: Flexible(
+                                        child: Text(
+                                          '''${snapshot.data[0]['events'][idx]['home_team'].toString().split(' ').first}
+${snapshot.data[0]['events'][idx]['home_team'].toString().split(' ').last}''',
+                                          textAlign: TextAlign.center,
+                                          maxLines: 3,
                                           style: const TextStyle(
-                                              color: Colors.yellow),
+                                              color: Colors.yellow,
+                                              fontSize: 12),
                                         ),
-                                        const Text('vs'),
-                                        Text(
-                                          snapshot.data[idx]['away_team'],
+                                      ),
+                                    ),
+                                    const Text('vs'),
+                                    SizedBox(
+                                      width: 80,
+                                      child: Flexible(
+                                        child: Text(
+                                          '''${snapshot.data[0]['events'][idx]['away_team'].toString().split(' ').first}
+${snapshot.data[0]['events'][idx]['away_team'].toString().split(' ').last}''',
+                                          textAlign: TextAlign.center,
                                           style: const TextStyle(
-                                              color: Colors.red),
-                                        )
-                                      ]),
+                                              color: Colors.red, fontSize: 12),
+                                        ),
+                                      ),
+                                    )
+                                  ]),
                                   const Spacer(),
-                                  Text(DateFormat("hh:mm:ss - dd-MM-yyyy")
-                                      .format(DateTime.parse(
-                                          snapshot.data[idx]['commence_time'])))
+                                  Text(
+                                    DateFormat("hh:mm:ss - dd-MM-yyyy").format(
+                                        DateTime.parse(snapshot.data[0]
+                                            ['events'][idx]['commence_time'])),
+                                    style: const TextStyle(fontSize: 10),
+                                  )
                                 ],
                               ),
                             ),

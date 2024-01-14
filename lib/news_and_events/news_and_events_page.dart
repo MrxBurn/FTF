@@ -16,11 +16,10 @@ class NewsAndEventsPage extends StatelessWidget {
             LogoHeader(backRequired: true),
             const FightersData(),
             const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // MMAEvents(),
-                BoxingEvents(),
+                SizedBox(width: 150, height: 100, child: MMAEvents()),
+                SizedBox(width: 150, height: 100, child: BoxingEvents()),
               ],
             )
           ],
