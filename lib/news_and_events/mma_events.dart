@@ -38,7 +38,6 @@ class _MMAEventsState extends State<MMAEvents> {
                     height: 215,
                     width: 190,
                     child: ListView.builder(
-                        shrinkWrap: true,
                         itemCount: snapshot.data[0]['events'].length,
                         itemBuilder: (BuildContext context, idx) {
                           return SizedBox(
@@ -49,29 +48,24 @@ class _MMAEventsState extends State<MMAEvents> {
                                   Row(children: [
                                     SizedBox(
                                       width: 80,
-                                      child: Flexible(
-                                        child: Text(
-                                          '''${snapshot.data[0]['events'][idx]['home_team'].toString().split(' ').first}
+                                      child: Text(
+                                        '''${snapshot.data[0]['events'][idx]['home_team'].toString().split(' ').first}
 ${snapshot.data[0]['events'][idx]['home_team'].toString().split(' ').last}''',
-                                          textAlign: TextAlign.center,
-                                          maxLines: 3,
-                                          style: const TextStyle(
-                                              color: Colors.yellow,
-                                              fontSize: 12),
-                                        ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 3,
+                                        style: const TextStyle(
+                                            color: Colors.yellow, fontSize: 12),
                                       ),
                                     ),
                                     const Text('vs'),
                                     SizedBox(
                                       width: 80,
-                                      child: Flexible(
-                                        child: Text(
-                                          '''${snapshot.data[0]['events'][idx]['away_team'].toString().split(' ').first}
+                                      child: Text(
+                                        '''${snapshot.data[0]['events'][idx]['away_team'].toString().split(' ').first}
 ${snapshot.data[0]['events'][idx]['away_team'].toString().split(' ').last}''',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: Colors.red, fontSize: 12),
-                                        ),
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            color: Colors.red, fontSize: 12),
                                       ),
                                     )
                                   ]),
@@ -92,7 +86,7 @@ ${snapshot.data[0]['events'][idx]['away_team'].toString().split(' ').last}''',
               ),
             );
           } else {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
         });
   }

@@ -16,7 +16,11 @@ class NewsAndEventsPage extends StatelessWidget {
           children: [
             LogoHeader(backRequired: true),
             const FightersData(),
+            const SizedBox(
+              height: 16,
+            ),
             Container(
+              height: 250,
               decoration:
                   BoxDecoration(color: const Color(lighterBlack), boxShadow: [
                 BoxShadow(
