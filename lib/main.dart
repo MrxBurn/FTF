@@ -126,7 +126,7 @@ class _MyAppState extends State<MyApp> {
           'dashboard': (context) => const DashboardPage(),
           'myOffers': (context) => MyOffersPage(),
           'fighterForum': (context) => const FighterForum(),
-          'newsEvents': (context) => NewsAndEventsPage()
+          'newsEvents': (context) => const NewsAndEventsPage()
         },
         localizationsDelegates: const [
           MonthYearPickerLocalizations.delegate,
