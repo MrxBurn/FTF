@@ -16,6 +16,7 @@ import 'package:ftf/dashboard/dashboard_page.dart';
 import 'package:ftf/fighter_forum/fighter_forum.dart';
 import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
+import 'package:ftf/my_account/my_account.dart';
 import 'package:ftf/my_offers/my_offers_page.dart';
 import 'package:ftf/news_and_events/news_and_events_page.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -126,7 +127,8 @@ class _MyAppState extends State<MyApp> {
           'dashboard': (context) => const DashboardPage(),
           'myOffers': (context) => MyOffersPage(),
           'fighterForum': (context) => const FighterForum(),
-          'newsEvents': (context) => const NewsAndEventsPage()
+          'newsEvents': (context) => const NewsAndEventsPage(),
+          'myAccount': (context) => MyAccount()
         },
         localizationsDelegates: const [
           MonthYearPickerLocalizations.delegate,

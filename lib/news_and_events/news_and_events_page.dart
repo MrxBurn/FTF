@@ -10,17 +10,22 @@ class NewsAndEventsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             LogoHeader(backRequired: true),
-            const FightersData(),
+            const Text(
+              'Events',
+              style: headerStyle,
+            ),
+            // const FightersData(),
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
             Container(
-              height: 250,
+              height: 523,
               decoration:
                   BoxDecoration(color: const Color(lighterBlack), boxShadow: [
                 BoxShadow(

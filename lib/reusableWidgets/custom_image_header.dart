@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:ftf/utils/general.dart';
 
 class CustomImageHeader extends StatelessWidget {
   final bool backRequired;
   final Function? onPressed;
   final String imagePath;
+  final bool networkImage;
 
   const CustomImageHeader(
       {super.key,
       required this.backRequired,
       this.onPressed,
-      required this.imagePath});
+      required this.imagePath,
+      this.networkImage = false});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +26,11 @@ class CustomImageHeader extends StatelessWidget {
             padding: const EdgeInsets.only(top: 170.0),
             child: CircleAvatar(
                 radius: 90,
-                backgroundImage: AssetImage(
-                  imagePath,
-                )),
+                backgroundImage: networkImage == false
+                    ? AssetImage(
+                        imagePath,
+                      )
+                    : NetworkImage(imagePath) as ImageProvider),
           ),
         ),
         backRequired == true

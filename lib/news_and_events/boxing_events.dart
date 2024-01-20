@@ -35,7 +35,7 @@ class BoxingEventsState extends State<BoxingEvents> {
                     ],
                   ),
                   SizedBox(
-                    height: 215,
+                    height: 500,
                     width: 190,
                     child: ListView.builder(
                         itemCount: snapshot.data[0]['events'].length,
