@@ -2,13 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/custom_image_header.dart';
+import 'package:ftf/reusableWidgets/dropdown_box.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_text_box.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/lists.dart';
 
-class MyAccount extends StatelessWidget {
-  MyAccount({super.key});
+class MyAccount extends StatefulWidget {
+  const MyAccount({super.key});
 
+  @override
+  State<MyAccount> createState() => _MyAccountState();
+}
+
+class _MyAccountState extends State<MyAccount> {
   final String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
   Future<Map<String, dynamic>> getUser() async {
@@ -22,17 +29,32 @@ class MyAccount extends StatelessWidget {
   }
 
   TextEditingController emailController = TextEditingController();
+
   TextEditingController firstNameController = TextEditingController();
+
   TextEditingController lastNameController = TextEditingController();
+
   TextEditingController weightClassController = TextEditingController();
+
   TextEditingController nationalityController = TextEditingController();
+
   TextEditingController bioController = TextEditingController();
+
+  String weight = '';
+
+  late Future<Map<String, dynamic>> future;
+
+  @override
+  void initState() {
+    future = getUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder(
-            future: getUser(),
+            future: future,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 emailController.text = snapshot.data['email'];
@@ -41,6 +63,7 @@ class MyAccount extends StatelessWidget {
                 weightClassController.text = snapshot.data['weightClass'];
                 nationalityController.text = snapshot.data['nationality'];
                 bioController.text = snapshot.data['description'];
+                weight = snapshot.data['weightClass'];
 
                 return SingleChildScrollView(
                     child: Column(
@@ -110,7 +133,8 @@ class MyAccount extends StatelessWidget {
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
                                     children: [
-                                      const Text('Email'),
+                                      const SizedBox(
+                                          width: 80, child: Text('Email')),
                                       RoundedTextInput(
                                         controller: emailController,
                                       ),
@@ -127,7 +151,8 @@ class MyAccount extends StatelessWidget {
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
                                     children: [
-                                      const Text('Name'),
+                                      const SizedBox(
+                                          width: 80, child: Text('Name')),
                                       RoundedTextInput(
                                         width: 95,
                                         controller: firstNameController,
@@ -149,11 +174,18 @@ class MyAccount extends StatelessWidget {
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
                                     children: [
-                                      const Text('Weightclass'),
-                                      RoundedTextInput(
-                                        width: 95,
-                                        controller: weightClassController,
-                                      ),
+                                      const SizedBox(
+                                          width: 80,
+                                          child: Text('Weightclass')),
+                                      DropdownBox(
+                                          dropDownValue: weight,
+                                          dropDownList: weightList,
+                                          changeParentValue: (value) => {
+                                                print(value),
+                                                setState(() {
+                                                  weight = value ?? '';
+                                                })
+                                              })
                                     ],
                                   ),
                                 ),
@@ -167,9 +199,11 @@ class MyAccount extends StatelessWidget {
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
                                     children: [
-                                      const Text('Nationality'),
+                                      const SizedBox(
+                                          width: 80,
+                                          child: Text('Nationality')),
                                       RoundedTextInput(
-                                        width: 95,
+                                        width: 150,
                                         controller: nationalityController,
                                       ),
                                     ],
