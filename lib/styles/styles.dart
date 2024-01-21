@@ -23,4 +23,11 @@ BoxShadow containerShadowWhite = BoxShadow(
   offset: const Offset(0, 4),
 );
 
+BoxShadow containerShadowYellow = BoxShadow(
+  color: Colors.yellow.withOpacity(0.3),
+  spreadRadius: 1,
+  blurRadius: 7,
+  offset: const Offset(0, 4),
+);
+
 EdgeInsets paddingLRT = const EdgeInsets.only(left: 24.0, right: 24, top: 16);

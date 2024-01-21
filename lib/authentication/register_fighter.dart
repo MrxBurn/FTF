@@ -70,6 +70,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {
                 users.doc(value.user?.uid).set({
+                  'email': email,
                   'firstName': firstName,
                   'lastName': lastName,
                   'nationality': nationality,
