@@ -18,12 +18,16 @@ class MyAccount extends StatefulWidget {
 class _MyAccountState extends State<MyAccount> {
   final String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
+  String weight = '';
+
   Future<Map<String, dynamic>> getUser() async {
     var result = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser)
         .get()
         .then((value) => value.data());
+
+    weight = result?['weightClass'];
 
     return result as Map<String, dynamic>;
   }
@@ -40,9 +44,13 @@ class _MyAccountState extends State<MyAccount> {
 
   TextEditingController bioController = TextEditingController();
 
-  String weight = '';
-
   late Future<Map<String, dynamic>> future;
+
+  void onDropDownChanged(value) {
+    setState(() {
+      weight = value!;
+    });
+  }
 
   @override
   void initState() {
@@ -63,7 +71,6 @@ class _MyAccountState extends State<MyAccount> {
                 weightClassController.text = snapshot.data['weightClass'];
                 nationalityController.text = snapshot.data['nationality'];
                 bioController.text = snapshot.data['description'];
-                weight = snapshot.data['weightClass'];
 
                 return SingleChildScrollView(
                     child: Column(
@@ -136,6 +143,7 @@ class _MyAccountState extends State<MyAccount> {
                                       const SizedBox(
                                           width: 80, child: Text('Email')),
                                       RoundedTextInput(
+                                        disabled: true,
                                         controller: emailController,
                                       ),
                                     ],
@@ -154,10 +162,12 @@ class _MyAccountState extends State<MyAccount> {
                                       const SizedBox(
                                           width: 80, child: Text('Name')),
                                       RoundedTextInput(
+                                        disabled: true,
                                         width: 95,
                                         controller: firstNameController,
                                       ),
                                       RoundedTextInput(
+                                        disabled: true,
                                         width: 95,
                                         controller: lastNameController,
                                       ),
@@ -178,14 +188,11 @@ class _MyAccountState extends State<MyAccount> {
                                           width: 80,
                                           child: Text('Weightclass')),
                                       DropdownBox(
+                                          disabled: true,
                                           dropDownValue: weight,
                                           dropDownList: weightList,
-                                          changeParentValue: (value) => {
-                                                print(value),
-                                                setState(() {
-                                                  weight = value ?? '';
-                                                })
-                                              })
+                                          changeParentValue: (value) =>
+                                              onDropDownChanged(value))
                                     ],
                                   ),
                                 ),
@@ -203,6 +210,7 @@ class _MyAccountState extends State<MyAccount> {
                                           width: 80,
                                           child: Text('Nationality')),
                                       RoundedTextInput(
+                                        disabled: true,
                                         width: 150,
                                         controller: nationalityController,
                                       ),

@@ -6,13 +6,13 @@ class DropdownBox extends StatefulWidget {
       {super.key,
       required this.dropDownValue,
       required this.dropDownList,
-      this.changeParentValue,
+      required this.changeParentValue,
       this.disabled = false,
       this.padding = const EdgeInsets.only(left: 24.0, right: 24)});
 
   final String dropDownValue;
   final List<String> dropDownList;
-  final Function(String? value)? changeParentValue;
+  final Function(String? value) changeParentValue;
   final bool disabled;
   final EdgeInsets padding;
 
@@ -33,7 +33,7 @@ class _DropdownBoxState extends State<DropdownBox> {
         color: Colors.white,
       ),
       onChanged: widget.disabled == false
-          ? (value) => widget.changeParentValue!(value)
+          ? (value) => widget.changeParentValue(value)
           : null,
       items: widget.dropDownList.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
