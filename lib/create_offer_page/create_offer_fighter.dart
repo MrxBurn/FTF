@@ -14,6 +14,7 @@ import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/reusableWidgets/search_input.dart';
 import 'package:ftf/reusableWidgets/month_year_picker.dart';
+import 'package:ftf/reusableWidgets/upload_option.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/classes.dart';
 import 'package:ftf/utils/lists.dart';
@@ -465,7 +466,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   children: [
                     ElevatedButton.icon(
                       onPressed: () => chooseUploadOption(
-                          context: context, uploadVideo: uploadVideo),
+                          context: context, uploadFunction: uploadVideo),
                       label: const Text('Attach callout video'),
                       icon: const Icon(Icons.attach_file),
                     ),
@@ -572,52 +573,4 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       ),
     );
   }
-}
-
-//TODO: Use this in fighter_image_upload.dart and move to separate file
-chooseUploadOption(
-    {required BuildContext context,
-    required Function(ImageSource source) uploadVideo}) {
-  showModalBottomSheet(
-    context: context,
-    builder: ((context) {
-      return SizedBox(
-        height: 100,
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () => uploadVideo(ImageSource.camera),
-              style: ElevatedButton.styleFrom(
-                  elevation: 0, backgroundColor: Colors.transparent),
-              child: const Row(
-                children: [
-                  Icon(Icons.camera_alt),
-                  Text(
-                    'Camera',
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () => uploadVideo(ImageSource.gallery),
-              style: ElevatedButton.styleFrom(
-                  elevation: 0, backgroundColor: Colors.transparent),
-              child: const Row(
-                children: [
-                  Icon(
-                    Icons.image,
-                  ),
-                  Text(
-                    'Gallery',
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }),
-  );
 }
