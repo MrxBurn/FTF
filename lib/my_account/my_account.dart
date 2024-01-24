@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -105,11 +105,6 @@ class _MyAccountState extends State<MyAccount> {
 
   Future<void> saveImage(File? img) async {
     if (img != null) {
-      Reference deleteFile = storageRef.child('fighterProfiles/$currentUser');
-
-      await deleteFile.delete();
-      //TODO: Delete folder before uploading new image
-
       Reference file =
           storageRef.child('fighterProfiles/$currentUser/$imageName');
 
