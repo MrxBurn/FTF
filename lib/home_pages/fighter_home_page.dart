@@ -1,49 +1,45 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ftf/news_and_events/get_events.dart';
-import 'package:ftf/reusableWidgets/button_black.dart';
+import 'package:ftf/reusableWidgets/button_cards.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 
-class FighterHomePage extends StatefulWidget {
+class FighterHomePage extends StatelessWidget {
   const FighterHomePage({super.key});
 
-  @override
-  State<FighterHomePage> createState() => _FighterHomePageState();
-}
-
-class _FighterHomePageState extends State<FighterHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           LogoHeader(backRequired: false),
-          BlackButton(
-            text: 'Create offer',
-            onPressed: () => Navigator.pushNamed(context, 'createOfferFighter'),
+          const ButtonCard(
+            path: 'assets/illustrations/create_offer.jpg',
+            route: 'createOfferFighter',
           ),
-          BlackButton(
-            text: 'Log out',
-            onPressed: () => FirebaseAuth.instance
-                .signOut()
-                .then((value) => Navigator.pushNamed(context, 'loginPage')),
-          ),
-          BlackButton(
-              text: 'Dashboard',
-              onPressed: () => Navigator.pushNamed(context, 'dashboard')),
-          BlackButton(
-              text: 'My offers',
-              onPressed: () => Navigator.pushNamed(context, 'myOffers')),
-          BlackButton(
-              text: 'Fighter discussions',
-              onPressed: () => Navigator.pushNamed(context, 'fighterForum')),
-          BlackButton(
-              text: 'Events',
-              onPressed: () => Navigator.pushNamed(context, 'newsEvents')),
-          BlackButton(
-              text: 'My account',
-              onPressed: () => Navigator.pushNamed(context, 'myAccount')),
+          // BlackButton(
+          //   text: 'Create offer',
+          //   onPressed: () => Navigator.pushNamed(context, 'createOfferFighter'),
+          // ),
+          // BlackButton(
+          //   text: 'Log out',
+          //   onPressed: () => FirebaseAuth.instance
+          //       .signOut()
+          //       .then((value) => Navigator.pushNamed(context, 'loginPage')),
+          // ),
+          // BlackButton(
+          //     text: 'Dashboard',
+          //     onPressed: () => Navigator.pushNamed(context, 'dashboard')),
+          // BlackButton(
+          //     text: 'My offers',
+          //     onPressed: () => Navigator.pushNamed(context, 'myOffers')),
+          // BlackButton(
+          //     text: 'Fighter discussions',
+          //     onPressed: () => Navigator.pushNamed(context, 'fighterForum')),
+          // BlackButton(
+          //     text: 'Events',
+          //     onPressed: () => Navigator.pushNamed(context, 'newsEvents')),
+          // BlackButton(
+          //     text: 'My account',
+          //     onPressed: () => Navigator.pushNamed(context, 'myAccount')),
         ],
       ),
     );

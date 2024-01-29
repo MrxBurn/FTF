@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ftf/news_and_events/boxing_events.dart';
-import 'package:ftf/news_and_events/fighters_data.dart';
 import 'package:ftf/news_and_events/mma_events.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
@@ -10,7 +9,6 @@ class NewsAndEventsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
