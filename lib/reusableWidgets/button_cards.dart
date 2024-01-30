@@ -6,12 +6,10 @@ import 'package:ftf/styles/styles.dart';
 class ButtonCard extends StatefulWidget {
   final String path;
   final String route;
+  final String name;
 
-  const ButtonCard({
-    super.key,
-    required this.path,
-    required this.route,
-  });
+  const ButtonCard(
+      {super.key, required this.path, required this.route, required this.name});
 
   @override
   State<ButtonCard> createState() => _ButtonCardState();
@@ -22,17 +20,18 @@ class _ButtonCardState extends State<ButtonCard> {
 
   @override
   void initState() {
+    super.initState();
     image = Image.asset(
       widget.path,
-      fit: BoxFit.cover,
+      fit: BoxFit.fill,
       height: 145,
+      width: double.infinity,
     );
-    super.initState();
   }
 
   @override
-  void didChangeDependencies() {
-    precacheImage(image.image, context);
+  void didChangeDependencies() async {
+    await precacheImage(image.image, context, size: const Size(100, 100));
     super.didChangeDependencies();
   }
 
@@ -44,15 +43,15 @@ class _ButtonCardState extends State<ButtonCard> {
         decoration: BoxDecoration(
             boxShadow: [containerShadowRed],
             borderRadius: const BorderRadius.all(Radius.circular(15))),
-        height: 153,
-        width: 150,
+        height: 120,
+        width: 130,
         child: Card(
             child: Stack(
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
               child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+                  imageFilter: ImageFilter.blur(sigmaX: 0.8, sigmaY: 0.8),
                   child: image),
             ),
             Center(
@@ -62,8 +61,8 @@ class _ButtonCardState extends State<ButtonCard> {
                     boxShadow: [containerShadowBlack],
                     color: Colors.black,
                     borderRadius: const BorderRadius.all(Radius.circular(5))),
-                child: const Text(
-                  'Create offer',
+                child: Text(
+                  widget.name,
                   textAlign: TextAlign.center,
                 ),
               ),

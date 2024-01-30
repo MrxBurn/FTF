@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_cards.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/styles/styles.dart';
 
 class FighterHomePage extends StatelessWidget {
   const FighterHomePage({super.key});
@@ -8,39 +9,70 @@ class FighterHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          LogoHeader(backRequired: false),
-          const ButtonCard(
-            path: 'assets/illustrations/create_offer.jpg',
-            route: 'createOfferFighter',
-          ),
-          // BlackButton(
-          //   text: 'Create offer',
-          //   onPressed: () => Navigator.pushNamed(context, 'createOfferFighter'),
-          // ),
-          // BlackButton(
-          //   text: 'Log out',
-          //   onPressed: () => FirebaseAuth.instance
-          //       .signOut()
-          //       .then((value) => Navigator.pushNamed(context, 'loginPage')),
-          // ),
-          // BlackButton(
-          //     text: 'Dashboard',
-          //     onPressed: () => Navigator.pushNamed(context, 'dashboard')),
-          // BlackButton(
-          //     text: 'My offers',
-          //     onPressed: () => Navigator.pushNamed(context, 'myOffers')),
-          // BlackButton(
-          //     text: 'Fighter discussions',
-          //     onPressed: () => Navigator.pushNamed(context, 'fighterForum')),
-          // BlackButton(
-          //     text: 'Events',
-          //     onPressed: () => Navigator.pushNamed(context, 'newsEvents')),
-          // BlackButton(
-          //     text: 'My account',
-          //     onPressed: () => Navigator.pushNamed(context, 'myAccount')),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            LogoHeader(backRequired: false),
+            Padding(
+              padding: paddingLRT,
+              child: const Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ButtonCard(
+                        name: 'Create offer',
+                        path: 'assets/illustrations/create_offer.jpg',
+                        route: 'createOfferFighter',
+                      ),
+                      ButtonCard(
+                        path: 'assets/illustrations/my_offers.jpg',
+                        route: 'myOffers',
+                        name: 'My offers',
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ButtonCard(
+                        path: 'assets/illustrations/dashboard.png',
+                        route: 'dashboard',
+                        name: 'Dashboard',
+                      ),
+                      ButtonCard(
+                        path: 'assets/illustrations/forum.jpeg',
+                        route: 'fighterForum',
+                        name: 'Fighter forum',
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ButtonCard(
+                        path: 'assets/illustrations/events.png',
+                        route: 'newsEvents',
+                        name: 'Events',
+                      ),
+                      ButtonCard(
+                        path: 'assets/illustrations/my_account.jpg',
+                        route: 'myAccount',
+                        name: 'My account',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

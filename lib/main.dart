@@ -128,7 +128,7 @@ class _MyAppState extends State<MyApp> {
           'myOffers': (context) => MyOffersPage(),
           'fighterForum': (context) => const FighterForum(),
           'newsEvents': (context) => const NewsAndEventsPage(),
-          'myAccount': (context) => MyAccount()
+          'myAccount': (context) => const MyAccount()
         },
         localizationsDelegates: const [
           MonthYearPickerLocalizations.delegate,
