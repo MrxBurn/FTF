@@ -394,6 +394,17 @@ class _MyAccountState extends State<MyAccount> {
                                   ]),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              BlackRoundedButton(
+                                isLoading: false,
+                                onPressed: () => FirebaseAuth.instance
+                                    .signOut()
+                                    .then((value) => Navigator.pushNamed(
+                                        context, 'loginPage')),
+                                text: 'Logout',
+                              ),
                             ],
                           ),
                         )

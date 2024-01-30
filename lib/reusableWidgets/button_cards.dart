@@ -3,42 +3,21 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
 
-class ButtonCard extends StatefulWidget {
-  final String path;
+class ButtonCard extends StatelessWidget {
   final String route;
   final String name;
+  final Image image;
 
   const ButtonCard(
-      {super.key, required this.path, required this.route, required this.name});
-
-  @override
-  State<ButtonCard> createState() => _ButtonCardState();
-}
-
-class _ButtonCardState extends State<ButtonCard> {
-  late Image image;
-
-  @override
-  void initState() {
-    super.initState();
-    image = Image.asset(
-      widget.path,
-      fit: BoxFit.fill,
-      height: 145,
-      width: double.infinity,
-    );
-  }
-
-  @override
-  void didChangeDependencies() async {
-    await precacheImage(image.image, context, size: const Size(100, 100));
-    super.didChangeDependencies();
-  }
+      {super.key,
+      required this.route,
+      required this.name,
+      required this.image});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, widget.route),
+      onTap: () => Navigator.pushNamed(context, route),
       child: Container(
         decoration: BoxDecoration(
             boxShadow: [containerShadowRed],
@@ -62,7 +41,7 @@ class _ButtonCardState extends State<ButtonCard> {
                     color: Colors.black,
                     borderRadius: const BorderRadius.all(Radius.circular(5))),
                 child: Text(
-                  widget.name,
+                  name,
                   textAlign: TextAlign.center,
                 ),
               ),
