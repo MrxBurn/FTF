@@ -6,13 +6,10 @@ import 'package:ftf/styles/styles.dart';
 class ButtonCard extends StatelessWidget {
   final String route;
   final String name;
-  final Image image;
+  final String path;
 
   const ButtonCard(
-      {super.key,
-      required this.route,
-      required this.name,
-      required this.image});
+      {super.key, required this.route, required this.name, required this.path});
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +28,40 @@ class ButtonCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.0),
               child: ImageFiltered(
                   imageFilter: ImageFilter.blur(sigmaX: 0.8, sigmaY: 0.8),
-                  child: image),
+                  child: Image.asset(
+                    path,
+                    fit: BoxFit.fill,
+                    height: 145,
+                    width: double.infinity,
+                  )),
             ),
+
             Center(
-              child: Container(
-                width: 100,
-                decoration: BoxDecoration(
-                    boxShadow: [containerShadowBlack],
+              child: Text(
+                name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.bold, shadows: [
+                  Shadow(
                     color: Colors.black,
-                    borderRadius: const BorderRadius.all(Radius.circular(5))),
-                child: Text(
-                  name,
-                  textAlign: TextAlign.center,
-                ),
+                    blurRadius: 7,
+                    offset: Offset(0, 4),
+                  )
+                ]),
               ),
             )
+            // Center(
+            //   child: Container(
+            //     width: 100,
+            //     decoration: BoxDecoration(
+            //         boxShadow: [containerShadowBlack],
+            //         color: Colors.black,
+            //         borderRadius: const BorderRadius.all(Radius.circular(5))),
+            //     child: Text(
+            //       name,
+            //       textAlign: TextAlign.center,
+            //     ),
+            //   ),
+            // )
           ],
         )),
       ),
