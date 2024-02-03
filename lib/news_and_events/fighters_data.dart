@@ -22,9 +22,6 @@ class _FightersDataState extends State<FightersData> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             var data = snapshot.data[0]['fighters'];
-
-            print(data);
-
             return Container(
                 width: double.infinity,
                 height: 200,

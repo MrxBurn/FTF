@@ -1,0 +1,76 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:ftf/fan_fights_overview/fights_overview_card.dart';
+import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/styles/styles.dart';
+
+class FanFightsOverview extends StatefulWidget {
+  const FanFightsOverview({super.key});
+
+  @override
+  State<FanFightsOverview> createState() => _FanFightsOverviewState();
+}
+
+class _FanFightsOverviewState extends State<FanFightsOverview> {
+  CollectionReference offers =
+      FirebaseFirestore.instance.collection('fightOffers');
+
+  Future<List> getAllOffers() async {
+    var result =
+        await offers.get().then((value) => value.docs.map((e) => e.data()));
+
+    List resultsList = [];
+
+    resultsList.add(result);
+
+    return resultsList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: FutureBuilder(
+            future: getAllOffers(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                List snapshotList = snapshot.data[0].toList();
+                return Column(children: [
+                  LogoHeader(backRequired: true),
+                  Padding(
+                    padding: paddingLRT,
+                    child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshotList.length,
+                        itemBuilder: (BuildContext context, idx) {
+                          return FightsOverviewCard(
+                              creator: snapshotList[idx]['creator'],
+                              opponent: snapshotList[idx]['opponent'],
+                              creatorValue: snapshotList[idx]
+                                      ['negotiationValues']
+                                  .last['creatorValue']
+                                  .toString(),
+                              opponentValue: snapshotList[idx]
+                                      ['negotiationValues']
+                                  .last['opponentValue']
+                                  .toString(),
+                              weightClass: snapshotList[idx]
+                                      ['negotiationValues']
+                                  .last['weightClass'],
+                              fighterStatus: snapshotList[idx]['fighterStatus'],
+                              fightDate: snapshotList[idx]['negotiationValues']
+                                  .last['fightDate']);
+                        }),
+                  )
+                ]);
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
+      ),
+    );
+  }
+}

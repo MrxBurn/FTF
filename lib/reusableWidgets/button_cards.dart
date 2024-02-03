@@ -35,33 +35,28 @@ class ButtonCard extends StatelessWidget {
                     width: double.infinity,
                   )),
             ),
-
-            Center(
-              child: Text(
-                name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontWeight: FontWeight.bold, shadows: [
-                  Shadow(
-                    color: Colors.black,
-                    blurRadius: 7,
-                    offset: Offset(0, 4),
-                  )
-                ]),
+            Stack(children: [
+              Center(
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    width: 100,
+                    height: 25,
+                    decoration: BoxDecoration(
+                        boxShadow: [containerShadowBlack],
+                        color: Colors.black,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5))),
+                  ),
+                ),
               ),
-            )
-            // Center(
-            //   child: Container(
-            //     width: 100,
-            //     decoration: BoxDecoration(
-            //         boxShadow: [containerShadowBlack],
-            //         color: Colors.black,
-            //         borderRadius: const BorderRadius.all(Radius.circular(5))),
-            //     child: Text(
-            //       name,
-            //       textAlign: TextAlign.center,
-            //     ),
-            //   ),
-            // )
+              Center(
+                child: Text(
+                  name,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ])
           ],
         )),
       ),

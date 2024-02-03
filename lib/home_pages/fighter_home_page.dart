@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_cards.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -89,6 +87,9 @@ class _FighterHomePageState extends State<FighterHomePage> {
                 ],
               ),
             ),
+            const SizedBox(
+              height: 16,
+            )
           ],
         ),
       ),

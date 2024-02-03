@@ -285,7 +285,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         'createdAt': DateTime.now(),
         'fightDate': yearController.text,
         'weightClass': weight,
-        'contractedChecked': contractedChecked
+        'contractedChecked': contractedChecked,
       });
       DocumentSnapshot<Map<String, dynamic>> loggedInUserObject =
           await FirebaseFirestore.instance

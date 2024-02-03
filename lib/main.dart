@@ -13,6 +13,7 @@ import 'package:ftf/authentication/register_fighter.dart';
 import 'package:ftf/create_offer_page/create_offer_fighter.dart';
 import 'package:ftf/create_offer_page/dynamic_link_summary.dart';
 import 'package:ftf/dashboard/dashboard_page.dart';
+import 'package:ftf/fan_fights_overview/fights_overview_page.dart';
 import 'package:ftf/fighter_forum/fighter_forum.dart';
 import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
@@ -128,7 +129,8 @@ class _MyAppState extends State<MyApp> {
           'myOffers': (context) => MyOffersPage(),
           'fighterForum': (context) => const FighterForum(),
           'newsEvents': (context) => const NewsAndEventsPage(),
-          'myAccount': (context) => const MyAccount()
+          'myAccount': (context) => const MyAccount(),
+          'fanFightsOverview': (context) => const FanFightsOverview()
         },
         localizationsDelegates: const [
           MonthYearPickerLocalizations.delegate,
