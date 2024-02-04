@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/snack_bar.dart';
-import 'package:ftf/view_offer_page/view_offer_page.dart';
+import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FighterImageUpload extends StatefulWidget {

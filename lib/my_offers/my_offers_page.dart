@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:ftf/my_offers/my_offers_widgets/offer_card.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
-import 'package:ftf/view_offer_page/view_offer_page.dart';
+import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 
 class MyOffersPage extends StatelessWidget {
   MyOffersPage({super.key});

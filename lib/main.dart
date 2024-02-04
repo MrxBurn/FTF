@@ -22,7 +22,7 @@ import 'package:ftf/my_offers/my_offers_page.dart';
 import 'package:ftf/news_and_events/news_and_events_page.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
-import 'package:ftf/view_offer_page/view_offer_page.dart';
+import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
 Future<void> main() async {
