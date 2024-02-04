@@ -6,13 +6,23 @@ class BlackButton extends StatelessWidget {
 
   final String text;
 
-  const BlackButton({super.key, required this.onPressed, required this.text});
+  final double width;
+  final double height;
+  final double fontSize;
+
+  const BlackButton(
+      {super.key,
+      required this.onPressed,
+      required this.text,
+      this.width = 230,
+      this.height = 60,
+      this.fontSize = 16});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 230,
-      height: 60,
+      width: width,
+      height: height,
       child: Container(
         decoration: BoxDecoration(boxShadow: [containerShadowRed]),
         child: ElevatedButton(
@@ -27,7 +37,7 @@ class BlackButton extends StatelessWidget {
             onPressed: () => onPressed(),
             child: Text(
               text,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
             )),
       ),
     );

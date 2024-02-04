@@ -449,6 +449,11 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   controller: messageController,
+                  onChanged: (value) => {
+                    setState(() {
+                      messageController.text = value;
+                    })
+                  },
                   decoration: const InputDecoration(
                       contentPadding: EdgeInsets.symmetric(
                           vertical: 25.0, horizontal: 10.0),
