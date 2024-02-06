@@ -15,15 +15,8 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
   CollectionReference offers =
       FirebaseFirestore.instance.collection('fightOffers');
 
-  Future<List> getAllOffers() async {
-    var result =
-        await offers.get().then((value) => value.docs.map((e) => e.data()));
-
-    List resultsList = [];
-
-    resultsList.add(result);
-
-    return resultsList;
+  Stream getAllOffers() {
+    return offers.snapshots();
   }
 
   @override
@@ -37,11 +30,11 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
               'Fights overview',
               style: TextStyle(height: -1, fontSize: 24, color: Colors.white),
             ),
-            FutureBuilder(
-                future: getAllOffers(),
+            StreamBuilder(
+                stream: getAllOffers(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    List snapshotList = snapshot.data[0].toList();
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    List snapshotList = snapshot.data.docs.toList();
                     return Column(children: [
                       Padding(
                         padding: const EdgeInsets.only(
@@ -76,8 +69,8 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
                                 fightDate: snapshotList[idx]
                                         ['negotiationValues']
                                     .last['fightDate'],
-                                likes: snapshotList[idx]['like'],
-                                dislikes: snapshotList[idx]['dislike'],
+                                likes: snapshotList[idx]['like'].length,
+                                dislikes: snapshotList[idx]['dislike'].length,
                                 onTap: () => Navigator.of(context)
                                     .push(MaterialPageRoute(
                                         builder: (context) => ViewOfferPageFan(

@@ -1,33 +1,53 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 
 class BlackRoundedButton extends StatelessWidget {
-  bool isLoading;
+  final bool isLoading;
 
-  Function onPressed;
+  final Function onPressed;
 
-  String text;
+  final String text;
 
-  BlackRoundedButton(
+  final Color shadowColour;
+
+  final Icon? icon;
+
+  final Color textColour;
+
+  const BlackRoundedButton(
       {super.key,
       required this.isLoading,
       required this.onPressed,
-      required this.text});
+      required this.text,
+      this.shadowColour = Colors.red,
+      this.icon,
+      this.textColour = Colors.white});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 5,
-          shadowColor: Colors.red,
-        ),
-        onPressed: () => onPressed(),
-        child: isLoading == true
-            ? const CircularProgressIndicator()
-            : Text(
-                text,
-                style: const TextStyle(fontSize: 16),
-              ));
+      style: ElevatedButton.styleFrom(
+        elevation: 5,
+        shadowColor: shadowColour,
+      ),
+      onPressed: () => onPressed(),
+      child: isLoading == true
+          ? const CircularProgressIndicator()
+          : icon != null
+              ? Wrap(
+                  spacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    icon ?? const SizedBox(),
+                    Text(
+                      text,
+                      style: TextStyle(fontSize: 16, color: textColour),
+                    ),
+                  ],
+                )
+              : Text(
+                  text,
+                  style: const TextStyle(fontSize: 16),
+                ),
+    );
   }
 }

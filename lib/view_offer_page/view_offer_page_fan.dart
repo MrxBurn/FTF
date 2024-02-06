@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/contract_split.dart';
@@ -5,6 +7,7 @@ import 'package:ftf/reusableWidgets/date_picker.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/month_year_picker.dart';
+import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/lists.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
@@ -28,15 +31,75 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
   Future<void>? initializeVideoPlayerFuture;
   DateTime date = DateTime.now();
 
+  String likeText = 'Like';
+  String dislikeText = 'Dislike';
+
+  Color likeButtonColour = Colors.white;
+  Color dislikeButtonColour = Colors.white;
+
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+
   @override
   void initState() {
     super.initState();
     date = widget.offer['offerExpiryDate'].toDate();
+
     if (widget.offer['calloutVideoURL'] != '') {
       videoController = VideoPlayerController.networkUrl(
           Uri.parse(widget.offer['calloutVideoURL']));
       initializeVideoPlayerFuture = videoController.initialize();
     }
+
+    //check if already liked offer
+    if (widget.offer['like'].contains(currentUser)) {
+      setState(() {
+        likeText = 'Liked';
+        likeButtonColour = Colors.yellow;
+      });
+    }
+    //check if already disliked offer
+    if (widget.offer['dislike'].contains(currentUser)) {
+      setState(() {
+        dislikeText = 'Disliked';
+        dislikeButtonColour = Colors.red;
+      });
+    }
+  }
+
+  void onLikePress() async {
+    await FirebaseFirestore.instance
+        .collection('fightOffers')
+        .doc(widget.offer['offerId'])
+        .update({
+      'like': FieldValue.arrayUnion([currentUser]),
+      'dislike': FieldValue.arrayRemove([currentUser])
+    });
+    setState(() {
+      likeText = 'Liked';
+      likeButtonColour = Colors.yellow;
+
+      //reset like button if necessary
+      dislikeText = 'Dislike';
+      dislikeButtonColour = Colors.white;
+    });
+  }
+
+  void onDislikePress() async {
+    await FirebaseFirestore.instance
+        .collection('fightOffers')
+        .doc(widget.offer['offerId'])
+        .update({
+      'like': FieldValue.arrayRemove([currentUser]),
+      'dislike': FieldValue.arrayUnion([currentUser])
+    });
+    setState(() {
+      dislikeText = 'Disliked';
+      dislikeButtonColour = Colors.red;
+
+      //reset like button if necessary
+      likeText = 'Like';
+      likeButtonColour = Colors.white;
+    });
   }
 
   @override
@@ -211,7 +274,41 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                       : const SizedBox(),
                 ],
               )
-            : const SizedBox()
+            : const SizedBox(),
+        const SizedBox(
+          height: 16,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BlackRoundedButton(
+              onPressed: () => onLikePress(),
+              text: likeText,
+              textColour: likeButtonColour,
+              icon: Icon(
+                Icons.thumb_up,
+                size: 14,
+                color: likeButtonColour,
+              ),
+              shadowColour: Colors.yellow,
+              isLoading: false,
+            ),
+            const SizedBox(
+              width: 12,
+            ),
+            BlackRoundedButton(
+              onPressed: () => onDislikePress(),
+              text: dislikeText,
+              textColour: dislikeButtonColour,
+              icon: Icon(
+                Icons.thumb_down,
+                size: 14,
+                color: dislikeButtonColour,
+              ),
+              isLoading: false,
+            )
+          ],
+        )
       ])
     ])));
   }
