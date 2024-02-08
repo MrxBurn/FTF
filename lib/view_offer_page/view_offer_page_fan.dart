@@ -67,39 +67,67 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
   }
 
   void onLikePress() async {
-    await FirebaseFirestore.instance
-        .collection('fightOffers')
-        .doc(widget.offer['offerId'])
-        .update({
-      'like': FieldValue.arrayUnion([currentUser]),
-      'dislike': FieldValue.arrayRemove([currentUser])
-    });
-    setState(() {
-      likeText = 'Liked';
-      likeButtonColour = Colors.yellow;
+    if (likeText != "Liked") {
+      await FirebaseFirestore.instance
+          .collection('fightOffers')
+          .doc(widget.offer['offerId'])
+          .update({
+        'like': FieldValue.arrayUnion([currentUser]),
+        'dislike': FieldValue.arrayRemove([currentUser])
+      });
+      setState(() {
+        likeText = 'Liked';
+        likeButtonColour = Colors.yellow;
 
-      //reset like button if necessary
-      dislikeText = 'Dislike';
-      dislikeButtonColour = Colors.white;
-    });
+        //reset like button if necessary
+        dislikeText = 'Dislike';
+        dislikeButtonColour = Colors.white;
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection('fightOffers')
+          .doc(widget.offer['offerId'])
+          .update({
+        'like': FieldValue.arrayRemove([currentUser]),
+      });
+
+      setState(() {
+        //reset like button if necessary
+        likeText = 'Like';
+        likeButtonColour = Colors.white;
+      });
+    }
   }
 
   void onDislikePress() async {
-    await FirebaseFirestore.instance
-        .collection('fightOffers')
-        .doc(widget.offer['offerId'])
-        .update({
-      'like': FieldValue.arrayRemove([currentUser]),
-      'dislike': FieldValue.arrayUnion([currentUser])
-    });
-    setState(() {
-      dislikeText = 'Disliked';
-      dislikeButtonColour = Colors.red;
+    if (dislikeText != 'Disliked') {
+      await FirebaseFirestore.instance
+          .collection('fightOffers')
+          .doc(widget.offer['offerId'])
+          .update({
+        'like': FieldValue.arrayRemove([currentUser]),
+        'dislike': FieldValue.arrayUnion([currentUser])
+      });
+      setState(() {
+        dislikeText = 'Disliked';
+        dislikeButtonColour = Colors.red;
 
-      //reset like button if necessary
-      likeText = 'Like';
-      likeButtonColour = Colors.white;
-    });
+        //reset like button if necessary
+        likeText = 'Like';
+        likeButtonColour = Colors.white;
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection('fightOffers')
+          .doc(widget.offer['offerId'])
+          .update({
+        'dislike': FieldValue.arrayRemove([currentUser])
+      });
+      setState(() {
+        dislikeText = 'Dislike';
+        dislikeButtonColour = Colors.white;
+      });
+    }
   }
 
   @override
@@ -269,7 +297,7 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                               context,
                               widget.offer['negotiationValues'].reversed
                                   .toList(),
-                              widget.offer),
+                              widget.offer.data()),
                           text: 'Review negotiations ')
                       : const SizedBox(),
                 ],
