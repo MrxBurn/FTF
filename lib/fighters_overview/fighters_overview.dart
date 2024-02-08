@@ -1,0 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/styles/styles.dart';
+
+class FightersOverview extends StatefulWidget {
+  const FightersOverview({super.key});
+
+  @override
+  State<FightersOverview> createState() => _FightersOverviewState();
+}
+
+class _FightersOverviewState extends State<FightersOverview> {
+  CollectionReference fighters = FirebaseFirestore.instance.collection('users');
+
+  Future<List<dynamic>> getFighters() async {
+    var result = await fighters
+        .where('route', isEqualTo: 'fighter')
+        .get()
+        .then((value) => value.docs.map((e) => e.data()));
+
+    return result.toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+          child: Column(
+        children: [
+          LogoHeader(backRequired: true),
+          const Text(
+            'Fighters overview',
+            style: headerStyle,
+          ),
+          FutureBuilder(
+              future: getFighters(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return ListView.builder(
+                    itemBuilder: (BuildContext context, idx) {
+                  return null;
+                });
+              })
+        ],
+      )),
+    );
+  }
+}

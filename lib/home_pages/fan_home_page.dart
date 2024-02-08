@@ -38,6 +38,10 @@ class _FanHomePageState extends State<FanHomePage> {
                     .signOut()
                     .then((value) => Navigator.pushNamed(context, 'loginPage')),
                 text: 'Logout'),
+            BlackButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, 'fightersOverview'),
+                text: 'Fighters overview'),
             const SizedBox(
               height: 16,
             )

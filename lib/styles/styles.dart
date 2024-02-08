@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const headerStyle = TextStyle(fontSize: 24, color: Colors.white);
+const headerStyle = TextStyle(fontSize: 24, color: Colors.white, height: -1);
 
 const bodyStyle = TextStyle(fontSize: 16, color: Colors.white);
 

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/fan_fights_overview/fights_overview_widgets/fights_overview_card.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/styles/styles.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fan.dart';
 
 class FanFightsOverview extends StatefulWidget {
@@ -28,7 +29,7 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
             LogoHeader(backRequired: true),
             const Text(
               'Fights overview',
-              style: TextStyle(height: -1, fontSize: 24, color: Colors.white),
+              style: headerStyle,
             ),
             StreamBuilder(
                 stream: getAllOffers(),
