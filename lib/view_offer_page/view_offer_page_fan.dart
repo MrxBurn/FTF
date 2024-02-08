@@ -224,6 +224,9 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                 ),
               )
             : const SizedBox(),
+        const SizedBox(
+          height: 16,
+        ),
         widget.offer['calloutVideoURL'] != ''
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
