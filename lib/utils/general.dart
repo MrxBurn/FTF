@@ -35,4 +35,4 @@ String? confirmPasswordValidator(String? value, String? password) {
 }
 
 String imgPlaceholder =
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png';
+    'https://firebasestorage.googleapis.com/v0/b/ftfdb-83750.appspot.com/o/imagePlaceholder%2Fimage_placeholder.png?alt=media&token=dad6825d-cf9b-4d35-b30d-c5585d3f5294';
