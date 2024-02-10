@@ -80,7 +80,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   'fighterStatus': fighterStatus,
                   'description': bio,
                   'route': 'fighter',
-                  'profileImageURL': ''
+                  'profileImageURL': '',
+                  'id': value.user?.uid
                 })
               });
       await FirebaseAuth.instance

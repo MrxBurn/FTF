@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/fighters_overview/fighter_view.dart';
 import 'package:ftf/fighters_overview/fighters_overview_widgets/fighter_card.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
@@ -54,6 +55,11 @@ class _FightersOverviewState extends State<FightersOverview> {
                             fighterType: data[idx]['fighterType'],
                             fighterStatus: data[idx]['fighterStatus'],
                             gender: data[idx]['gender'],
+                            onTap: () =>
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => FighterView(
+                                          fighter: data[idx],
+                                        ))),
                           );
                         }),
                   );

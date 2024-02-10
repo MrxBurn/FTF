@@ -16,7 +16,7 @@ import 'package:video_player/video_player.dart';
 class ViewOfferPageFan extends StatefulWidget {
   const ViewOfferPageFan({super.key, required this.offer});
 
-  final offer;
+  final dynamic offer;
 
   final double width = 170;
   final double height = 40;

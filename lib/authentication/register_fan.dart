@@ -53,7 +53,8 @@ class _RegisterFanState extends State<RegisterFan> {
                           users.doc(value.user?.uid).set({
                             'firstName': firstName,
                             'userName': userName,
-                            'route': 'fan'
+                            'route': 'fan',
+                            'id': value.user?.uid
                           }),
                           await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
