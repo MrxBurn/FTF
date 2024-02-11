@@ -13,6 +13,8 @@ class FighterView extends StatefulWidget {
 }
 
 class _FighterViewState extends State<FighterView> {
+  TextStyle fighterDescriptionStyle = const TextStyle(fontSize: 12);
+
   CollectionReference offers =
       FirebaseFirestore.instance.collection('fightOffers');
 
@@ -48,13 +50,85 @@ class _FighterViewState extends State<FighterView> {
             style: headerStyle,
           ),
 
-          Container(
-            decoration: BoxDecoration(boxShadow: [containerShadowWhite]),
-            child: const Column(children: [
-              Row(
-                children: [],
-              )
-            ]),
+          Padding(
+            padding: paddingLRT,
+            child: Container(
+              height: 150,
+              decoration: BoxDecoration(
+                  boxShadow: [containerShadowWhite],
+                  color: const Color(lighterBlack)),
+              child: Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: GridView(
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 115.0,
+                        ),
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.only(left: 8, top: 16),
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Weight class:',
+                                style: fighterDescriptionStyle,
+                              ),
+                              Text(
+                                'Type:',
+                                style: fighterDescriptionStyle,
+                              ),
+                              Text(
+                                'Status:',
+                                style: fighterDescriptionStyle,
+                              ),
+                              Text(
+                                'Gender:',
+                                style: fighterDescriptionStyle,
+                              ),
+                              Text(
+                                'Nationality:',
+                                style: fighterDescriptionStyle,
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.fighter['weightClass'],
+                                style: fighterDescriptionStyle,
+                              ),
+                              Text(
+                                widget.fighter['fighterType'],
+                                style: fighterDescriptionStyle,
+                              ),
+                              Text(
+                                widget.fighter['fighterStatus'],
+                                style: fighterDescriptionStyle,
+                              ),
+                              Text(
+                                widget.fighter['gender'],
+                                style: fighterDescriptionStyle,
+                              ),
+                              Text(
+                                widget.fighter['nationality'],
+                                style: fighterDescriptionStyle,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                        onPressed: () {}, child: const Text('Costel'))
+                  ],
+                )
+              ]),
+            ),
           )
 
           //TODO: Do this later
