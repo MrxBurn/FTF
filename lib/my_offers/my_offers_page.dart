@@ -41,6 +41,11 @@ class MyOffersPage extends StatelessWidget {
     return combinedList;
   }
 
+  final double cardHeight = 200;
+
+  final double likeHeight = 30;
+  final double likeValueSize = 12;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +108,7 @@ class MyOffersPage extends StatelessWidget {
                                         ),
                                         SizedBox(
                                           width: double.infinity,
-                                          height: 150,
+                                          height: cardHeight,
                                           child: ListView.separated(
                                             scrollDirection: Axis.horizontal,
                                             itemCount: createdByList.length,
@@ -129,6 +134,16 @@ class MyOffersPage extends StatelessWidget {
                                                                   )))
                                                     },
                                                     child: OfferCard(
+                                                      height: likeHeight,
+                                                      valueSize: likeValueSize,
+                                                      iconSize: likeValueSize,
+                                                      likes: createdByList[idx]
+                                                              ['like']
+                                                          .length,
+                                                      dislikes:
+                                                          createdByList[idx]
+                                                                  ['dislike']
+                                                              .length,
                                                       creator:
                                                           '${userData.data()?['firstName']} ${userData.data()?['lastName']}',
                                                       opponent:
@@ -181,7 +196,7 @@ class MyOffersPage extends StatelessWidget {
                                         ),
                                         SizedBox(
                                           width: double.infinity,
-                                          height: 150,
+                                          height: cardHeight,
                                           child: ListView.separated(
                                             scrollDirection: Axis.horizontal,
                                             itemCount:
@@ -208,6 +223,18 @@ class MyOffersPage extends StatelessWidget {
                                                                   )))
                                                     },
                                                     child: OfferCard(
+                                                      height: likeHeight,
+                                                      valueSize: likeValueSize,
+                                                      iconSize: likeValueSize,
+                                                      likes:
+                                                          currentUserAsOpponent[
+                                                                  idx]['like']
+                                                              .length,
+                                                      dislikes:
+                                                          currentUserAsOpponent[
+                                                                      idx]
+                                                                  ['dislike']
+                                                              .length,
                                                       creator:
                                                           '${userData.data()?['firstName']} ${userData.data()?['lastName']}',
                                                       opponent:
@@ -268,7 +295,7 @@ class MyOffersPage extends StatelessWidget {
                                         ),
                                         SizedBox(
                                           width: double.infinity,
-                                          height: 150,
+                                          height: cardHeight,
                                           child: ListView.separated(
                                             scrollDirection: Axis.horizontal,
                                             itemCount:
@@ -296,6 +323,18 @@ class MyOffersPage extends StatelessWidget {
                                                                   )))
                                                     },
                                                     child: OfferCard(
+                                                      height: likeHeight,
+                                                      valueSize: likeValueSize,
+                                                      iconSize: likeValueSize,
+                                                      likes:
+                                                          totalOffersCurrentUserUnderNegotiation[
+                                                                  idx]['like']
+                                                              .length,
+                                                      dislikes:
+                                                          totalOffersCurrentUserUnderNegotiation[
+                                                                      idx]
+                                                                  ['dislike']
+                                                              .length,
                                                       creator:
                                                           '${userData.data()?['firstName']} ${userData.data()?['lastName']}',
                                                       opponent: totalOffersCurrentUserUnderNegotiation[
@@ -378,7 +417,7 @@ class MyOffersPage extends StatelessWidget {
                                         ),
                                         SizedBox(
                                           width: double.infinity,
-                                          height: 150,
+                                          height: cardHeight,
                                           child: ListView.separated(
                                             scrollDirection: Axis.horizontal,
                                             itemCount: agreedFights.length,
@@ -404,6 +443,16 @@ class MyOffersPage extends StatelessWidget {
                                                                   )))
                                                     },
                                                     child: OfferCard(
+                                                      height: likeHeight,
+                                                      valueSize: likeValueSize,
+                                                      iconSize: likeValueSize,
+                                                      likes: agreedFights[idx]
+                                                              ['like']
+                                                          .length,
+                                                      dislikes:
+                                                          agreedFights[idx]
+                                                                  ['dislike']
+                                                              .length,
                                                       creator:
                                                           '${userData.data()?['firstName']} ${userData.data()?['lastName']}',
                                                       opponent: agreedFights[
@@ -479,7 +528,7 @@ class MyOffersPage extends StatelessWidget {
                                         ),
                                         SizedBox(
                                           width: double.infinity,
-                                          height: 150,
+                                          height: cardHeight,
                                           child: ListView.separated(
                                             scrollDirection: Axis.horizontal,
                                             itemCount: declinedFights.length,
@@ -505,6 +554,16 @@ class MyOffersPage extends StatelessWidget {
                                                                   )))
                                                     },
                                                     child: OfferCard(
+                                                      height: likeHeight,
+                                                      valueSize: likeValueSize,
+                                                      iconSize: likeValueSize,
+                                                      likes: declinedFights[idx]
+                                                              ['like']
+                                                          .length,
+                                                      dislikes:
+                                                          declinedFights[idx]
+                                                                  ['dislike']
+                                                              .length,
                                                       creator:
                                                           '${userData.data()?['firstName']} ${userData.data()?['lastName']}',
                                                       opponent: declinedFights[

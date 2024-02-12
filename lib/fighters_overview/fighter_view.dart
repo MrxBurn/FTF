@@ -187,9 +187,6 @@ class _FighterViewState extends State<FighterView> {
                 const SizedBox(
                   height: 16,
                 ),
-                const Text(
-                  'Received fights',
-                ),
                 FutureBuilder(
                   future: getFighterOffers(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -200,41 +197,62 @@ class _FighterViewState extends State<FighterView> {
                               element['opponentId'] == widget.fighter['id'])
                           .toList();
 
-                      print(receivedFights);
-
-                      return SizedBox(
-                        height: 150,
-                        width: double.infinity,
-                        child: ListView.separated(
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                                  width: 16,
+                      return receivedFights.isNotEmpty
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Received fight offers',
                                 ),
-                            itemCount: receivedFights.length,
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, idx) {
-                              return OfferCard(
-                                  creator: receivedFights[idx]['creator'],
-                                  opponent: receivedFights[idx]['opponent'],
-                                  creatorValue: receivedFights[idx]
-                                          ['negotiationValues']
-                                      .last['creatorValue']
-                                      .toString(),
-                                  opponentValue: receivedFights[idx]
-                                          ['negotiationValues']
-                                      .last['opponentValue']
-                                      .toString(),
-                                  weightClass: receivedFights[idx]
-                                          ['negotiationValues']
-                                      .last['weightClass'],
-                                  fighterStatus: receivedFights[idx]
-                                      ['fighterStatus'],
-                                  fightDate: receivedFights[idx]
-                                          ['negotiationValues']
-                                      .last['fightDate']);
-                            }),
-                      );
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                SizedBox(
+                                  height: 180,
+                                  width: double.infinity,
+                                  child: ListView.separated(
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(
+                                            width: 16,
+                                          ),
+                                      itemCount: receivedFights.length,
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemBuilder: (BuildContext context, idx) {
+                                        return OfferCard(
+                                            height: 30,
+                                            valueSize: 12,
+                                            iconSize: 12,
+                                            likes: receivedFights[idx]['like']
+                                                .length,
+                                            dislikes: receivedFights[idx]
+                                                    ['dislike']
+                                                .length,
+                                            creator: receivedFights[idx]
+                                                ['creator'],
+                                            opponent: receivedFights[idx]
+                                                ['opponent'],
+                                            creatorValue: receivedFights[idx]
+                                                    ['negotiationValues']
+                                                .last['creatorValue']
+                                                .toString(),
+                                            opponentValue: receivedFights[idx]
+                                                    ['negotiationValues']
+                                                .last['opponentValue']
+                                                .toString(),
+                                            weightClass: receivedFights[idx]
+                                                    ['negotiationValues']
+                                                .last['weightClass'],
+                                            fighterStatus: receivedFights[idx]
+                                                ['fighterStatus'],
+                                            fightDate: receivedFights[idx]
+                                                    ['negotiationValues']
+                                                .last['fightDate']);
+                                      }),
+                                ),
+                              ],
+                            )
+                          : const SizedBox();
                     } else {
                       return const Center(
                         child: CircularProgressIndicator(),
@@ -245,8 +263,80 @@ class _FighterViewState extends State<FighterView> {
                 const SizedBox(
                   height: 16,
                 ),
+                FutureBuilder(
+                  future: getFighterOffers(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      List sentFights = snapshot.data
+                          .toList()
+                          .where((element) =>
+                              element['createdBy'] == widget.fighter['id'])
+                          .toList();
+
+                      return sentFights.isNotEmpty
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Sent fight offers',
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                SizedBox(
+                                  height: 170,
+                                  width: double.infinity,
+                                  child: ListView.separated(
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(
+                                            width: 16,
+                                          ),
+                                      itemCount: sentFights.length,
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemBuilder: (BuildContext context, idx) {
+                                        return OfferCard(
+                                            height: 30,
+                                            valueSize: 12,
+                                            iconSize: 12,
+                                            likes:
+                                                sentFights[idx]['like'].length,
+                                            dislikes: sentFights[idx]['dislike']
+                                                .length,
+                                            creator: sentFights[idx]['creator'],
+                                            opponent: sentFights[idx]
+                                                ['opponent'],
+                                            creatorValue: sentFights[idx]
+                                                    ['negotiationValues']
+                                                .last['creatorValue']
+                                                .toString(),
+                                            opponentValue: sentFights[idx]
+                                                    ['negotiationValues']
+                                                .last['opponentValue']
+                                                .toString(),
+                                            weightClass: sentFights[idx]
+                                                    ['negotiationValues']
+                                                .last['weightClass'],
+                                            fighterStatus: sentFights[idx]
+                                                ['fighterStatus'],
+                                            fightDate: sentFights[idx]
+                                                    ['negotiationValues']
+                                                .last['fightDate']);
+                                      }),
+                                ),
+                              ],
+                            )
+                          : const SizedBox();
+                    } else {
+                      return const SizedBox();
+                    }
+                  },
+                ),
               ],
             ),
+          ),
+          const SizedBox(
+            height: 16,
           ),
         ],
       )),
