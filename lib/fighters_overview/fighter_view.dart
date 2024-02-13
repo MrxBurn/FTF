@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/my_offers/my_offers_widgets/offer_card.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/view_offer_page/view_offer_page_fan.dart';
 
 class FighterView extends StatefulWidget {
   const FighterView({super.key, this.fighter});
@@ -17,30 +19,44 @@ class _FighterViewState extends State<FighterView> {
   TextStyle fighterDescriptionStyle = const TextStyle(fontSize: 12);
 
   Color followColour = Colors.white;
+  String followText = 'Follow';
 
   TextEditingController bioController = TextEditingController();
 
   CollectionReference offers =
       FirebaseFirestore.instance.collection('fightOffers');
 
-  Future<List<dynamic>> getFighterOffers() async {
-    List allOffers = [];
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
-    var sentOffers = await offers
-        .where('createdBy', isEqualTo: widget.fighter['id'])
-        .get()
-        .then((value) => value.docs.map((e) => e.data()));
+  Stream getFighterOffers() {
+    return offers.snapshots();
+  }
 
-    var receivedOffers = await offers
-        .where('opponentId', isEqualTo: widget.fighter['id'])
-        .get()
-        .then((value) => value.docs.map((e) => e.data()));
+  Future<void> onFollowTap() async {
+    if (followText != "Followed") {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.fighter['id'])
+          .update({
+        'followers': FieldValue.arrayUnion([currentUser]),
+      });
+      setState(() {
+        followText = 'Followed';
+        followColour = Colors.yellow;
+      });
+    } else {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.fighter['id'])
+          .update({
+        'followers': FieldValue.arrayRemove([currentUser]),
+      });
 
-    allOffers.addAll(sentOffers);
-
-    allOffers.addAll(receivedOffers);
-
-    return allOffers;
+      setState(() {
+        followText = 'Follow';
+        followColour = Colors.white;
+      });
+    }
   }
 
   @override
@@ -48,6 +64,18 @@ class _FighterViewState extends State<FighterView> {
     super.initState();
 
     bioController.text = widget.fighter['description'];
+
+    if (widget.fighter['followers'].contains(currentUser)) {
+      setState(() {
+        followText = 'Followed';
+        followColour = Colors.yellow;
+      });
+    } else {
+      setState(() {
+        followText = 'Follow';
+        followColour = Colors.white;
+      });
+    }
   }
 
   @override
@@ -80,7 +108,7 @@ class _FighterViewState extends State<FighterView> {
                           child: GridView(
                             gridDelegate:
                                 const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 130.0,
+                              maxCrossAxisExtent: 150.0,
                             ),
                             shrinkWrap: true,
                             padding: const EdgeInsets.only(left: 8, top: 16),
@@ -140,7 +168,7 @@ class _FighterViewState extends State<FighterView> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              top: 8.0, right: 6, left: 64),
+                              top: 8.0, right: 6, left: 50),
                           child: Container(
                             decoration: BoxDecoration(
                                 boxShadow: [containerShadowYellow]),
@@ -153,9 +181,9 @@ class _FighterViewState extends State<FighterView> {
                                     borderRadius: BorderRadius.circular(5.0),
                                   )),
                                 ),
-                                onPressed: () {},
+                                onPressed: onFollowTap,
                                 child: Text(
-                                  'Follow',
+                                  followText,
                                   style: TextStyle(
                                       fontSize: 12, color: followColour),
                                 )),
@@ -187,72 +215,160 @@ class _FighterViewState extends State<FighterView> {
                 const SizedBox(
                   height: 16,
                 ),
-                FutureBuilder(
-                  future: getFighterOffers(),
+                StreamBuilder(
+                  stream: getFighterOffers(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      List receivedFights = snapshot.data
+                    if (snapshot.connectionState == ConnectionState.active) {
+                      List receivedFights = snapshot.data.docs
                           .toList()
                           .where((element) =>
                               element['opponentId'] == widget.fighter['id'])
                           .toList();
 
-                      return receivedFights.isNotEmpty
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Received fight offers',
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                SizedBox(
-                                  height: 180,
-                                  width: double.infinity,
-                                  child: ListView.separated(
-                                      separatorBuilder: (context, index) =>
-                                          const SizedBox(
-                                            width: 16,
-                                          ),
-                                      itemCount: receivedFights.length,
-                                      scrollDirection: Axis.horizontal,
-                                      shrinkWrap: true,
-                                      itemBuilder: (BuildContext context, idx) {
-                                        return OfferCard(
-                                            height: 30,
-                                            valueSize: 12,
-                                            iconSize: 12,
-                                            likes: receivedFights[idx]['like']
-                                                .length,
-                                            dislikes: receivedFights[idx]
-                                                    ['dislike']
-                                                .length,
-                                            creator: receivedFights[idx]
-                                                ['creator'],
-                                            opponent: receivedFights[idx]
-                                                ['opponent'],
-                                            creatorValue: receivedFights[idx]
-                                                    ['negotiationValues']
-                                                .last['creatorValue']
-                                                .toString(),
-                                            opponentValue: receivedFights[idx]
-                                                    ['negotiationValues']
-                                                .last['opponentValue']
-                                                .toString(),
-                                            weightClass: receivedFights[idx]
-                                                    ['negotiationValues']
-                                                .last['weightClass'],
-                                            fighterStatus: receivedFights[idx]
-                                                ['fighterStatus'],
-                                            fightDate: receivedFights[idx]
-                                                    ['negotiationValues']
-                                                .last['fightDate']);
-                                      }),
-                                ),
-                              ],
-                            )
-                          : const SizedBox();
+                      List sentFights = snapshot.data.docs
+                          .toList()
+                          .where((element) =>
+                              element['createdBy'] == widget.fighter['id'])
+                          .toList();
+
+                      return Column(
+                        children: [
+                          receivedFights.isNotEmpty
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Received fight offers',
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    SizedBox(
+                                      height: 180,
+                                      width: double.infinity,
+                                      child: ListView.separated(
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(
+                                                width: 16,
+                                              ),
+                                          itemCount: receivedFights.length,
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemBuilder:
+                                              (BuildContext context, idx) {
+                                            return GestureDetector(
+                                              onTap: () =>
+                                                  Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ViewOfferPageFan(
+                                                    offer: receivedFights[idx],
+                                                  ),
+                                                ),
+                                              ),
+                                              child: OfferCard(
+                                                  height: 30,
+                                                  valueSize: 12,
+                                                  iconSize: 12,
+                                                  likes: receivedFights[idx]['like']
+                                                      .length,
+                                                  dislikes: receivedFights[idx]
+                                                          ['dislike']
+                                                      .length,
+                                                  creator: receivedFights[idx]
+                                                      ['creator'],
+                                                  opponent: receivedFights[idx]
+                                                      ['opponent'],
+                                                  creatorValue: receivedFights[idx]
+                                                          ['negotiationValues']
+                                                      .last['creatorValue']
+                                                      .toString(),
+                                                  opponentValue: receivedFights[idx]
+                                                          ['negotiationValues']
+                                                      .last['opponentValue']
+                                                      .toString(),
+                                                  weightClass: receivedFights[idx]
+                                                          ['negotiationValues']
+                                                      .last['weightClass'],
+                                                  fighterStatus:
+                                                      receivedFights[idx]
+                                                          ['fighterStatus'],
+                                                  fightDate: receivedFights[idx]['negotiationValues'].last['fightDate']),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox(),
+                          sentFights.isNotEmpty
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Sent fight offers',
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    SizedBox(
+                                      height: 170,
+                                      width: double.infinity,
+                                      child: ListView.separated(
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(
+                                                width: 16,
+                                              ),
+                                          itemCount: sentFights.length,
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          itemBuilder:
+                                              (BuildContext context, idx) {
+                                            return GestureDetector(
+                                              onTap: () =>
+                                                  Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ViewOfferPageFan(
+                                                    offer: sentFights[idx],
+                                                  ),
+                                                ),
+                                              ),
+                                              child: OfferCard(
+                                                  height: 30,
+                                                  valueSize: 12,
+                                                  iconSize: 12,
+                                                  likes: sentFights[idx]['like']
+                                                      .length,
+                                                  dislikes: sentFights[idx]['dislike']
+                                                      .length,
+                                                  creator: sentFights[idx]
+                                                      ['creator'],
+                                                  opponent: sentFights[idx]
+                                                      ['opponent'],
+                                                  creatorValue: sentFights[idx]
+                                                          ['negotiationValues']
+                                                      .last['creatorValue']
+                                                      .toString(),
+                                                  opponentValue: sentFights[idx]
+                                                          ['negotiationValues']
+                                                      .last['opponentValue']
+                                                      .toString(),
+                                                  weightClass: sentFights[idx]
+                                                          ['negotiationValues']
+                                                      .last['weightClass'],
+                                                  fighterStatus: sentFights[idx]
+                                                      ['fighterStatus'],
+                                                  fightDate: sentFights[idx]
+                                                          ['negotiationValues']
+                                                      .last['fightDate']),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox()
+                        ],
+                      );
                     } else {
                       return const Center(
                         child: CircularProgressIndicator(),
@@ -263,8 +379,8 @@ class _FighterViewState extends State<FighterView> {
                 const SizedBox(
                   height: 16,
                 ),
-                FutureBuilder(
-                  future: getFighterOffers(),
+                StreamBuilder(
+                  stream: getFighterOffers(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       List sentFights = snapshot.data
@@ -295,33 +411,46 @@ class _FighterViewState extends State<FighterView> {
                                       scrollDirection: Axis.horizontal,
                                       shrinkWrap: true,
                                       itemBuilder: (BuildContext context, idx) {
-                                        return OfferCard(
-                                            height: 30,
-                                            valueSize: 12,
-                                            iconSize: 12,
-                                            likes:
-                                                sentFights[idx]['like'].length,
-                                            dislikes: sentFights[idx]['dislike']
-                                                .length,
-                                            creator: sentFights[idx]['creator'],
-                                            opponent: sentFights[idx]
-                                                ['opponent'],
-                                            creatorValue: sentFights[idx]
-                                                    ['negotiationValues']
-                                                .last['creatorValue']
-                                                .toString(),
-                                            opponentValue: sentFights[idx]
-                                                    ['negotiationValues']
-                                                .last['opponentValue']
-                                                .toString(),
-                                            weightClass: sentFights[idx]
-                                                    ['negotiationValues']
-                                                .last['weightClass'],
-                                            fighterStatus: sentFights[idx]
-                                                ['fighterStatus'],
-                                            fightDate: sentFights[idx]
-                                                    ['negotiationValues']
-                                                .last['fightDate']);
+                                        return GestureDetector(
+                                          onTap: () =>
+                                              Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ViewOfferPageFan(
+                                                offer: sentFights[idx],
+                                              ),
+                                            ),
+                                          ),
+                                          child: OfferCard(
+                                              height: 30,
+                                              valueSize: 12,
+                                              iconSize: 12,
+                                              likes: sentFights[idx]['like']
+                                                  .length,
+                                              dislikes: sentFights[idx]
+                                                      ['dislike']
+                                                  .length,
+                                              creator: sentFights[idx]
+                                                  ['creator'],
+                                              opponent: sentFights[idx]
+                                                  ['opponent'],
+                                              creatorValue: sentFights[idx]
+                                                      ['negotiationValues']
+                                                  .last['creatorValue']
+                                                  .toString(),
+                                              opponentValue: sentFights[idx]
+                                                      ['negotiationValues']
+                                                  .last['opponentValue']
+                                                  .toString(),
+                                              weightClass: sentFights[idx]
+                                                      ['negotiationValues']
+                                                  .last['weightClass'],
+                                              fighterStatus: sentFights[idx]
+                                                  ['fighterStatus'],
+                                              fightDate: sentFights[idx]
+                                                      ['negotiationValues']
+                                                  .last['fightDate']),
+                                        );
                                       }),
                                 ),
                               ],

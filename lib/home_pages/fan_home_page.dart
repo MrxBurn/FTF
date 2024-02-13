@@ -42,6 +42,10 @@ class _FanHomePageState extends State<FanHomePage> {
                 onPressed: () =>
                     Navigator.pushNamed(context, 'fightersOverview'),
                 text: 'Fighters overview'),
+            BlackButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, 'fightersOverview'),
+                text: 'Your Fighters'),
             const SizedBox(
               height: 16,
             )

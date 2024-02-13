@@ -123,15 +123,18 @@ class MyOffersPage extends StatelessWidget {
                                                 children: [
                                                   GestureDetector(
                                                     onTap: () => {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  ViewOfferPage(
-                                                                    offerId: createdByList[
-                                                                            idx]
-                                                                        [
-                                                                        'offerId'],
-                                                                  )))
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ViewOfferPage(
+                                                            offerId:
+                                                                createdByList[
+                                                                        idx]
+                                                                    ['offerId'],
+                                                          ),
+                                                        ),
+                                                      )
                                                     },
                                                     child: OfferCard(
                                                       height: likeHeight,
