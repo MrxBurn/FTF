@@ -19,6 +19,7 @@ import 'package:ftf/fighters_overview/fighters_overview.dart';
 import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
 import 'package:ftf/my_account/my_account.dart';
+import 'package:ftf/my_fighters_overview/my_followed_fighters.dart';
 import 'package:ftf/my_offers/my_offers_page.dart';
 import 'package:ftf/news_and_events/news_and_events_page.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -132,7 +133,8 @@ class _MyAppState extends State<MyApp> {
           'newsEvents': (context) => const NewsAndEventsPage(),
           'myAccount': (context) => const MyAccount(),
           'fanFightsOverview': (context) => const FanFightsOverview(),
-          'fightersOverview': (context) => const FightersOverview()
+          'fightersOverview': (context) => const FightersOverview(),
+          'myFighters': (context) => const MyFollowedFighters()
         },
         localizationsDelegates: const [
           MonthYearPickerLocalizations.delegate,

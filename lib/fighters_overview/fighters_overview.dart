@@ -6,7 +6,11 @@ import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 
 class FightersOverview extends StatefulWidget {
-  const FightersOverview({super.key});
+  const FightersOverview({super.key, this.future, this.pageTitle});
+
+  final Future<List<dynamic>>? future;
+
+  final String? pageTitle;
 
   @override
   State<FightersOverview> createState() => _FightersOverviewState();
@@ -31,12 +35,12 @@ class _FightersOverviewState extends State<FightersOverview> {
           child: Column(
         children: [
           LogoHeader(backRequired: true),
-          const Text(
-            'Fighters overview',
+          Text(
+            widget.pageTitle ?? 'Fighters overview',
             style: headerStyle,
           ),
           FutureBuilder(
-              future: getFighters(),
+              future: widget.future ?? getFighters(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   var data = snapshot.data;
