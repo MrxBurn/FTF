@@ -41,10 +41,10 @@ class _FanHomePageState extends State<FanHomePage> {
             BlackButton(
                 onPressed: () =>
                     Navigator.pushNamed(context, 'fightersOverview'),
-                text: 'Fighters overview'),
+                text: 'All fighters'),
             BlackButton(
                 onPressed: () => Navigator.pushNamed(context, 'myFighters'),
-                text: 'Your Fighters'),
+                text: 'My Fighters'),
             // BlackButton(
             //     onPressed: () => Navigator.pushNamed(context, 'newsEvents'),
             //     text: 'Events'),
