@@ -45,6 +45,12 @@ class _FanHomePageState extends State<FanHomePage> {
             BlackButton(
                 onPressed: () => Navigator.pushNamed(context, 'myFighters'),
                 text: 'Your Fighters'),
+            // BlackButton(
+            //     onPressed: () => Navigator.pushNamed(context, 'newsEvents'),
+            //     text: 'Events'),
+            // BlackButton(
+            //     onPressed: () => Navigator.pushNamed(context, 'fanForum'),
+            //     text: 'Fan Forum'),
             const SizedBox(
               height: 16,
             )
