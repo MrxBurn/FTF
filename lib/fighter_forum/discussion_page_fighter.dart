@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ftf/fighter_forum/comments_section.dart';
+import 'package:ftf/fighter_forum/comments_section_fighter.dart';
 import 'package:ftf/reusableWidgets/custom_image_header.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DiscussionPage extends StatefulWidget {
-  const DiscussionPage(
+class DiscussionPageFighter extends StatefulWidget {
+  const DiscussionPageFighter(
       {super.key,
       required this.title,
       required this.body,
@@ -19,15 +19,15 @@ class DiscussionPage extends StatefulWidget {
   final String title;
   final String body;
   final String subTitle;
-  final List<Map<String, String>> links;
+  final List<dynamic> links;
   final String imagePath;
   final String firebaseCollection;
 
   @override
-  State<DiscussionPage> createState() => _DiscussionPageState();
+  State<DiscussionPageFighter> createState() => _DiscussionPageFighterState();
 }
 
-class _DiscussionPageState extends State<DiscussionPage> {
+class _DiscussionPageFighterState extends State<DiscussionPageFighter> {
   final TextEditingController controller = TextEditingController();
   bool isTextFieldTapped = false;
 
@@ -97,59 +97,65 @@ class _DiscussionPageState extends State<DiscussionPage> {
         ),
         Text(
           widget.title,
-          style: headerStyle,
+          style: const TextStyle(fontSize: 15),
         ),
         Padding(
           padding: paddingLRT,
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  widget.subTitle,
-                  style: const TextStyle(fontSize: 18),
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Text(
-                widget.body,
-                style: const TextStyle(fontSize: 14),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'For more insights (links):',
-                  style: TextStyle(fontSize: 14),
-                ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Column(
-                  children: widget.links.map((e) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: InkWell(
-                      onTap: () => {launchUrl(Uri.parse(e['url']!))},
-                      child: Text(
-                        e['name']!,
-                        style: const TextStyle(
-                          color: Colors.yellow,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+              widget.links.isNotEmpty
+                  ? Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            widget.subTitle,
+                            style: const TextStyle(fontSize: 18),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                );
-              }).toList()),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          widget.body,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'For more insights (links):',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Column(
+                            children: widget.links.map((e) {
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: InkWell(
+                                onTap: () => {launchUrl(Uri.parse(e['url']!))},
+                                child: Text(
+                                  e['name']!,
+                                  style: const TextStyle(
+                                    color: Colors.yellow,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList()),
+                      ],
+                    )
+                  : const SizedBox(),
               const SizedBox(
                 height: 16,
               ),
@@ -213,7 +219,7 @@ class _DiscussionPageState extends State<DiscussionPage> {
                       ],
                     )
                   : const SizedBox(),
-              CommentsSection(getComments: future),
+              CommentsSectionFighter(getComments: future),
               const SizedBox(
                 height: 8,
               ),

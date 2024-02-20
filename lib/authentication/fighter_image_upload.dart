@@ -40,7 +40,7 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
   saveToFirebase(File? image) async {
     if (image != null) {
       Reference file =
-          storageRef.child('fighterProfiles/$currentUser/$imageName');
+          storageRef.child('fighterProfiles/$currentUser/profileImage');
 
       await file.putFile(image);
 

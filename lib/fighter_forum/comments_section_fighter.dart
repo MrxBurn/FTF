@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:ftf/utils/general.dart';
 
-class CommentsSection extends StatefulWidget {
-  const CommentsSection({super.key, required this.getComments});
+class CommentsSectionFighter extends StatefulWidget {
+  const CommentsSectionFighter({super.key, required this.getComments});
 
   final Future<List<Map<String, dynamic>>> getComments;
 
   @override
-  State<CommentsSection> createState() => _CommentsSectionState();
+  State<CommentsSectionFighter> createState() => _CommentsSectionFighterState();
 }
 
-class _CommentsSectionState extends State<CommentsSection> {
+class _CommentsSectionFighterState extends State<CommentsSectionFighter> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

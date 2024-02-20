@@ -106,7 +106,7 @@ class _MyAccountState extends State<MyAccount> {
   Future<void> saveImage(File? img) async {
     if (img != null) {
       Reference file =
-          storageRef.child('fighterProfiles/$currentUser/$imageName');
+          storageRef.child('fighterProfiles/$currentUser/profileImage');
 
       await file.putFile(img);
 

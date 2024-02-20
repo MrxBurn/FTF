@@ -7,6 +7,10 @@ class FighterForum extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ForumPage(title: 'Fighter discussions', threads: threads);
+    return ForumPage(
+      title: 'Fighter discussions',
+      threads: threads,
+      isFanForum: false,
+    );
   }
 }
