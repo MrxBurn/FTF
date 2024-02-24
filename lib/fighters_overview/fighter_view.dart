@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/fighters_overview/fighters_overview_widgets/select_dream_opponent.dart';
 import 'package:ftf/my_offers/my_offers_widgets/offer_card.dart';
+import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fan.dart';
@@ -95,7 +97,7 @@ class _FighterViewState extends State<FighterView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 150,
+                  height: 170,
                   decoration: BoxDecoration(
                       boxShadow: [containerShadowWhite],
                       color: const Color(lighterBlack)),
@@ -191,6 +193,15 @@ class _FighterViewState extends State<FighterView> {
                         ),
                       ],
                     ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    BlackButton(
+                        width: 150,
+                        height: 40,
+                        fontSize: 12,
+                        onPressed: () => showDreamOpponent(context),
+                        text: 'Suggest opponent')
                   ]),
                 ),
                 const SizedBox(
