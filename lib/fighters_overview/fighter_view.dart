@@ -30,6 +30,18 @@ class _FighterViewState extends State<FighterView> {
 
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
+  List<Map<String, dynamic>> fightersList = [];
+
+  Future<void> getFighters() async {
+    var result = await FirebaseFirestore.instance
+        .collection('users')
+        .where('route', isEqualTo: 'fighter')
+        .get()
+        .then((value) => value.docs.map((e) => e.data()));
+
+    fightersList = result.toList();
+  }
+
   Stream getFighterOffers() {
     return offers.snapshots();
   }
@@ -64,6 +76,8 @@ class _FighterViewState extends State<FighterView> {
   @override
   void initState() {
     super.initState();
+
+    getFighters();
 
     bioController.text = widget.fighter['description'];
 
@@ -200,7 +214,8 @@ class _FighterViewState extends State<FighterView> {
                         width: 150,
                         height: 40,
                         fontSize: 12,
-                        onPressed: () => showDreamOpponent(context),
+                        onPressed: () =>
+                            showDreamOpponent(context, fightersList),
                         text: 'Suggest opponent')
                   ]),
                 ),
