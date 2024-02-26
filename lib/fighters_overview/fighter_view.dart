@@ -214,8 +214,8 @@ class _FighterViewState extends State<FighterView> {
                         width: 150,
                         height: 40,
                         fontSize: 12,
-                        onPressed: () =>
-                            showDreamOpponent(context, fightersList),
+                        onPressed: () => showDreamOpponent(
+                            context, fightersList, widget.fighter['id']),
                         text: 'Suggest opponent')
                   ]),
                 ),
