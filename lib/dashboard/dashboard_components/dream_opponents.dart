@@ -1,12 +1,10 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
 
 class DreamOpponents extends StatelessWidget {
-  DreamOpponents({super.key, required this.opponentsList});
+  const DreamOpponents({super.key, required this.opponentsList});
 
-  List opponentsList;
+  final List<dynamic> opponentsList;
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +36,9 @@ class DreamOpponents extends StatelessWidget {
 }
 
 class DreamOpponentsList extends StatelessWidget {
-  DreamOpponentsList({super.key, required this.opponentsList});
+  const DreamOpponentsList({super.key, required this.opponentsList});
 
-  List opponentsList;
+  final List opponentsList;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -68,7 +66,7 @@ class DreamOpponentsList extends StatelessWidget {
                         style: const TextStyle(fontSize: 16),
                       ),
                       Text(
-                        opponentsList[idx]['category'],
+                        opponentsList[idx]['fighterType'],
                         style:
                             const TextStyle(fontSize: 10, color: Colors.grey),
                       ),

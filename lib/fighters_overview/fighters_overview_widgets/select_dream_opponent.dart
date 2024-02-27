@@ -37,19 +37,35 @@ class _ChoiceChipListState extends State<ChoiceChipList> {
 
   Future<void> suggestDreamOpponent(
       String currentFighter, Map<String, dynamic> selectedFighter) async {
+    Map<String, dynamic>? selectedDbFighter = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentFighter)
+        .collection('dreamOpponents')
+        .doc(selectedFighter['id'])
+        .get()
+        .then((value) => value.data());
+
+    var calculatedSuggestions = selectedDbFighter?['fanIds'] != null
+        ? [...selectedDbFighter!['fanIds']]
+        : [currentUser];
+
+    if (selectedDbFighter?['fanIds'] != null &&
+        !selectedDbFighter?['fanIds'].contains(currentUser)) {
+      calculatedSuggestions = [...selectedDbFighter!['fanIds'], currentUser];
+    }
+
     await FirebaseFirestore.instance
         .collection('users')
         .doc(currentFighter)
-        .update({
-      'dreamOpponents': FieldValue.arrayUnion([
-        {
-          'dreamOpponent': selectedFighter['id'],
-          'fanId': currentUser,
-          'dreamOpponentName':
-              '${selectedFighter['firstName']} ${selectedFighter['lastName']}',
-        }
-      ])
-    });
+        .collection('dreamOpponents')
+        .doc(selectedFighter['id'])
+        .set({
+      'dreamOpponent': selectedFighter['id'],
+      'fanIds': calculatedSuggestions,
+      'dreamOpponentName':
+          '${selectedFighter['firstName']} ${selectedFighter['lastName']}',
+      'fighterType': selectedFighter['fighterType']
+    }, SetOptions(merge: true)).catchError((error) => error);
   }
 
   @override

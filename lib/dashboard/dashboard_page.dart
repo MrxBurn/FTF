@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/dashboard/dashboard_components/dream_opponents.dart';
 import 'package:ftf/dashboard/dashboard_components/most_disliked_offers.dart';
@@ -11,17 +13,17 @@ List opponentList = [
   {
     "image": imgPlaceholder,
     'name': 'Alex Todea',
-    'category': 'Heavyweight, Boxer'
+    'fighterType': 'Heavyweight, Boxer'
   },
   {
     "image": imgPlaceholder,
     'name': 'George Stokes',
-    'category': 'Bantamweight, MMA'
+    'fighterType': 'Bantamweight, MMA'
   },
   {
     "image": imgPlaceholder,
     'name': 'Mark Robson',
-    'category': 'Lightweight, Boxer'
+    'fighterType': 'Lightweight, Boxer'
   }
 ];
 
@@ -54,6 +56,18 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+
+  Future<void> getDreamOpponents() async {
+    Map<String, dynamic>? result = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser)
+        .get()
+        .then((value) => value.data());
+
+    // result?['dreamOpponents'].where((obj) => obj['']);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
