@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ftf/utils/general.dart';
 
 class CommentsSectionFan extends StatefulWidget {
   const CommentsSectionFan({super.key, required this.getComments});

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/general.dart';
 
 class DreamOpponents extends StatelessWidget {
   const DreamOpponents({super.key, required this.opponentsList});
@@ -53,7 +54,10 @@ class DreamOpponentsList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    backgroundImage: NetworkImage(opponentsList[idx]['image']),
+                    backgroundImage:
+                        opponentsList[idx]['profileImageURL'] != null
+                            ? NetworkImage(opponentsList[idx]['image'])
+                            : NetworkImage(imgPlaceholder),
                   ),
                   const SizedBox(
                     width: 24,
@@ -62,7 +66,7 @@ class DreamOpponentsList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        opponentsList[idx]['name'],
+                        opponentsList[idx]['dreamOpponentName'],
                         style: const TextStyle(fontSize: 16),
                       ),
                       Text(

@@ -58,14 +58,38 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
+  List<dynamic> dreamOpponentsList = [];
+  int followersNumber = 0;
+
   Future<void> getDreamOpponents() async {
-    Map<String, dynamic>? result = await FirebaseFirestore.instance
+    var result = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser)
+        .collection('dreamOpponents')
+        .get()
+        .then((value) => value.docs.map((e) => e.data()));
+
+    var filteredResult = result
+        .toList()
+        .reversed
+        .where((element) => element['fanIds'].length >= 3);
+
+    dreamOpponentsList += filteredResult.toList();
+  }
+
+  Future<void> getFollowers() async {
+    var result = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser)
         .get()
         .then((value) => value.data());
 
-    // result?['dreamOpponents'].where((obj) => obj['']);
+    followersNumber = result?['followers'].toList().length;
+  }
+
+  Future<void> future() async {
+    await getDreamOpponents();
+    await getFollowers();
   }
 
   @override
@@ -81,25 +105,40 @@ class _DashboardPageState extends State<DashboardPage> {
           const SizedBox(
             height: 16,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              NumberFollowers(
-                numberFollowers: '16',
-              ),
-              OffersEngagement(
-                likes: '300',
-                dislikes: '50',
-              )
-            ],
-          ),
-          DreamOpponents(
-            opponentsList: opponentList,
-          ),
-          MostLikedOffers(
-            likedOfferList: likedOffersList,
-          ),
-          MostDislikedOffers(dislikedOfferList: likedOffersList)
+          FutureBuilder(
+              future: future(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  print(dreamOpponentsList);
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          NumberFollowers(
+                            numberFollowers: followersNumber.toString(),
+                          ),
+                          OffersEngagement(
+                            likes: '300',
+                            dislikes: '50',
+                          )
+                        ],
+                      ),
+                      DreamOpponents(
+                        opponentsList: dreamOpponentsList,
+                      ),
+                      MostLikedOffers(
+                        likedOfferList: likedOffersList,
+                      ),
+                      MostDislikedOffers(dislikedOfferList: likedOffersList)
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
         ]),
       ),
     );

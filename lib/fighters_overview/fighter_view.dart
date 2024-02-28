@@ -36,6 +36,7 @@ class _FighterViewState extends State<FighterView> {
     var result = await FirebaseFirestore.instance
         .collection('users')
         .where('route', isEqualTo: 'fighter')
+        .where('id', isNotEqualTo: widget.fighter['id'])
         .get()
         .then((value) => value.docs.map((e) => e.data()));
 

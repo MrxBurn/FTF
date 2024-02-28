@@ -64,7 +64,8 @@ class _ChoiceChipListState extends State<ChoiceChipList> {
       'fanIds': calculatedSuggestions,
       'dreamOpponentName':
           '${selectedFighter['firstName']} ${selectedFighter['lastName']}',
-      'fighterType': selectedFighter['fighterType']
+      'fighterType': selectedFighter['fighterType'],
+      'profileImageURL': selectedFighter['profileImageURL'],
     }, SetOptions(merge: true)).catchError((error) => error);
   }
 
