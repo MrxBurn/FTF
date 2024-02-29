@@ -61,7 +61,10 @@ class _DashboardPageState extends State<DashboardPage> {
   List<dynamic> dreamOpponentsList = [];
   int followersNumber = 0;
 
-  Future<void> getDreamOpponents() async {
+  int totalLikes = 0;
+  int totalDislikes = 0;
+
+  Future<List<dynamic>> getDreamOpponents() async {
     var result = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser)
@@ -69,27 +72,44 @@ class _DashboardPageState extends State<DashboardPage> {
         .get()
         .then((value) => value.docs.map((e) => e.data()));
 
-    var filteredResult = result
+    return result
         .toList()
         .reversed
-        .where((element) => element['fanIds'].length >= 3);
-
-    dreamOpponentsList += filteredResult.toList();
+        .where((element) => element['fanIds'].length >= 3)
+        .toList();
   }
 
-  Future<void> getFollowers() async {
+  Future<int> getFollowers() async {
     var result = await FirebaseFirestore.instance
         .collection('users')
         .doc(currentUser)
         .get()
         .then((value) => value.data());
 
-    followersNumber = result?['followers'].toList().length;
+    return result?['followers'].toList().length;
+  }
+
+  Future<void> getTotalLikes() async {
+    var result = await FirebaseFirestore.instance
+        .collection('fightOffers')
+        .where(Filter.or(Filter('createdBy', isEqualTo: currentUser),
+            Filter('opponentId', isEqualTo: currentUser)))
+        .get()
+        .then((value) => value.docs.map((e) => e.data()));
+
+    for (var element in result) {
+      totalLikes = element['like'].length;
+    }
+
+    for (var element in result) {
+      totalDislikes = element['dislike'].length;
+    }
   }
 
   Future<void> future() async {
-    await getDreamOpponents();
-    await getFollowers();
+    dreamOpponentsList = await getDreamOpponents();
+    followersNumber = await getFollowers();
+    await getTotalLikes();
   }
 
   @override
@@ -109,7 +129,6 @@ class _DashboardPageState extends State<DashboardPage> {
               future: future(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  print(dreamOpponentsList);
                   return Column(
                     children: [
                       Row(
@@ -119,8 +138,8 @@ class _DashboardPageState extends State<DashboardPage> {
                             numberFollowers: followersNumber.toString(),
                           ),
                           OffersEngagement(
-                            likes: '300',
-                            dislikes: '50',
+                            likes: totalLikes.toString(),
+                            dislikes: totalDislikes.toString(),
                           )
                         ],
                       ),
