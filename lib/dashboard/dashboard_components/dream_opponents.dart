@@ -54,10 +54,9 @@ class DreamOpponentsList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    backgroundImage:
-                        opponentsList[idx]['profileImageURL'] != null
-                            ? NetworkImage(opponentsList[idx]['image'])
-                            : NetworkImage(imgPlaceholder),
+                    backgroundImage: opponentsList[idx]['profileImageURL'] != ''
+                        ? NetworkImage(opponentsList[idx]['profileImageURL'])
+                        : NetworkImage(imgPlaceholder),
                   ),
                   const SizedBox(
                     width: 24,
