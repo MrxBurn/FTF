@@ -64,6 +64,8 @@ class _DashboardPageState extends State<DashboardPage> {
   int totalLikes = 0;
   int totalDislikes = 0;
 
+  List<Map<String, dynamic>> mostLikedOffers = [];
+
   Future<List<dynamic>> getDreamOpponents() async {
     var result = await FirebaseFirestore.instance
         .collection('users')
@@ -106,10 +108,24 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getMostLikedOffers() async {
+    List<Map<String, dynamic>> result = await FirebaseFirestore.instance
+        .collection('fightOffers')
+        .where(Filter.or(Filter('createdBy', isEqualTo: currentUser),
+            Filter('opponentId', isEqualTo: currentUser)))
+        .orderBy('offerExpiryDate', descending: true)
+        .limit(3)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList());
+
+    return result;
+  }
+  //TODO, display now the 3 offers that are most liked
+
   Future<void> future() async {
     dreamOpponentsList = await getDreamOpponents();
     followersNumber = await getFollowers();
-    await getTotalLikes();
+    mostLikedOffers = await getMostLikedOffers();
   }
 
   @override
@@ -129,6 +145,7 @@ class _DashboardPageState extends State<DashboardPage> {
               future: future(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
+                  print(mostLikedOffers);
                   return Column(
                     children: [
                       Row(
