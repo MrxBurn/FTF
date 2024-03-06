@@ -73,7 +73,8 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
           .doc(widget.offer['offerId'])
           .update({
         'like': FieldValue.arrayUnion([currentUser]),
-        'dislike': FieldValue.arrayRemove([currentUser])
+        'dislike': FieldValue.arrayRemove([currentUser]),
+        'likeCount': widget.offer['like'].length + 1
       });
       setState(() {
         likeText = 'Liked';
@@ -89,6 +90,7 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
           .doc(widget.offer['offerId'])
           .update({
         'like': FieldValue.arrayRemove([currentUser]),
+        'likeCount': widget.offer['like'].length
       });
 
       setState(() {
@@ -106,7 +108,8 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
           .doc(widget.offer['offerId'])
           .update({
         'like': FieldValue.arrayRemove([currentUser]),
-        'dislike': FieldValue.arrayUnion([currentUser])
+        'dislike': FieldValue.arrayUnion([currentUser]),
+        'dislikeCount': widget.offer['dislike'].length + 1
       });
       setState(() {
         dislikeText = 'Disliked';
@@ -121,7 +124,8 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
           .collection('fightOffers')
           .doc(widget.offer['offerId'])
           .update({
-        'dislike': FieldValue.arrayRemove([currentUser])
+        'dislike': FieldValue.arrayRemove([currentUser]),
+        'dislikeCount': widget.offer['dislike'].length
       });
       setState(() {
         dislikeText = 'Dislike';
@@ -132,6 +136,7 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.offer['like'].length);
     return Scaffold(
         body: SingleChildScrollView(
             child: Column(children: [

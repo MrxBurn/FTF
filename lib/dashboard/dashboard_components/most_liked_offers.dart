@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ftf/styles/styles.dart';
@@ -54,6 +56,8 @@ class LikedOffersList extends StatelessWidget {
 
   List likedOfferList;
 
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -62,6 +66,9 @@ class LikedOffersList extends StatelessWidget {
       child: ListView.builder(
           itemCount: likedOfferList.length,
           itemBuilder: (context, idx) {
+            print(likedOfferList[idx]['negotiationValues']
+                .last['creatorValue']
+                .toString());
             return SizedBox(
               width: 300,
               child: Card(
@@ -76,11 +83,19 @@ class LikedOffersList extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                likedOfferList[idx]['creator'],
+                                currentUser == likedOfferList[idx]['createdBy']
+                                    ? likedOfferList[idx]['creator']
+                                    : likedOfferList[idx]['opponent'],
                                 style: const TextStyle(color: Colors.yellow),
                               ),
                               Text(
-                                likedOfferList[idx]['creatorValue'],
+                                currentUser == likedOfferList[idx]['createdBy']
+                                    ? likedOfferList[idx]['negotiationValues']
+                                        .last['creatorValue']
+                                        .toString()
+                                    : likedOfferList[idx]['negotiationValues']
+                                        .last['opponentValue']
+                                        .toString(),
                                 style: const TextStyle(color: Colors.yellow),
                               )
                             ],
@@ -92,12 +107,20 @@ class LikedOffersList extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                likedOfferList[idx]['opponent'],
+                                currentUser != likedOfferList[idx]['createdBy']
+                                    ? likedOfferList[idx]['creator']
+                                    : likedOfferList[idx]['opponent'],
                                 style: const TextStyle(color: Colors.red),
                                 textAlign: TextAlign.center,
                               ),
                               Text(
-                                likedOfferList[idx]['opponentValue'],
+                                currentUser != likedOfferList[idx]['createdBy']
+                                    ? likedOfferList[idx]['negotiationValues']
+                                        .last['creatorValue']
+                                        .toString()
+                                    : likedOfferList[idx]['negotiationValues']
+                                        .last['opponentValue']
+                                        .toString(),
                                 style: const TextStyle(color: Colors.red),
                                 textAlign: TextAlign.center,
                               )

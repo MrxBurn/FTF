@@ -113,16 +113,22 @@ class _DashboardPageState extends State<DashboardPage> {
         .collection('fightOffers')
         .where(Filter.or(Filter('createdBy', isEqualTo: currentUser),
             Filter('opponentId', isEqualTo: currentUser)))
+        .orderBy('likeCount', descending: true)
         .orderBy('offerExpiryDate', descending: true)
         .limit(3)
         .get()
-        .then((value) => value.docs.map((e) => e.data()).toList());
+        .then((value) => value.docs.map((e) => e.data()).toList())
+        .catchError((e) {
+      return e;
+    });
 
     return result;
   }
-  //TODO, display now the 3 offers that are most liked
+
+  //TODO: Create mostDislikedOffers and create index by print error
 
   Future<void> future() async {
+    await getTotalLikes();
     dreamOpponentsList = await getDreamOpponents();
     followersNumber = await getFollowers();
     mostLikedOffers = await getMostLikedOffers();
@@ -164,7 +170,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         opponentsList: dreamOpponentsList,
                       ),
                       MostLikedOffers(
-                        likedOfferList: likedOffersList,
+                        likedOfferList: mostLikedOffers,
                       ),
                       MostDislikedOffers(dislikedOfferList: likedOffersList)
                     ],
