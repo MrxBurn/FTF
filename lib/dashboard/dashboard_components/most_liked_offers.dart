@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -66,9 +65,6 @@ class LikedOffersList extends StatelessWidget {
       child: ListView.builder(
           itemCount: likedOfferList.length,
           itemBuilder: (context, idx) {
-            print(likedOfferList[idx]['negotiationValues']
-                .last['creatorValue']
-                .toString());
             return SizedBox(
               width: 300,
               child: Card(

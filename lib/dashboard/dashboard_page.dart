@@ -65,6 +65,8 @@ class _DashboardPageState extends State<DashboardPage> {
   int totalDislikes = 0;
 
   List<Map<String, dynamic>> mostLikedOffers = [];
+  List<Map<String, dynamic>> mostDislikedOffers = [];
+
 
   Future<List<dynamic>> getDreamOpponents() async {
     var result = await FirebaseFirestore.instance
@@ -125,13 +127,32 @@ class _DashboardPageState extends State<DashboardPage> {
     return result;
   }
 
+  Future<List<Map<String, dynamic>>> getMostDislikedOffers() async {
+    List<Map<String, dynamic>> result = await FirebaseFirestore.instance
+        .collection('fightOffers')
+        .where(Filter.or(Filter('createdBy', isEqualTo: currentUser),
+        Filter('opponentId', isEqualTo: currentUser)))
+        .orderBy('dislikeCount', descending: true)
+        .orderBy('offerExpiryDate', descending: true)
+        .limit(3)
+        .get()
+        .then((value) => value.docs.map((e) => e.data()).toList())
+        .catchError((e) {
+      return e;
+    });
+
+    return result;
+  }
+
   //TODO: Create mostDislikedOffers and create index by print error
 
   Future<void> future() async {
     await getTotalLikes();
-    dreamOpponentsList = await getDreamOpponents();
-    followersNumber = await getFollowers();
-    mostLikedOffers = await getMostLikedOffers();
+    // dreamOpponentsList = await getDreamOpponents();
+    // followersNumber = await getFollowers();
+    // mostLikedOffers = await getMostLikedOffers();
+    mostDislikedOffers = await getMostDislikedOffers();
+
   }
 
   @override
@@ -151,7 +172,6 @@ class _DashboardPageState extends State<DashboardPage> {
               future: future(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  print(mostLikedOffers);
                   return Column(
                     children: [
                       Row(
@@ -172,7 +192,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       MostLikedOffers(
                         likedOfferList: mostLikedOffers,
                       ),
-                      MostDislikedOffers(dislikedOfferList: likedOffersList)
+                      MostDislikedOffers(dislikedOfferList: mostDislikedOffers)
                     ],
                   );
                 } else {

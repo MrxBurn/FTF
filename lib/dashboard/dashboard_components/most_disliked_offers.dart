@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ftf/styles/styles.dart';
@@ -57,6 +58,9 @@ class DislikedOfferList extends StatelessWidget {
 
   List dislikedOfferList;
 
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -79,11 +83,19 @@ class DislikedOfferList extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                dislikedOfferList[idx]['creator'],
+                                currentUser == dislikedOfferList[idx]['createdBy']
+                                    ? dislikedOfferList[idx]['creator']
+                                    : dislikedOfferList[idx]['opponent'],
                                 style: const TextStyle(color: Colors.grey),
                               ),
                               Text(
-                                dislikedOfferList[idx]['creatorValue'],
+                                currentUser == dislikedOfferList[idx]['createdBy']
+                                    ? dislikedOfferList[idx]['negotiationValues']
+                                    .last['creatorValue']
+                                    .toString()
+                                    : dislikedOfferList[idx]['negotiationValues']
+                                    .last['opponentValue']
+                                    .toString(),
                                 style: const TextStyle(color: Colors.grey),
                               )
                             ],
@@ -95,12 +107,20 @@ class DislikedOfferList extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                dislikedOfferList[idx]['opponent'],
+                                currentUser != dislikedOfferList[idx]['createdBy']
+                                    ? dislikedOfferList[idx]['creator']
+                                    : dislikedOfferList[idx]['opponent'],
                                 style: const TextStyle(color: Colors.grey),
                                 textAlign: TextAlign.center,
                               ),
                               Text(
-                                dislikedOfferList[idx]['opponentValue'],
+                                currentUser != dislikedOfferList[idx]['createdBy']
+                                    ? dislikedOfferList[idx]['negotiationValues']
+                                    .last['creatorValue']
+                                    .toString()
+                                    : dislikedOfferList[idx]['negotiationValues']
+                                    .last['opponentValue']
+                                    .toString(),
                                 style: const TextStyle(color: Colors.grey),
                                 textAlign: TextAlign.center,
                               )
