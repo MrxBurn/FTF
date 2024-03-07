@@ -19,7 +19,8 @@ import 'package:ftf/fighter_forum/fighter_forum.dart';
 import 'package:ftf/fighters_overview/fighters_overview.dart';
 import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
-import 'package:ftf/my_account/my_account.dart';
+import 'package:ftf/my_account/my_account_fan.dart';
+import 'package:ftf/my_account/my_account_fighter.dart';
 import 'package:ftf/my_fighters_overview/my_followed_fighters.dart';
 import 'package:ftf/my_offers/my_offers_page.dart';
 import 'package:ftf/news_and_events/news_and_events_page.dart';
@@ -133,7 +134,8 @@ class _MyAppState extends State<MyApp> {
           'fighterForum': (context) => const FighterForum(),
           'fanForum': (context) => const FanForumPage(),
           'newsEvents': (context) => const NewsAndEventsPage(),
-          'myAccount': (context) => const MyAccount(),
+          'myAccountFighter': (context) => const MyAccountFighter(),
+          'myAccountFan': (context) => const MyAccountFan(),
           'fanFightsOverview': (context) => const FanFightsOverview(),
           'fightersOverview': (context) => const FightersOverview(),
           'myFighters': (context) => const MyFollowedFighters()

@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
+import 'package:ftf/reusableWidgets/button_cards.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/styles/styles.dart';
 
 class FanHomePage extends StatefulWidget {
   const FanHomePage({super.key});
@@ -14,11 +16,11 @@ class _FanHomePageState extends State<FanHomePage> {
   bool isLoading = false;
 
   List<String> imagePaths = [
-    'assets/illustrations/create_offer.png',
-    'assets/illustrations/my_offers.png',
-    'assets/illustrations/dashboard.png',
-    'assets/illustrations/forum.png',
+    'assets/illustrations/fight_offers_fan.jpg',
+    'assets/illustrations/all_fighters.jpg',
+    'assets/illustrations/my_fighters.jpg',
     'assets/illustrations/events.png',
+    'assets/illustrations/forum.png',
     'assets/illustrations/my_account.png',
   ];
 
@@ -29,28 +31,64 @@ class _FanHomePageState extends State<FanHomePage> {
         child: Column(
           children: [
             LogoHeader(backRequired: false),
-            BlackButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, 'fanFightsOverview'),
-                text: 'Fights overview'),
-            BlackButton(
-                onPressed: () => FirebaseAuth.instance
-                    .signOut()
-                    .then((value) => Navigator.pushNamed(context, 'loginPage')),
-                text: 'Logout'),
-            BlackButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, 'fightersOverview'),
-                text: 'All fighters'),
-            BlackButton(
-                onPressed: () => Navigator.pushNamed(context, 'myFighters'),
-                text: 'My Fighters'),
-            BlackButton(
-                onPressed: () => Navigator.pushNamed(context, 'newsEvents'),
-                text: 'Events'),
-            BlackButton(
-                onPressed: () => Navigator.pushNamed(context, 'fanForum'),
-                text: 'Fan Forum'),
+            Padding(
+              padding: paddingLRT,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ButtonCard(
+                        path: imagePaths[0],
+                        name: 'Fights Overview',
+                        route: 'fanFightsOverview',
+                      ),
+                      ButtonCard(
+                        path: imagePaths[1],
+                        route: 'fightersOverview',
+                        name: 'All fighters',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ButtonCard(
+                        path: imagePaths[2],
+                        route: 'myFighters',
+                        name: 'My Fighters',
+                      ),
+                      ButtonCard(
+                        path: imagePaths[3],
+                        route: 'newsEvents',
+                        name: 'Events',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ButtonCard(
+                        path: imagePaths[4],
+                        route: 'fanForum',
+                        name: 'Fan Forum',
+                      ),
+                      ButtonCard(
+                        path: imagePaths[5],
+                        route: 'myAccountFan',
+                        name: 'My account',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(
               height: 16,
             )

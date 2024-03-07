@@ -1,0 +1,116 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/reusableWidgets/rounded_black_button.dart';
+import 'package:ftf/reusableWidgets/rounded_text_box.dart';
+import 'package:ftf/styles/styles.dart';
+
+class MyAccountFan extends StatefulWidget {
+  const MyAccountFan({super.key});
+
+  @override
+  State<MyAccountFan> createState() => _MyAccountFanState();
+}
+
+class _MyAccountFanState extends State<MyAccountFan> {
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+
+  TextEditingController emailController = TextEditingController();
+
+  TextEditingController firstNameController = TextEditingController();
+
+  Future<Map<String, dynamic>?> getUser() async {
+    Map<String, dynamic>? result = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser)
+        .get()
+        .then((value) => value.data());
+
+    return result;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            LogoHeader(backRequired: true),
+            FutureBuilder(
+                future: getUser(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(children: [
+                        Container(
+                            constraints: const BoxConstraints(minHeight: 200),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(15)),
+                                color: const Color(black),
+                                boxShadow: [containerShadowRed]),
+                            child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Wrap(
+                                      spacing: 10,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      children: [
+                                        const SizedBox(
+                                            width: 80, child: Text('Email')),
+                                        RoundedTextInput(
+                                          disabled: true,
+                                          controller: emailController,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Wrap(
+                                      spacing: 8,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      children: [
+                                        const SizedBox(
+                                            width: 80,
+                                            child: Text('First name')),
+                                        RoundedTextInput(
+                                          disabled: true,
+                                          width: 95,
+                                          controller: firstNameController,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ])))
+                      ]),
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
+            BlackRoundedButton(
+              isLoading: false,
+              onPressed: () => FirebaseAuth.instance
+                  .signOut()
+                  .then((value) => Navigator.pushNamed(context, 'loginPage')),
+              text: 'Logout',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

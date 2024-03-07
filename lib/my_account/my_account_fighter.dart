@@ -16,14 +16,14 @@ import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
 import 'package:image_picker/image_picker.dart';
 
-class MyAccount extends StatefulWidget {
-  const MyAccount({super.key});
+class MyAccountFighter extends StatefulWidget {
+  const MyAccountFighter({super.key});
 
   @override
-  State<MyAccount> createState() => _MyAccountState();
+  State<MyAccountFighter> createState() => _MyAccountFighterState();
 }
 
-class _MyAccountState extends State<MyAccount> {
+class _MyAccountFighterState extends State<MyAccountFighter> {
   final String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
   String weight = '';

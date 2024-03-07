@@ -79,7 +79,7 @@ class _FighterHomePageState extends State<FighterHomePage> {
                       ),
                       ButtonCard(
                         path: imagePaths[5],
-                        route: 'myAccount',
+                        route: 'myAccountFighter',
                         name: 'My account',
                       ),
                     ],
