@@ -1,28 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/button_cards.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 
-class FanHomePage extends StatefulWidget {
+List<String> imagePaths = [
+  'assets/illustrations/fight_offers_fan.jpg',
+  'assets/illustrations/all_fighters.jpg',
+  'assets/illustrations/my_fighters.jpg',
+  'assets/illustrations/events.png',
+  'assets/illustrations/forum.png',
+  'assets/illustrations/my_account.png',
+];
+
+class FanHomePage extends StatelessWidget {
   const FanHomePage({super.key});
-
-  @override
-  State<FanHomePage> createState() => _FanHomePageState();
-}
-
-class _FanHomePageState extends State<FanHomePage> {
-  bool isLoading = false;
-
-  List<String> imagePaths = [
-    'assets/illustrations/fight_offers_fan.jpg',
-    'assets/illustrations/all_fighters.jpg',
-    'assets/illustrations/my_fighters.jpg',
-    'assets/illustrations/events.png',
-    'assets/illustrations/forum.png',
-    'assets/illustrations/my_account.png',
-  ];
 
   @override
   Widget build(BuildContext context) {
