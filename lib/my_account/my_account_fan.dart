@@ -16,9 +16,10 @@ class MyAccountFan extends StatefulWidget {
 class _MyAccountFanState extends State<MyAccountFan> {
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
-  TextEditingController emailController = TextEditingController();
-
   TextEditingController firstNameController = TextEditingController();
+
+  TextEditingController userNameController = TextEditingController();
+
 
   Future<Map<String, dynamic>?> getUser() async {
     Map<String, dynamic>? result = await FirebaseFirestore.instance
@@ -41,11 +42,14 @@ class _MyAccountFanState extends State<MyAccountFan> {
                 future: getUser(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
+                    firstNameController.text = snapshot.data['firstName'];
+                    userNameController.text = snapshot.data['userName'];
+
                     return Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(children: [
                         Container(
-                            constraints: const BoxConstraints(minHeight: 200),
+                            constraints: const BoxConstraints(minHeight: 150),
                             width: double.infinity,
                             decoration: BoxDecoration(
                                 borderRadius:
@@ -55,18 +59,23 @@ class _MyAccountFanState extends State<MyAccountFan> {
                             child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(children: [
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Wrap(
-                                      spacing: 10,
+                                      spacing: 8,
                                       crossAxisAlignment:
-                                          WrapCrossAlignment.center,
+                                      WrapCrossAlignment.center,
                                       children: [
                                         const SizedBox(
-                                            width: 80, child: Text('Email')),
+                                            width: 80,
+                                            child: Text('User name')),
                                         RoundedTextInput(
                                           disabled: true,
-                                          controller: emailController,
+                                          width: 95,
+                                          controller: userNameController,
                                         ),
                                       ],
                                     ),
