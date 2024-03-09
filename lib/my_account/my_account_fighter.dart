@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ftf/authentication/login.dart';
 import 'package:ftf/reusableWidgets/custom_image_header.dart';
 import 'package:ftf/reusableWidgets/dropdown_box.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -401,8 +402,11 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                                 isLoading: false,
                                 onPressed: () => FirebaseAuth.instance
                                     .signOut()
-                                    .then((value) => Navigator.pushNamed(
-                                        context, 'loginPage')),
+                                    .then((value) => Navigator.of(context)
+                                        .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (ctx) => LoginPage()),
+                                            (route) => false)),
                                 text: 'Logout',
                               ),
                             ],

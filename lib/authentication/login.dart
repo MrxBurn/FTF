@@ -112,8 +112,22 @@ class _LoginPageState extends State<LoginPage> {
                       validatorFunction: (value) => fieldRequired(value),
                       passwordField: true,
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                            onPressed: () =>
+                                Navigator.pushNamed(context, 'forgotPassword'),
+                            child: Text(
+                              'Forgot password?',
+                              style: TextStyle(
+                                  color: Colors.yellow.withOpacity(0.8)),
+                            )),
+                      ),
+                    ),
                     const SizedBox(
-                      height: 25,
+                      height: 12,
                     ),
                     Center(
                       child: SizedBox(

@@ -7,6 +7,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/authentication/account_type.dart';
 import 'package:ftf/authentication/fighter_image_upload.dart';
+import 'package:ftf/authentication/forgot_passwrod.dart';
 import 'package:ftf/authentication/login.dart';
 import 'package:ftf/authentication/register_fan.dart';
 import 'package:ftf/authentication/register_fighter.dart';
@@ -138,7 +139,8 @@ class _MyAppState extends State<MyApp> {
           'myAccountFan': (context) => const MyAccountFan(),
           'fanFightsOverview': (context) => const FanFightsOverview(),
           'fightersOverview': (context) => const FightersOverview(),
-          'myFighters': (context) => const MyFollowedFighters()
+          'myFighters': (context) => const MyFollowedFighters(),
+          'forgotPassword': (context) => const ForgotPasswordPage()
         },
         localizationsDelegates: const [
           MonthYearPickerLocalizations.delegate,

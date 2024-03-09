@@ -46,7 +46,8 @@ class BlackRoundedButton extends StatelessWidget {
         ),
         onPressed: !isDisabled ? () => onPressed() : null,
         child: isLoading == true
-            ? const CircularProgressIndicator()
+            ? Transform.scale(
+                scale: 0.5, child: const CircularProgressIndicator())
             : icon != null
                 ? Wrap(
                     spacing: 8,

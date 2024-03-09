@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/authentication/login.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/reusableWidgets/rounded_text_box.dart';
@@ -19,7 +20,6 @@ class _MyAccountFanState extends State<MyAccountFan> {
   TextEditingController firstNameController = TextEditingController();
 
   TextEditingController userNameController = TextEditingController();
-
 
   Future<Map<String, dynamic>?> getUser() async {
     Map<String, dynamic>? result = await FirebaseFirestore.instance
@@ -67,7 +67,7 @@ class _MyAccountFanState extends State<MyAccountFan> {
                                     child: Wrap(
                                       spacing: 8,
                                       crossAxisAlignment:
-                                      WrapCrossAlignment.center,
+                                          WrapCrossAlignment.center,
                                       children: [
                                         const SizedBox(
                                             width: 80,
@@ -112,9 +112,10 @@ class _MyAccountFanState extends State<MyAccountFan> {
                 }),
             BlackRoundedButton(
               isLoading: false,
-              onPressed: () => FirebaseAuth.instance
-                  .signOut()
-                  .then((value) => Navigator.pushNamed(context, 'loginPage')),
+              onPressed: () => FirebaseAuth.instance.signOut().then((value) =>
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (ctx) => LoginPage()),
+                      (route) => false)),
               text: 'Logout',
             ),
           ],
