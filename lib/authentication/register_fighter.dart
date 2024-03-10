@@ -8,6 +8,7 @@ import 'package:ftf/authentication/fighter_image_upload.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/lists.dart';
@@ -65,7 +66,9 @@ class _RegisterFighterState extends State<RegisterFighter> {
       String fighterStatus,
       String bio) async {
     try {
-      isLoading = true;
+      setState(() {
+        isLoading = true;
+      });
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {
@@ -88,7 +91,9 @@ class _RegisterFighterState extends State<RegisterFighter> {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
-      isLoading = false;
+      setState(() {
+        isLoading = false;
+      });
 
       if (context.mounted) {
         Navigator.of(context).push(MaterialPageRoute(
@@ -280,36 +285,25 @@ class _RegisterFighterState extends State<RegisterFighter> {
               height: 25,
             ),
             Center(
-              child: SizedBox(
-                width: 150,
-                height: 48,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      shadowColor: Colors.red,
-                    ),
-                    onPressed: () => {
-                          if (_formKey.currentState!.validate() == true)
-                            {
-                              registerFighter(
-                                  emailController.text,
-                                  passwordController.text,
-                                  firstNameController.text,
-                                  lastNameController.text,
-                                  nationalityController.text,
-                                  fighterType,
-                                  genderValue,
-                                  weightValue,
-                                  fighterStatusValue,
-                                  bioController.text)
-                            }
-                        },
-                    child: isLoading == true
-                        ? const CircularProgressIndicator()
-                        : const Text(
-                            'Register',
-                            style: TextStyle(fontSize: 16),
-                          )),
+              child: BlackRoundedButton(
+                isLoading: isLoading,
+                onPressed: () => {
+                  if (_formKey.currentState!.validate() == true)
+                    {
+                      registerFighter(
+                          emailController.text,
+                          passwordController.text,
+                          firstNameController.text,
+                          lastNameController.text,
+                          nationalityController.text,
+                          fighterType,
+                          genderValue,
+                          weightValue,
+                          fighterStatusValue,
+                          bioController.text)
+                    }
+                },
+                text: 'Register',
               ),
             ),
           ],

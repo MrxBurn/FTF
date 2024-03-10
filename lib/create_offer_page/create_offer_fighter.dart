@@ -38,6 +38,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   DateTime actualExpiryDate = DateTime.now();
 
+  bool isLoading = false;
+
   VideoPlayerController? _videoController;
   Future<void>? _initializeVideoPlayerFuture;
 
@@ -52,8 +54,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   TextEditingController pickerController = TextEditingController();
 
   TextEditingController yearController = TextEditingController();
-
-  //TODO: Use Reusable login, register button in all occurences
 
   String searchValue = '';
 
@@ -273,6 +273,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
   }
 
   void createOffer(Object offer) async {
+    setState(() {
+      isLoading = true;
+    });
     if (searchValue.isEmpty && !fighterNotFoundChecked) {
       showSnackBar(
           text: 'Please select fighter or tick fighter not found',
@@ -309,6 +312,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
             context: context,
             color: Colors.green);
       }
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -569,7 +575,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                 height: 16,
               ),
               BlackRoundedButton(
-                  isLoading: false /*TODO: Implement is loading */,
+                  isLoading: isLoading,
                   text: submitButton,
                   onPressed: () => createOffer(offer)),
             ],

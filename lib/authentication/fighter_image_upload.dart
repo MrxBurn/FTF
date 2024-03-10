@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/snack_bar.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
@@ -37,6 +38,8 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
 
   String imageName = '';
 
+  bool isLoading = false;
+
   saveToFirebase(File? image) async {
     if (image != null) {
       Reference file =
@@ -46,6 +49,9 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
 
       String imageURL = (await file.getDownloadURL()).toString();
 
+      setState(() {
+        isLoading = true;
+      });
       await fighterUsers
           .doc(currentUser)
           .update({'profileImageURL': imageURL}).then((value) => {
@@ -59,6 +65,9 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                             )))
                   }
               });
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -224,16 +233,10 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: ElevatedButton(
+                        child: BlackRoundedButton(
                           onPressed: () => saveToFirebase(image),
-                          style: ElevatedButton.styleFrom(
-                            elevation: 5,
-                            shadowColor: Colors.red,
-                          ),
-                          child: const Text(
-                            'Upload',
-                            style: TextStyle(fontSize: 16),
-                          ),
+                          text: 'Upload',
+                          isLoading: isLoading,
                         ),
                       )
                     ],
