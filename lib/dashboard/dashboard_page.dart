@@ -67,7 +67,6 @@ class _DashboardPageState extends State<DashboardPage> {
   List<Map<String, dynamic>> mostLikedOffers = [];
   List<Map<String, dynamic>> mostDislikedOffers = [];
 
-
   Future<List<dynamic>> getDreamOpponents() async {
     var result = await FirebaseFirestore.instance
         .collection('users')
@@ -131,7 +130,7 @@ class _DashboardPageState extends State<DashboardPage> {
     List<Map<String, dynamic>> result = await FirebaseFirestore.instance
         .collection('fightOffers')
         .where(Filter.or(Filter('createdBy', isEqualTo: currentUser),
-        Filter('opponentId', isEqualTo: currentUser)))
+            Filter('opponentId', isEqualTo: currentUser)))
         .orderBy('dislikeCount', descending: true)
         .orderBy('offerExpiryDate', descending: true)
         .limit(3)
@@ -144,15 +143,12 @@ class _DashboardPageState extends State<DashboardPage> {
     return result;
   }
 
-  //TODO: Create mostDislikedOffers and create index by print error
-
   Future<void> future() async {
     await getTotalLikes();
-    // dreamOpponentsList = await getDreamOpponents();
-    // followersNumber = await getFollowers();
-    // mostLikedOffers = await getMostLikedOffers();
+    dreamOpponentsList = await getDreamOpponents();
+    followersNumber = await getFollowers();
+    mostLikedOffers = await getMostLikedOffers();
     mostDislikedOffers = await getMostDislikedOffers();
-
   }
 
   @override
