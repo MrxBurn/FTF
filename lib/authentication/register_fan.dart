@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -65,7 +66,9 @@ class _RegisterFanState extends State<RegisterFan> {
                               'firstName': firstName,
                               'userName': userName,
                               'route': 'fan',
-                              'id': value.user?.uid
+                              'id': value.user?.uid,
+                              'deviceToken':
+                                  await FirebaseMessaging.instance.getToken()
                             }),
                             await FirebaseAuth.instance
                                 .signInWithEmailAndPassword(

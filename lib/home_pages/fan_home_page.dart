@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_cards.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';

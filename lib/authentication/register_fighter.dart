@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/authentication/fighter_image_upload.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
@@ -71,7 +72,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
       });
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => {
+          .then((value) async => {
                 users.doc(value.user?.uid).set({
                   'email': email,
                   'firstName': firstName,
@@ -85,7 +86,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   'route': 'fighter',
                   'profileImageURL': '',
                   'id': value.user?.uid,
-                  'followers': []
+                  'followers': [],
+                  'deviceToken': await FirebaseMessaging.instance.getToken()
                 })
               });
       await FirebaseAuth.instance
