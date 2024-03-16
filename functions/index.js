@@ -114,11 +114,48 @@ exports.sendNotificationOnFighterDataChangeToFans = functions.firestore
 // *********************
 // *********************
 
-const sendNotificationOnOfferCreate = async (data) => {
+const sendNotificationOnOfferCreateOpponent = async (data) => {
   const fighterData = await admin
       .firestore()
       .collection("users")
       .doc(data.opponentId)
+      .get().then((res) => res.data());
+
+  const followersId = fighterData.followers;
+
+  followersId
+      .forEach((followerId) => {
+        const snapshot = admin
+            .firestore().collection("users").doc(followerId).get();
+        snapshot.then(async (doc) => {
+          if (doc.exists) {
+            const fanData = doc.data();
+
+            if (fanData.deviceToken) {
+              const notification = {
+                token: fanData.deviceToken,
+                notification:
+              {
+                title: "A followed fighter received an offer",
+                body: `${fighterData.firstName} ${fighterData.lastName} has received an offer`,
+              },
+              };
+              try {
+                await admin.messaging().send(notification);
+              } catch (error) {
+                console.error("Error sending notification:", error);
+              }
+            }
+          }
+        });
+      });
+};
+
+const sendNotificationOnOfferCreateCreator = async (data) => {
+  const fighterData = await admin
+      .firestore()
+      .collection("users")
+      .doc(data.createdBy)
       .get().then((res) => res.data());
 
   const followersId = fighterData.followers;
@@ -156,6 +193,188 @@ exports.sendNotificationToFanFollowedFighterAsOpponent =
       .firestore
       .document("fightOffers/{offerId}").onCreate(async (snap) => {
         const data = snap.data();
+        sendNotificationOnOfferCreateOpponent(data);
+      });
 
-        sendNotificationOnOfferCreate(data);
+exports.sendNotificationToFanFollowedFighterAsCreator =
+  functions
+      .firestore
+      .document("fightOffers/{offerId}").onCreate(async (snap) => {
+        const data = snap.data();
+        sendNotificationOnOfferCreateCreator(data);
+      });
+
+
+// *********************
+// *********************
+//  FAN NOTIFICATION
+//  WHEN FIGHT OFFER IS ACCEPTED/DECLINED
+// *********************
+// *********************
+
+const sendNotificationOnOfferAccepted = async (data) => {
+  const fighterOpponentData = await admin
+      .firestore()
+      .collection("users")
+      .doc(data.opponentId)
+      .get().then((res) => res.data());
+
+  const fighterCreatorData = await admin
+      .firestore()
+      .collection("users")
+      .doc(data.createdBy)
+      .get().then((res) => res.data());
+
+
+  const creatorFollowersId = fighterCreatorData.followers;
+  const opponentFollowersId = fighterOpponentData.followers;
+
+  // creator logic
+  creatorFollowersId
+      .forEach((followerId) => {
+        const snapshot = admin
+            .firestore().collection("users").doc(followerId).get();
+        snapshot.then(async (doc) => {
+          if (doc.exists) {
+            const fanData = doc.data();
+
+            if (fanData.deviceToken) {
+              const notification = {
+                token: fanData.deviceToken,
+                notification:
+              {
+                title: "Offer has been approved",
+                body: `${fighterCreatorData.firstName} ${fighterCreatorData.lastName} approved an offer`,
+              },
+              };
+              try {
+                await admin.messaging().send(notification);
+                console.log("offer approved creator");
+              } catch (error) {
+                console.error("Error sending notification:", error);
+              }
+            }
+          }
+        });
+      });
+
+  // opponent logic
+  opponentFollowersId
+      .forEach((followerId) => {
+        const snapshot = admin
+            .firestore().collection("users").doc(followerId).get();
+        snapshot.then(async (doc) => {
+          if (doc.exists) {
+            const fanData = doc.data();
+
+            if (fanData.deviceToken) {
+              const notification = {
+                token: fanData.deviceToken,
+                notification:
+              {
+                title: "Offer has been approved",
+                body: `${fighterOpponentData.firstName} ${fighterOpponentData.lastName} approved an offer`,
+              },
+              };
+              try {
+                await admin.messaging().send(notification);
+                console.log("offer approved opponent");
+              } catch (error) {
+                console.error("Error sending notification:", error);
+              }
+            }
+          }
+        });
+      });
+};
+
+const sendNotificationOnOfferDeclined = async (data) => {
+  const fighterOpponentData = await admin
+      .firestore()
+      .collection("users")
+      .doc(data.opponentId)
+      .get().then((res) => res.data());
+
+  const fighterCreatorData = await admin
+      .firestore()
+      .collection("users")
+      .doc(data.createdBy)
+      .get().then((res) => res.data());
+
+
+  const creatorFollowersId = fighterCreatorData.followers;
+  const opponentFollowersId = fighterOpponentData.followers;
+
+  // creator logic
+  creatorFollowersId
+      .forEach((followerId) => {
+        const snapshot = admin
+            .firestore().collection("users").doc(followerId).get();
+        snapshot.then(async (doc) => {
+          if (doc.exists) {
+            const fanData = doc.data();
+
+            if (fanData.deviceToken) {
+              const notification = {
+                token: fanData.deviceToken,
+                notification:
+              {
+                title: "Offer has been declined",
+                body: `${fighterCreatorData.firstName} ${fighterCreatorData.lastName} declined an offer`,
+              },
+              };
+              try {
+                await admin.messaging().send(notification);
+                console.log("offer declined creator");
+              } catch (error) {
+                console.error("Error sending notification:", error);
+              }
+            }
+          }
+        });
+      });
+
+  // opponent logic
+  opponentFollowersId
+      .forEach((followerId) => {
+        const snapshot = admin
+            .firestore().collection("users").doc(followerId).get();
+        snapshot.then(async (doc) => {
+          if (doc.exists) {
+            const fanData = doc.data();
+
+            if (fanData.deviceToken) {
+              const notification = {
+                token: fanData.deviceToken,
+                notification:
+              {
+                title: "Offer has been declined",
+                body: `${fighterOpponentData.firstName} ${fighterOpponentData.lastName} declined an offer`,
+              },
+              };
+              try {
+                await admin.messaging().send(notification);
+                console.log("offer declined opponent");
+              } catch (error) {
+                console.error("Error sending notification:", error);
+              }
+            }
+          }
+        });
+      });
+};
+
+exports.sendNotificationToFanOfferStatusChanged =
+  functions
+      .firestore
+      .document("fightOffers/{offerId}").onUpdate(async (change) => {
+        const before = change.before.data();
+        const after = change.after.data();
+
+        if (before.status === "PENDING" && after.status === "APPROVED") {
+          sendNotificationOnOfferAccepted(change.after.data());
+        }
+        if (before.status === "PENDING" && after.status === "DECLINED") {
+          sendNotificationOnOfferDeclined(change.after.data());
+        }
       });

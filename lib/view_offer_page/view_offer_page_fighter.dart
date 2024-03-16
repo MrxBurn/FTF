@@ -402,12 +402,6 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                       });
                                 },
                                 text: 'Press to review video',
-                                // child: const Text(
-                                //   'Press to review video',
-                                //   style: TextStyle(
-                                //       color: Colors.white,
-                                //       decoration: TextDecoration.underline),
-                                // ),
                               ),
                             ),
                           )
@@ -423,7 +417,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () =>
-                                          onApproveOrDeclinePressed('DECLINED'),
+                                          onApproveOrDeclinePressed('APPROVED'),
                                       child: const Text(
                                         'Approve',
                                         style: TextStyle(color: Colors.green),
@@ -728,7 +722,7 @@ void showDeclineAlert(BuildContext context, Function onSubmit) {
                             )),
                         TextButton(
                             onPressed: () => {
-                                  onSubmit(),
+                                  onSubmit("DECLINED"),
                                   Navigator.pushNamed(context, 'fighterHome'),
                                   showSnackBar(
                                       color: Colors.green,
