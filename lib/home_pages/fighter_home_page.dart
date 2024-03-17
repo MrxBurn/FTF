@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_cards.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -22,8 +23,12 @@ class _FighterHomePageState extends State<FighterHomePage> {
     'assets/illustrations/my_account.png',
   ];
 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   @override
   Widget build(BuildContext context) {
+    _firebaseMessaging.requestPermission();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
