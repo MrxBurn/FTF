@@ -31,18 +31,40 @@ import 'package:ftf/styles/styles.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  if (message.notification?.title == 'Test') {
-    print('bla');
-  }
+
+  navigatorKey.currentState?.pushNamed('myOffers');
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true, badge: true, sound: true);
+
+//when app terminated
+  FirebaseMessaging.instance.getInitialMessage().then((value) => {
+        if (value?.notification != null)
+          {navigatorKey.currentState?.pushNamed('myAccountFighter')}
+      });
+
+//app in background
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    navigatorKey.currentState?.pushNamed('fighterForum');
+  });
+
+//app in foreground
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      navigatorKey.currentState?.pushNamed('newsEvents');
+    }
+  });
 
   runApp(const MyApp());
 }
@@ -90,7 +112,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    print(navigatorKey.currentState);
     return MaterialApp(
+        navigatorKey: navigatorKey,
         title: 'Flutter Demo',
         theme: ThemeData(
           primaryColor: Colors.black,
