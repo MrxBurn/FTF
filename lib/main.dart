@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ftf/authentication/account_type.dart';
 import 'package:ftf/authentication/fighter_image_upload.dart';
 import 'package:ftf/authentication/forgot_passwrod.dart';
@@ -28,20 +29,38 @@ import 'package:ftf/my_offers/my_offers_page.dart';
 import 'package:ftf/news_and_events/news_and_events_page.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/foreground_notification_service.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
-  navigatorKey.currentState?.pushNamed('myOffers');
+void Function(NotificationResponse)? onForegroundNotificationTap(payload) {
+  navigatorKey.currentState?.pushNamed('myAccountFighter');
+  return payload;
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onDidReceiveNotificationResponse: onForegroundNotificationTap);
+
+//Firebase messaging
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
   FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true, badge: true, sound: true);
@@ -59,10 +78,23 @@ Future<void> main() async {
 
 //app in foreground
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Message data: ${message.data}');
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
 
-    if (message.notification != null) {
-      navigatorKey.currentState?.pushNamed('newsEvents');
+    if (notification != null && android != null) {
+      flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              icon: android.smallIcon,
+            ),
+          ));
+
+      print('hello');
     }
   });
 
