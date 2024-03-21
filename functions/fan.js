@@ -146,7 +146,7 @@ const sendNotificationOnOfferCreateOpponent = async (data) => {
                 body: `${fighterData.firstName} ${fighterData.lastName} has received an offer`,
               },
                 data: {
-                  offerId: data.offerId,
+                  offerId: data.offerId.toString(),
                 },
               };
               try {
@@ -186,7 +186,7 @@ const sendNotificationOnOfferCreateCreator = async (data) => {
                 body: `${fighterData.firstName} ${fighterData.lastName} has created an offer`,
               },
                 data: {
-                  offerId: data.offerId,
+                  offerId: data.offerId.toString(),
                 },
               };
               try {
@@ -260,7 +260,7 @@ const sendNotificationOnOfferAccepted = async (data) => {
                 body: `${fighterCreatorData.firstName} ${fighterCreatorData.lastName} approved an offer`,
               },
                 data: {
-                  offerId: data.offerId,
+                  offerId: data.offerId.toString(),
                 },
               };
               try {
@@ -292,7 +292,7 @@ const sendNotificationOnOfferAccepted = async (data) => {
                 body: `${fighterOpponentData.firstName} ${fighterOpponentData.lastName} approved an offer`,
               },
                 data: {
-                  offerId: data.offerId,
+                  offerId: data.offerId.toString(),
                 },
               };
               try {
@@ -342,7 +342,7 @@ const sendNotificationOnOfferDeclined = async (data) => {
                 body: `${fighterCreatorData.firstName} ${fighterCreatorData.lastName} declined an offer`,
               },
                 data: {
-                  offerId: data.offerId,
+                  offerId: data.offerId.toString(),
                 },
               };
               try {
@@ -374,7 +374,7 @@ const sendNotificationOnOfferDeclined = async (data) => {
                 body: `${fighterOpponentData.firstName} ${fighterOpponentData.lastName} declined an offer`,
               },
                 data: {
-                  offerId: data.offerId,
+                  offerId: data.offerId.toString(),
                 },
               };
               try {
