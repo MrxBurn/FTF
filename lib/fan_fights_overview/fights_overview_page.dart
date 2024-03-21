@@ -75,7 +75,8 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
                                 onTap: () => Navigator.of(context)
                                     .push(MaterialPageRoute(
                                         builder: (context) => ViewOfferPageFan(
-                                              offer: snapshotList[idx],
+                                              offerId: snapshotList[idx]
+                                                  ['offerId'],
                                             ))),
                               );
                             }),

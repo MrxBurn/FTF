@@ -120,7 +120,7 @@ exports.sendNotificationOnFighterDataChangeToFans = functions.firestore
 // *********************
 // *********************
 
-const sendNotificationOnOfferCreateOpponent = async (data) => {
+const sendNotificationOnOfferCreateOpponent = async (data, offerId) => {
   const fighterData = await admin
       .firestore()
       .collection("users")
@@ -146,7 +146,7 @@ const sendNotificationOnOfferCreateOpponent = async (data) => {
                 body: `${fighterData.firstName} ${fighterData.lastName} has received an offer`,
               },
                 data: {
-                  offerId: data.offerId.toString(),
+                  offerId: offerId,
                 },
               };
               try {
@@ -160,7 +160,7 @@ const sendNotificationOnOfferCreateOpponent = async (data) => {
       });
 };
 
-const sendNotificationOnOfferCreateCreator = async (data) => {
+const sendNotificationOnOfferCreateCreator = async (data, offerId) => {
   const fighterData = await admin
       .firestore()
       .collection("users")
@@ -186,7 +186,7 @@ const sendNotificationOnOfferCreateCreator = async (data) => {
                 body: `${fighterData.firstName} ${fighterData.lastName} has created an offer`,
               },
                 data: {
-                  offerId: data.offerId.toString(),
+                  offerId: offerId,
                 },
               };
               try {
@@ -204,17 +204,22 @@ const sendNotificationOnOfferCreateCreator = async (data) => {
 exports.sendNotificationToFanFollowedFighterAsOpponent =
   functions
       .firestore
-      .document("fightOffers/{offerId}").onCreate(async (snap) => {
+      .document("fightOffers/{offerId}").onCreate(async (snap, context) => {
+        const offerId = context.params.offerId;
+
+
         const data = snap.data();
-        sendNotificationOnOfferCreateOpponent(data);
+        sendNotificationOnOfferCreateOpponent(data, offerId);
       });
 
 exports.sendNotificationToFanFollowedFighterAsCreator =
   functions
       .firestore
-      .document("fightOffers/{offerId}").onCreate(async (snap) => {
+      .document("fightOffers/{offerId}").onCreate(async (snap, context) => {
+        const offerId = context.params.offerId;
+
         const data = snap.data();
-        sendNotificationOnOfferCreateCreator(data);
+        sendNotificationOnOfferCreateCreator(data, offerId);
       });
 
 
@@ -225,7 +230,7 @@ exports.sendNotificationToFanFollowedFighterAsCreator =
 // *********************
 // *********************
 
-const sendNotificationOnOfferAccepted = async (data) => {
+const sendNotificationOnOfferAccepted = async (data, offerId) => {
   const fighterOpponentData = await admin
       .firestore()
       .collection("users")
@@ -260,7 +265,7 @@ const sendNotificationOnOfferAccepted = async (data) => {
                 body: `${fighterCreatorData.firstName} ${fighterCreatorData.lastName} approved an offer`,
               },
                 data: {
-                  offerId: data.offerId.toString(),
+                  offerId: offerId,
                 },
               };
               try {
@@ -292,7 +297,7 @@ const sendNotificationOnOfferAccepted = async (data) => {
                 body: `${fighterOpponentData.firstName} ${fighterOpponentData.lastName} approved an offer`,
               },
                 data: {
-                  offerId: data.offerId.toString(),
+                  offerId: offerId,
                 },
               };
               try {
@@ -307,7 +312,7 @@ const sendNotificationOnOfferAccepted = async (data) => {
       });
 };
 
-const sendNotificationOnOfferDeclined = async (data) => {
+const sendNotificationOnOfferDeclined = async (data, offerId) => {
   const fighterOpponentData = await admin
       .firestore()
       .collection("users")
@@ -342,7 +347,7 @@ const sendNotificationOnOfferDeclined = async (data) => {
                 body: `${fighterCreatorData.firstName} ${fighterCreatorData.lastName} declined an offer`,
               },
                 data: {
-                  offerId: data.offerId.toString(),
+                  offerId: offerId,
                 },
               };
               try {
@@ -374,7 +379,7 @@ const sendNotificationOnOfferDeclined = async (data) => {
                 body: `${fighterOpponentData.firstName} ${fighterOpponentData.lastName} declined an offer`,
               },
                 data: {
-                  offerId: data.offerId.toString(),
+                  offerId: offerId,
                 },
               };
               try {
@@ -392,14 +397,16 @@ const sendNotificationOnOfferDeclined = async (data) => {
 exports.sendNotificationToFanOfferStatusChanged =
   functions
       .firestore
-      .document("fightOffers/{offerId}").onUpdate(async (change) => {
+      .document("fightOffers/{offerId}").onUpdate(async (change, context) => {
+        const offerId = context.params.offerId;
+
         const before = change.before.data();
         const after = change.after.data();
 
         if (before.status === "PENDING" && after.status === "APPROVED") {
-          sendNotificationOnOfferAccepted(change.after.data());
+          sendNotificationOnOfferAccepted(change.after.data(), offerId);
         }
         if (before.status === "PENDING" && after.status === "DECLINED") {
-          sendNotificationOnOfferDeclined(change.after.data());
+          sendNotificationOnOfferDeclined(change.after.data(), offerId);
         }
       });

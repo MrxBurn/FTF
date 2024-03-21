@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/fan_forum/comments_section_fan.dart';
-import 'package:ftf/fighter_forum/comments_section_fighter.dart';
 import 'package:ftf/reusableWidgets/custom_image_header.dart';
 import 'package:ftf/styles/styles.dart';
 

@@ -333,7 +333,8 @@ class _FighterViewState extends State<FighterView> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     ViewOfferPageFan(
-                                                  offer: receivedFights[idx],
+                                                  offerId: receivedFights[idx]
+                                                      ['offerId'],
                                                 ),
                                               ),
                                             ),
@@ -400,7 +401,8 @@ class _FighterViewState extends State<FighterView> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     ViewOfferPageFan(
-                                                  offer: sentFights[idx],
+                                                  offerId: sentFights[idx]
+                                                      ['offerId'],
                                                 ),
                                               ),
                                             ),
@@ -488,7 +490,8 @@ class _FighterViewState extends State<FighterView> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 ViewOfferPageFan(
-                                              offer: sentFights[idx],
+                                              offerId: sentFights[idx]
+                                                  ['offerId'],
                                             ),
                                           ),
                                         ),
