@@ -19,6 +19,7 @@ import 'package:ftf/dashboard/dashboard_page.dart';
 import 'package:ftf/fan_fights_overview/fights_overview_page.dart';
 import 'package:ftf/fan_forum/fan_forum_page.dart';
 import 'package:ftf/fighter_forum/fighter_forum.dart';
+import 'package:ftf/fighters_overview/fighter_view.dart';
 import 'package:ftf/fighters_overview/fighters_overview.dart';
 import 'package:ftf/home_pages/fan_home_page.dart';
 import 'package:ftf/home_pages/fighter_home_page.dart';
@@ -38,9 +39,26 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-void Function(NotificationResponse)? onForegroundNotificationTap(payload) {
-  navigatorKey.currentState?.pushNamed('myAccountFighter');
-  return payload;
+void onForegroundNotificationTap(NotificationResponse response) {
+  print("Payload ${response.payload}");
+
+  List<String> payloadSplit = response.payload?.split(' ') ?? [];
+
+  print(payloadSplit);
+
+  if (payloadSplit.contains('userId')) {
+    navigatorKey.currentState?.push(MaterialPageRoute(
+        builder: (context) => FighterView(
+              fighterId: payloadSplit[1],
+            )));
+  }
+  if (payloadSplit.contains('offerId')) {
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(
+        builder: (context) => ViewOfferPage(offerId: payloadSplit[1]),
+      ),
+    );
+  }
 }
 
 Future<void> main() async {
@@ -67,13 +85,14 @@ Future<void> main() async {
 
 //when app terminated
   FirebaseMessaging.instance.getInitialMessage().then((value) => {
-        if (value?.notification != null)
-          {navigatorKey.currentState?.pushNamed('myAccountFighter')}
+        if (value?.notification != null) print(value)
+        // {navigatorKey.currentState?.pushNamed('myAccountFighter')}
       });
 
 //app in background
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
-    navigatorKey.currentState?.pushNamed('fighterForum');
+    // navigatorKey.currentState?.pushNamed('fighterForum');
+    print(event);
   });
 
 //app in foreground
@@ -83,18 +102,19 @@ Future<void> main() async {
 
     if (notification != null && android != null) {
       flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              icon: android.smallIcon,
-            ),
-          ));
-
-      print('hello');
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(channel.id, channel.name,
+              icon: android.smallIcon, playSound: true),
+        ),
+        payload: message.data.containsKey('userId')
+            ? ("userId ${message.data['userId']}")
+            : ("offerId ${message.data['offerId']}"),
+      );
+      print(message.data.containsKey('userId') ? "userId" : 'offerId');
+      //TODO: Move this on tap function above
     }
   });
 
@@ -144,7 +164,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print(navigatorKey.currentState);
     return MaterialApp(
         navigatorKey: navigatorKey,
         title: 'Flutter Demo',

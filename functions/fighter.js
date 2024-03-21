@@ -19,10 +19,13 @@ const sendNotification = async (data, title, body) => {
     const notification = {
       token: fighterData.deviceToken,
       notification:
-            {
-              title: title,
-              body: body,
-            },
+      {
+        title: title,
+        body: body,
+      },
+      data: {
+        offerId: data.offerId,
+      },
     };
     try {
       await admin.messaging().send(notification);
@@ -50,10 +53,13 @@ const sendNotificationOnOfferStatusChange = async (data, title, body) => {
     const notification = {
       token: creatorData.deviceToken,
       notification:
-            {
-              title: title,
-              body: body,
-            },
+      {
+        title: title,
+        body: body,
+      },
+      data: {
+        offerId: data.offerId,
+      },
     };
     try {
       await admin.messaging().send(notification);
@@ -67,10 +73,12 @@ const sendNotificationOnOfferStatusChange = async (data, title, body) => {
     const notification = {
       token: opponentData.deviceToken,
       notification:
-            {
-              title: title,
-              body: body,
-            },
+      {
+        title: title,
+        body: body,
+      }, data: {
+        offerId: data.offerId,
+      },
     };
     try {
       await admin.messaging().send(notification);

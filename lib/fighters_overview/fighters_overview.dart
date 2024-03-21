@@ -62,7 +62,7 @@ class _FightersOverviewState extends State<FightersOverview> {
                             onTap: () =>
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => FighterView(
-                                          fighter: data[idx],
+                                          fighterId: data[idx]['id'],
                                         ))),
                           );
                         }),
