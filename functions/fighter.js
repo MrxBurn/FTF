@@ -8,7 +8,7 @@ const admin = require("firebase-admin");
 // *********************
 // *********************
 
-const sendNotification = async (data, title, body) => {
+const sendNotification = async (data, title, body, offerId) => {
   const fighterData = await admin
       .firestore()
       .collection("users")
@@ -24,7 +24,7 @@ const sendNotification = async (data, title, body) => {
         body: body,
       },
       data: {
-        offerId: data.offerId,
+        offerId: offerId,
       },
     };
     try {
@@ -36,7 +36,7 @@ const sendNotification = async (data, title, body) => {
   }
 };
 
-const sendNotificationOnOfferStatusChange = async (data, title, body) => {
+const sendNotificationOnOfferStatusChange = async (data, title, body, offerId) => {
   const creatorData = await admin
       .firestore()
       .collection("users")
@@ -58,7 +58,7 @@ const sendNotificationOnOfferStatusChange = async (data, title, body) => {
         body: body,
       },
       data: {
-        offerId: data.offerId,
+        offerId: offerId,
       },
     };
     try {
@@ -77,7 +77,7 @@ const sendNotificationOnOfferStatusChange = async (data, title, body) => {
         title: title,
         body: body,
       }, data: {
-        offerId: data.offerId,
+        offerId: offerId,
       },
     };
     try {
@@ -90,29 +90,33 @@ const sendNotificationOnOfferStatusChange = async (data, title, body) => {
 };
 
 
-exports.sendNotificationOnOfferCreated = functions.firestore.document("fightOffers/{offerId}").onCreate(async (snap) => {
+exports.sendNotificationOnOfferCreated = functions.firestore.document("fightOffers/{offerId}").onCreate(async (snap, context) => {
   const data = snap.data();
+  const offerId = context.params.offerId;
 
-  sendNotification(data, "Offer received", `${data.creator} has sent you an offer`);
+  sendNotification(data, "Offer received", `${data.creator} has sent you an offer`, offerId);
 });
 
-exports.sendNotificationOnNegotiation = functions.firestore.document("fightOffers/{offerId}").onUpdate(async (change) => {
+exports.sendNotificationOnNegotiation = functions.firestore.document("fightOffers/{offerId}").onUpdate(async (change, context) => {
+  const offerId = context.params.offerId;
   const before = change.before.data();
   const after = change.after.data();
 
+
   if (before.negotiationValues.length !== after.negotiationValues.length) {
-    sendNotification(change.after.data(), "Negotiation received", `${change.after.data().creator} has sent you a negotiation`);
+    sendNotification(change.after.data(), "Negotiation received", `${change.after.data().creator} has sent you a negotiation`, offerId);
   }
 });
 
-exports.sendNotificationOnApproveCreator = functions.firestore.document("fightOffers/{offerId}").onUpdate(async (change) => {
+exports.sendNotificationOnApproveCreator = functions.firestore.document("fightOffers/{offerId}").onUpdate(async (change, context) => {
+  const offerId = context.params.offerId;
   const before = change.before.data();
   const after = change.after.data();
 
   if (before.status === "PENDING" && after.status === "APPROVED") {
-    sendNotificationOnOfferStatusChange(change.after.data(), "Offer approved", `One of your offers has been approved `);
+    sendNotificationOnOfferStatusChange(change.after.data(), "Offer approved", `One of your offers has been approved`, offerId);
   }
   if (before.status === "PENDING" && after.status === "DECLINED") {
-    sendNotificationOnOfferStatusChange(change.after.data(), "Offer declined", `One of your offers has been declined `);
+    sendNotificationOnOfferStatusChange(change.after.data(), "Offer declined", `One of your offers has been declined`, offerId);
   }
 });
