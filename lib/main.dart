@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -37,15 +36,13 @@ import 'package:month_year_picker/month_year_picker.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+const bool useEmulator = false;
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 void onForegroundNotificationTap(NotificationResponse response) {
-  print("Payload ${response.payload}");
-
   List<String> payloadSplit = response.payload?.split(' ') ?? [];
-
-  print(payloadSplit);
 
   if (payloadSplit.contains('userId')) {
     navigatorKey.currentState?.push(
@@ -72,9 +69,26 @@ void onForegroundNotificationTap(NotificationResponse response) {
   }
 }
 
+Future connectEmulator() async {
+  final localHostString = Platform.isAndroid ? "10.0.2.2" : 'localhost';
+
+  FirebaseFirestore.instance.settings = Settings(
+    host: '$localHostString:8080',
+    sslEnabled: false,
+    persistenceEnabled: false,
+  );
+
+  await FirebaseAuth.instance
+      .useAuthEmulator('http://$localHostString:9099', 9099);
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  if (useEmulator) {
+    await connectEmulator();
+  }
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onDidReceiveNotificationResponse: onForegroundNotificationTap);
@@ -111,7 +125,7 @@ Future<void> main() async {
         if (value != null &&
             value.notification != null &&
             value.data.containsKey('offerId') &&
-            value.data.containsKey('fan'))
+            value.data['type'] == 'fan')
           {
             navigatorKey.currentState?.push(
               MaterialPageRoute(
@@ -123,7 +137,7 @@ Future<void> main() async {
         if (value != null &&
             value.notification != null &&
             value.data.containsKey('offerId') &&
-            value.data.containsKey('fighter'))
+            value.data['type'] == 'fighter')
           {
             navigatorKey.currentState?.push(
               MaterialPageRoute(
@@ -136,8 +150,34 @@ Future<void> main() async {
 
 //app in background
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
-    // navigatorKey.currentState?.pushNamed('fighterForum');
-    print(event);
+    if (event.notification != null && event.data.containsKey('userId')) {
+      navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (context) => FighterView(
+            fighterId: event.data['userId'],
+          ),
+        ),
+      );
+    }
+    if (event.notification != null &&
+        event.data.containsKey('offerId') &&
+        event.data['type'] == 'fan') {
+      navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (context) =>
+              ViewOfferPageFan(offerId: event.data['offerId']),
+        ),
+      );
+    }
+    if (event.notification != null &&
+        event.data.containsKey('offerId') &&
+        event.data['type'] == 'fighter') {
+      navigatorKey.currentState?.push(
+        MaterialPageRoute(
+          builder: (context) => ViewOfferPage(offerId: event.data['offerId']),
+        ),
+      );
+    }
   });
 
 //app in foreground
@@ -148,6 +188,7 @@ Future<void> main() async {
     String constructedPayload = message.data.containsKey('userId')
         ? "userId ${message.data['userId']} type ${message.data['type']}"
         : "offerId ${message.data['offerId']} type ${message.data['type']}";
+
     if (notification != null && android != null) {
       flutterLocalNotificationsPlugin.show(
         notification.hashCode,
