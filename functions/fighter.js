@@ -10,10 +10,10 @@ const admin = require("firebase-admin");
 
 const sendNotification = async (data, title, body, offerId) => {
   const fighterData = await admin
-    .firestore()
-    .collection("users")
-    .doc(data.opponentId)
-    .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(data.opponentId)
+      .get().then((res) => res.data());
 
   if (fighterData.deviceToken) {
     const notification = {
@@ -25,12 +25,12 @@ const sendNotification = async (data, title, body, offerId) => {
       },
       data: {
         offerId: offerId,
-        type: 'fighter'
-
+        type: "fighter",
       },
     };
     try {
       await admin.messaging().send(notification);
+      console.log(data);
       console.log(`${data.creator} success`);
     } catch (error) {
       console.error("Error sending notification:", error);
@@ -40,16 +40,16 @@ const sendNotification = async (data, title, body, offerId) => {
 
 const sendNotificationOnOfferStatusChange = async (data, title, body, offerId) => {
   const creatorData = await admin
-    .firestore()
-    .collection("users")
-    .doc(data.createdBy)
-    .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(data.createdBy)
+      .get().then((res) => res.data());
 
   const opponentData = await admin
-    .firestore()
-    .collection("users")
-    .doc(data.opponentId)
-    .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(data.opponentId)
+      .get().then((res) => res.data());
 
   if (creatorData.deviceToken) {
     const notification = {
@@ -61,7 +61,7 @@ const sendNotificationOnOfferStatusChange = async (data, title, body, offerId) =
       },
       data: {
         offerId: offerId,
-        type: 'fighter'
+        type: "fighter",
       },
     };
     try {
@@ -81,7 +81,7 @@ const sendNotificationOnOfferStatusChange = async (data, title, body, offerId) =
         body: body,
       }, data: {
         offerId: offerId,
-        type: 'fighter'
+        type: "fighter",
       },
     };
     try {

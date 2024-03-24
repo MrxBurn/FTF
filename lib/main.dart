@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,6 +44,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 void onForegroundNotificationTap(NotificationResponse response) {
   List<String> payloadSplit = response.payload?.split(' ') ?? [];
+
+  print(payloadSplit);
 
   if (payloadSplit.contains('userId')) {
     navigatorKey.currentState?.push(
@@ -110,6 +113,7 @@ Future<void> main() async {
 
 //when app terminated
   FirebaseMessaging.instance.getInitialMessage().then((value) => {
+        print(value?.data),
         if (value != null &&
             value.notification != null &&
             value.data.containsKey('userId'))
@@ -150,6 +154,7 @@ Future<void> main() async {
 
 //app in background
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    print(event.notification);
     if (event.notification != null && event.data.containsKey('userId')) {
       navigatorKey.currentState?.push(
         MaterialPageRoute(

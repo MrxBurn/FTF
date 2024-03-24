@@ -400,13 +400,20 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                               ),
                               BlackRoundedButton(
                                 isLoading: false,
-                                onPressed: () => FirebaseAuth.instance
-                                    .signOut()
-                                    .then((value) => Navigator.of(context)
-                                        .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (ctx) => LoginPage()),
-                                            (route) => false)),
+                                onPressed: () async => {
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(currentUser)
+                                      .update(
+                                          {'deviceToken': FieldValue.delete()}),
+                                  FirebaseAuth.instance.signOut().then(
+                                      (value) => Navigator.of(context)
+                                          .pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                  builder: (ctx) =>
+                                                      LoginPage()),
+                                              (route) => false))
+                                },
                                 text: 'Logout',
                               ),
                             ],

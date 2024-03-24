@@ -146,15 +146,15 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
     });
   }
 
-  Future<void> onApproveOrDeclinePressed(String status) async {
+  Future<void> onApproveOrDeclinePressed(
+      String status, String confirmationMessage) async {
     await FirebaseFirestore.instance
         .collection('fightOffers')
         .doc(widget.offerId)
         .update({'status': status});
     if (context.mounted) {
-      Navigator.pushNamed(context, 'fighterHome');
       showSnackBar(
-          text: 'Offer status changed!', context: context, color: Colors.green);
+          text: confirmationMessage, context: context, color: Colors.green);
     }
   }
 
@@ -417,7 +417,8 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () =>
-                                          onApproveOrDeclinePressed('APPROVED'),
+                                          onApproveOrDeclinePressed('APPROVED',
+                                              'Offer approved successfully!'),
                                       child: const Text(
                                         'Approve',
                                         style: TextStyle(color: Colors.green),
@@ -694,7 +695,8 @@ void showNegotiationHistory(
       });
 }
 
-void showDeclineAlert(BuildContext context, Function onSubmit) {
+void showDeclineAlert(BuildContext context,
+    Future<void> Function(String status, String confirmationMessage) onSubmit) {
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -722,12 +724,9 @@ void showDeclineAlert(BuildContext context, Function onSubmit) {
                             )),
                         TextButton(
                             onPressed: () => {
-                                  onSubmit("DECLINED"),
+                                  onSubmit("DECLINED",
+                                      'Offer declined successfully'),
                                   Navigator.pushNamed(context, 'fighterHome'),
-                                  showSnackBar(
-                                      color: Colors.green,
-                                      text: 'Offer declined!',
-                                      context: context)
                                 },
                             child: const Text('Yes',
                                 style: TextStyle(color: Colors.red))),

@@ -174,9 +174,20 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     });
   }
 
+  Map<String, dynamic>? loggedInUserObject = {};
   @override
   void initState() {
     super.initState();
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser)
+        .get()
+        .then((value) => {
+              setState(() {
+                loggedInUserObject = value.data();
+              })
+            });
     pickerController = TextEditingController(
         text: ('${today.day}-${today.month}-${today.year}').toString());
 
@@ -290,16 +301,10 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         'weightClass': weight,
         'contractedChecked': contractedChecked,
       });
-      DocumentSnapshot<Map<String, dynamic>> loggedInUserObject =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(currentUser)
-              .get();
+
       await fightOffers.add(offer).then((value) => {
             value.update({
               'offerId': value.id,
-              'creator':
-                  '${loggedInUserObject['firstName']} ${loggedInUserObject['lastName']}'
             }),
             saveToFirebase(video, value.id),
             if (fighterNotFoundChecked) {createDynamicLink(value.id)}
@@ -340,7 +345,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'createdBy': currentUser,
       'fighterStatus': fighterStatus,
       'negotiationValues': negotiationValues,
-      'status': "PENDING"
+      'status': "PENDING",
+      'creator':
+          '${loggedInUserObject?['firstName']} ${loggedInUserObject?['lastName']}'
     };
 
     return Scaffold(
