@@ -41,6 +41,8 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
 
   Map<String, dynamic> dataForLikes = {};
 
+  Color statusColor = Colors.white;
+
   late Future _future;
   Future<Map<String, dynamic>?> getCurrentFighter() async {
     Map<String, dynamic>? result = await FirebaseFirestore.instance
@@ -178,8 +180,23 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                               videoController.initialize();
                         }
 
+                        if (snapshot.data['status'] == "DECLINED") {
+                          statusColor = Colors.red;
+                        } else if (snapshot.data['status'] == "APPROVED") {
+                          statusColor = Colors.green;
+                        } else {
+                          statusColor = Colors.orange;
+                        }
+
                         return Column(
                           children: [
+                            Text(
+                              snapshot.data['status'],
+                              style: TextStyle(color: statusColor),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
                             ContractSplit(
                                 creator: offer['creator'],
                                 opponent: offer['opponent'],

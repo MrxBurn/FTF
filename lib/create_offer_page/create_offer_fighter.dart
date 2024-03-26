@@ -300,6 +300,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         'fightDate': yearController.text,
         'weightClass': weight,
         'contractedChecked': contractedChecked,
+        'createdBy': currentUser,
       });
 
       await fightOffers.add(offer).then((value) => {

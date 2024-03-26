@@ -8,6 +8,7 @@ import 'package:ftf/reusableWidgets/date_picker.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/month_year_picker.dart';
+import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/styles/styles.dart';
 
 import 'package:ftf/utils/lists.dart';
@@ -58,9 +59,15 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
   bool buttonsVisible = false;
 
+  bool chatButtonVisible = false;
+
   bool dialogContractedChecked = false;
 
   Color negotiateInputColour = Colors.yellow;
+
+  bool isCurrentUserLastNegotiator = false;
+
+  Color statusColor = Colors.white;
 
   final double width = 170;
   final double height = 40;
@@ -93,6 +100,56 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
     negotiateOpponentValue.text = '0';
   }
 
+  void initializeData(data) {
+    if (data['calloutVideoURL'] != '') {
+      _videoController =
+          VideoPlayerController.networkUrl(Uri.parse(data['calloutVideoURL']));
+      _initializeVideoPlayerFuture = _videoController.initialize();
+    }
+    if (data['negotiationValues'].length == 1 &&
+        currentUser == data['createdBy']) {
+      buttonsVisible = false;
+    } else if (data['status'] != 'PENDING') {
+      buttonsVisible = false;
+    } else {
+      buttonsVisible = true;
+    }
+
+    if (currentUser != data['createdBy']) {
+      negotiateInputColour = Colors.red;
+    } else {
+      negotiateInputColour = Colors.yellow;
+    }
+
+    DateTime firebaseDate = data['offerExpiryDate'].toDate();
+
+    pickerController.text =
+        '${firebaseDate.day}-${firebaseDate.month}-${firebaseDate.year}';
+    yearController.text =
+        data['negotiationValues'].last['fightDate'].toString();
+
+    alertYearController.text = yearController.text;
+
+    initialCreatorValue.text =
+        data['negotiationValues'].last['creatorValue'].toString();
+
+    initialOpponentValue.text =
+        data['negotiationValues'].last['opponentValue'].toString();
+
+    messageController.text = data['message'];
+
+    if (data['status'] == "APPROVED") {
+      chatButtonVisible = true;
+    }
+
+    if (data['negotiationValues'].last['createdBy'] == currentUser) {
+      isCurrentUserLastNegotiator = true;
+    } else {
+      isCurrentUserLastNegotiator = false;
+    }
+  }
+
+  late Future _future;
   Future<Map<String, dynamic>> getDocument() async {
     DocumentSnapshot res = await FirebaseFirestore.instance
         .collection('fightOffers')
@@ -123,20 +180,28 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
       });
     }
 
+    initializeData(data);
+
     return res.data() as Map<String, dynamic>;
   }
 
   List updatedNegotiationValues = [];
 
-  Future<void> updateNegotiationValues(int creatorValue, int opponentValue,
-      String weight, String fightDate, bool contractedChecked) async {
+  Future<void> updateNegotiationValues(
+    int creatorValue,
+    int opponentValue,
+    String weight,
+    String fightDate,
+    bool contractedChecked,
+  ) async {
     updatedNegotiationValues.add({
       'creatorValue': creatorValue,
       'opponentValue': opponentValue,
       'createdAt': DateTime.now(),
       'fightDate': fightDate,
       'weightClass': weight,
-      'contractedChecked': contractedChecked
+      'contractedChecked': contractedChecked,
+      'createdBy': currentUser,
     });
     await FirebaseFirestore.instance
         .collection('fightOffers')
@@ -148,6 +213,9 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
 
   Future<void> onApproveOrDeclinePressed(
       String status, String confirmationMessage) async {
+    setState(() {
+      buttonsVisible = false;
+    });
     await FirebaseFirestore.instance
         .collection('fightOffers')
         .doc(widget.offerId)
@@ -159,309 +227,307 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder(
+        body: SingleChildScrollView(
+      child: Column(
+        children: [
+          LogoHeader(
+            backRequired: true,
+            onPressed: () => Navigator.pushNamed(context, 'fighterHome'),
+          ),
+          const Text(
+            'View offer',
+            style: headerStyle,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          FutureBuilder(
             future: getDocument(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if (data['calloutVideoURL'] != '') {
-                  _videoController = VideoPlayerController.networkUrl(
-                      Uri.parse(data['calloutVideoURL']));
-                  _initializeVideoPlayerFuture = _videoController.initialize();
-                }
-                if (snapshot.data['negotiationValues'].length == 1 &&
-                    currentUser == snapshot.data['createdBy']) {
-                  buttonsVisible = false;
-                } else if (snapshot.data['status'] != 'PENDING') {
-                  buttonsVisible = false;
+                if (snapshot.data['status'] == "DECLINED") {
+                  statusColor = Colors.red;
+                } else if (snapshot.data['status'] == "APPROVED") {
+                  statusColor = Colors.green;
                 } else {
-                  buttonsVisible = true;
+                  statusColor = Colors.orange;
                 }
-
-                if (currentUser != snapshot.data['createdBy']) {
-                  negotiateInputColour = Colors.red;
-                } else {
-                  negotiateInputColour = Colors.yellow;
-                }
-
-                DateTime firebaseDate = data['offerExpiryDate'].toDate();
-
-                pickerController.text =
-                    '${firebaseDate.day}-${firebaseDate.month}-${firebaseDate.year}';
-                yearController.text = snapshot
-                    .data['negotiationValues'].last['fightDate']
-                    .toString();
-
-                alertYearController.text = yearController.text;
-
-                initialCreatorValue.text = snapshot
-                    .data['negotiationValues'].last['creatorValue']
-                    .toString();
-
-                initialOpponentValue.text = snapshot
-                    .data['negotiationValues'].last['opponentValue']
-                    .toString();
-
-                messageController.text = snapshot.data['message'];
-
-                return SingleChildScrollView(
-                    child: Column(children: [
-                  LogoHeader(
-                    backRequired: true,
-                    onPressed: () =>
-                        Navigator.pushNamed(context, 'fighterHome'),
-                  ),
-                  const Text(
-                    'View offer',
-                    style: headerStyle,
+                return Column(children: [
+                  Container(
+                    width: 205,
+                    height: 68,
+                    decoration: BoxDecoration(
+                      color: const Color(lighterBlack),
+                      boxShadow: [containerShadowRed],
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        snapshot.data['opponent'],
+                        style: const TextStyle(fontSize: 28, color: Colors.red),
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     height: 16,
                   ),
-                  Column(children: [
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      width: 205,
-                      height: 68,
-                      decoration: BoxDecoration(
-                        color: const Color(lighterBlack),
-                        boxShadow: [containerShadowRed],
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                      ),
-                      child: Center(
-                        child: Text(
-                          snapshot.data['opponent'],
-                          style:
-                              const TextStyle(fontSize: 28, color: Colors.red),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    ContractSplit(
-                        creator: data['creator'],
-                        opponent: data['opponent'],
-                        title: 'Contract split - latest offer',
-                        readOnly: true,
-                        contractedChecked: snapshot.data['negotiationValues']
-                            .last['contractedChecked'],
-                        creatorValue: initialCreatorValue,
-                        onTickChanged: (value) => value,
-                        opponentValue: initialOpponentValue,
-                        onContractSplitChange: () {},
-                        onEditingComplete: () {}),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    snapshot.data['negotiationValues'].length > 1
-                        ? BlackButton(
-                            onPressed: () => showNegotiationHistory(
-                                context,
-                                snapshot.data['negotiationValues'].reversed
-                                    .toList(),
-                                data),
-                            text: 'Review negotiations ')
-                        : const SizedBox(),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    DropDownWidget(
+                  Text(
+                    snapshot.data['status'],
+                    style: TextStyle(color: statusColor),
+                  ),
+                  snapshot.data['status'] == "APPROVED"
+                      ? const Text(
+                          'Scroll down to chat',
+                          style: TextStyle(color: Colors.grey, fontSize: 10),
+                        )
+                      : const SizedBox(),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  ContractSplit(
+                      creator: data['creator'],
+                      opponent: data['opponent'],
+                      title: 'Contract split - latest offer',
+                      readOnly: true,
+                      contractedChecked: snapshot
+                          .data['negotiationValues'].last['contractedChecked'],
+                      creatorValue: initialCreatorValue,
+                      onTickChanged: (value) => value,
+                      opponentValue: initialOpponentValue,
+                      onContractSplitChange: () {},
+                      onEditingComplete: () {}),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  snapshot.data['negotiationValues'].length > 1
+                      ? BlackButton(
+                          onPressed: () => showNegotiationHistory(
+                              context,
+                              snapshot.data['negotiationValues'].reversed
+                                  .toList(),
+                              data),
+                          text: 'Review negotiations ')
+                      : const SizedBox(),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  DropDownWidget(
+                    disabled: true,
+                    changeParentValue: null,
+                    dropDownList: rematchClauseList,
+                    dropDownValue: data['rematchClause'],
+                    dropDownName: 'Rematch clause*',
+                  ),
+                  DropDownWidget(
                       disabled: true,
                       changeParentValue: null,
-                      dropDownList: rematchClauseList,
-                      dropDownValue: data['rematchClause'],
-                      dropDownName: 'Rematch clause*',
-                    ),
-                    DropDownWidget(
-                        disabled: true,
-                        changeParentValue: null,
-                        dropDownValue: data['fighterStatus'],
-                        dropDownList: fighterStatusList,
-                        dropDownName: 'Fighter status*'),
-                    DropDownWidget(
-                        disabled: true,
-                        changeParentValue: null,
-                        dropDownValue: snapshot
-                            .data['negotiationValues'].last['weightClass']
-                            .toString(),
-                        dropDownList: weightList,
-                        dropDownName: 'Weight class*'),
-                    YearPickerWidget(
-                      callback: (v) {},
+                      dropDownValue: data['fighterStatus'],
+                      dropDownList: fighterStatusList,
+                      dropDownName: 'Fighter status*'),
+                  DropDownWidget(
                       disabled: true,
-                      leadingText: 'Fight date*',
-                      controller: yearController,
-                    ),
-                    DatePicker(
-                      disabled: true,
-                      leadingText: 'Offer expiry date*',
-                      displayDate: pickerController,
-                      callback: (v) => {
-                        setState(() => pickerController.text =
-                            data['offerExpiryDate'].toDate())
-                      },
-                    ),
-                    snapshot.data['message'] != ''
-                        ? Padding(
-                            padding: paddingLRT,
-                            child: TextFormField(
-                              readOnly: true,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              controller: messageController,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 25.0, horizontal: 10.0),
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15))),
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.white)),
-                                labelStyle: TextStyle(color: Colors.grey),
-                              ),
+                      changeParentValue: null,
+                      dropDownValue: snapshot
+                          .data['negotiationValues'].last['weightClass']
+                          .toString(),
+                      dropDownList: weightList,
+                      dropDownName: 'Weight class*'),
+                  YearPickerWidget(
+                    callback: (v) {},
+                    disabled: true,
+                    leadingText: 'Fight date*',
+                    controller: yearController,
+                  ),
+                  DatePicker(
+                    disabled: true,
+                    leadingText: 'Offer expiry date*',
+                    displayDate: pickerController,
+                    callback: (v) => {
+                      setState(() => pickerController.text =
+                          data['offerExpiryDate'].toDate())
+                    },
+                  ),
+                  snapshot.data['message'] != ''
+                      ? Padding(
+                          padding: paddingLRT,
+                          child: TextFormField(
+                            readOnly: true,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            controller: messageController,
+                            decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 25.0, horizontal: 10.0),
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white)),
+                              labelStyle: TextStyle(color: Colors.grey),
                             ),
-                          )
-                        : const SizedBox(),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    data['calloutVideoURL'] != ''
-                        ? Padding(
-                            padding: const EdgeInsets.only(left: 24),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: BlackButton(
-                                width: width,
-                                height: height,
-                                fontSize: fontSize,
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          actions: [
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            FutureBuilder(
-                                              future:
-                                                  _initializeVideoPlayerFuture,
-                                              builder: (context, snapshot) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.done) {
-                                                  return AspectRatio(
-                                                    aspectRatio:
-                                                        _videoController
-                                                            .value.aspectRatio,
-                                                    child: VideoPlayer(
-                                                        _videoController),
-                                                  );
-                                                } else {
-                                                  return const SizedBox();
-                                                }
-                                              },
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pop(),
-                                                  child: const Text(
-                                                    'Cancel',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
+                          ),
+                        )
+                      : const SizedBox(),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  data['calloutVideoURL'] != ''
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 24),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: BlackButton(
+                              width: width,
+                              height: height,
+                              fontSize: fontSize,
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        actions: [
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          FutureBuilder(
+                                            future:
+                                                _initializeVideoPlayerFuture,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.done) {
+                                                return AspectRatio(
+                                                  aspectRatio: _videoController
+                                                      .value.aspectRatio,
+                                                  child: VideoPlayer(
+                                                      _videoController),
+                                                );
+                                              } else {
+                                                return const SizedBox();
+                                              }
+                                            },
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: const Text(
+                                                  'Cancel',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
                                                 ),
-                                                ElevatedButton.icon(
-                                                    onPressed: () {
-                                                      _videoController.play();
-                                                    },
-                                                    icon: const Icon(
-                                                      Icons.play_arrow,
-                                                      color: Colors.yellow,
-                                                    ),
-                                                    label: const Text(
-                                                      "Play",
-                                                      style: TextStyle(
-                                                          color: Colors.yellow),
-                                                    )),
-                                              ],
-                                            )
-                                          ],
-                                        );
-                                      });
-                                },
-                                text: 'Press to review video',
+                                              ),
+                                              ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    _videoController.play();
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.play_arrow,
+                                                    color: Colors.yellow,
+                                                  ),
+                                                  label: const Text(
+                                                    "Play",
+                                                    style: TextStyle(
+                                                        color: Colors.yellow),
+                                                  )),
+                                            ],
+                                          )
+                                        ],
+                                      );
+                                    });
+                              },
+                              text: 'Press to review video',
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                  buttonsVisible && !isCurrentUserLastNegotiator
+                      ? Column(
+                          children: [
+                            Padding(
+                              padding: paddingLRT,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () => onApproveOrDeclinePressed(
+                                        'APPROVED',
+                                        'Offer approved successfully!'),
+                                    child: const Text(
+                                      'Approve',
+                                      style: TextStyle(color: Colors.green),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () => showDeclineAlert(
+                                          context, onApproveOrDeclinePressed),
+                                      child: const Text(
+                                        'Decline',
+                                        style: TextStyle(color: Colors.red),
+                                      ))
+                                ],
                               ),
                             ),
-                          )
-                        : const SizedBox(),
-                    buttonsVisible
-                        ? Column(
-                            children: [
-                              Padding(
-                                padding: paddingLRT,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () =>
-                                          onApproveOrDeclinePressed('APPROVED',
-                                              'Offer approved successfully!'),
-                                      child: const Text(
-                                        'Approve',
-                                        style: TextStyle(color: Colors.green),
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                        onPressed: () => showDeclineAlert(
-                                            context, onApproveOrDeclinePressed),
-                                        child: const Text(
-                                          'Decline',
-                                          style: TextStyle(color: Colors.red),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              ElevatedButton(
-                                  onPressed: () => showAlerDialog(
-                                      context,
-                                      contractedChecked,
-                                      negotiateCreatorValue,
-                                      negotiateOpponentValue,
-                                      onContractSplitChange,
-                                      onEditingComplete,
-                                      (value) => onContractedTick(value),
-                                      updateNegotiationValues,
-                                      snapshot.data['negotiationValues']
-                                          .last['weightClass']
-                                          .toString(),
-                                      alertYearController,
-                                      negotiateInputColour),
-                                  child: const Text(
-                                    'Negotiate',
-                                    style: TextStyle(color: Colors.yellow),
-                                  ))
-                            ],
-                          )
-                        : const SizedBox()
-                  ])
-                ]));
+                            ElevatedButton(
+                                onPressed: () => showAlerDialog(
+                                    context,
+                                    contractedChecked,
+                                    negotiateCreatorValue,
+                                    negotiateOpponentValue,
+                                    onContractSplitChange,
+                                    onEditingComplete,
+                                    (value) => onContractedTick(value),
+                                    updateNegotiationValues,
+                                    snapshot.data['negotiationValues']
+                                        .last['weightClass']
+                                        .toString(),
+                                    alertYearController,
+                                    negotiateInputColour),
+                                child: const Text(
+                                  'Negotiate',
+                                  style: TextStyle(color: Colors.yellow),
+                                )),
+                          ],
+                        )
+                      : const SizedBox(),
+                  chatButtonVisible
+                      ? BlackRoundedButton(
+                          isLoading: false, onPressed: () {}, text: 'Chat')
+                      : const SizedBox(),
+                  isCurrentUserLastNegotiator &&
+                          snapshot.data['status'] == "PENDING"
+                      ? const Text(
+                          'Awaiting response from opponent',
+                          style: TextStyle(
+                            color: Colors.yellow,
+                            fontSize: 14,
+                          ),
+                        )
+                      : const SizedBox(),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ]);
               } else {
-                return const CircularProgressIndicator();
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
-            }));
+            },
+          ),
+        ],
+      ),
+    ));
   }
 }
 
