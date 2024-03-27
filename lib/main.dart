@@ -45,8 +45,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void onForegroundNotificationTap(NotificationResponse response) {
   List<String> payloadSplit = response.payload?.split(' ') ?? [];
 
-  print(payloadSplit);
-
   if (payloadSplit.contains('userId')) {
     navigatorKey.currentState?.push(
       MaterialPageRoute(

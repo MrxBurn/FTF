@@ -149,7 +149,6 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
     }
   }
 
-  late Future _future;
   Future<Map<String, dynamic>> getDocument() async {
     DocumentSnapshot res = await FirebaseFirestore.instance
         .collection('fightOffers')

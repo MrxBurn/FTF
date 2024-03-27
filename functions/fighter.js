@@ -10,10 +10,10 @@ const admin = require("firebase-admin");
 
 const sendNotification = async (data, title, body, offerId) => {
   const fighterData = await admin
-      .firestore()
-      .collection("users")
-      .doc(data.opponentId)
-      .get().then((res) => res.data());
+    .firestore()
+    .collection("users")
+    .doc(data.opponentId)
+    .get().then((res) => res.data());
 
   if (fighterData.deviceToken) {
     const notification = {
@@ -40,16 +40,16 @@ const sendNotification = async (data, title, body, offerId) => {
 
 const sendNotificationOnOfferStatusChange = async (data, title, body, offerId) => {
   const creatorData = await admin
-      .firestore()
-      .collection("users")
-      .doc(data.createdBy)
-      .get().then((res) => res.data());
+    .firestore()
+    .collection("users")
+    .doc(data.createdBy)
+    .get().then((res) => res.data());
 
   const opponentData = await admin
-      .firestore()
-      .collection("users")
-      .doc(data.opponentId)
-      .get().then((res) => res.data());
+    .firestore()
+    .collection("users")
+    .doc(data.opponentId)
+    .get().then((res) => res.data());
 
   if (creatorData.deviceToken) {
     const notification = {
@@ -93,6 +93,72 @@ const sendNotificationOnOfferStatusChange = async (data, title, body, offerId) =
   }
 };
 
+const sendNotificationOnNegotiationSent = async (data, offerId) => {
+  const lastNegotiation = data.negotiationValues.slice(-1)[0];
+
+  console.log(lastNegotiation.createdBy);
+
+  //check if creator negotiated
+  if (data.createdBy == lastNegotiation.createdBy) {
+    const fighterData = await admin
+      .firestore()
+      .collection("users")
+      .doc(data.opponentId)
+      .get().then((res) => res.data());
+
+    if (fighterData.deviceToken) {
+      const notification = {
+        token: fighterData.deviceToken,
+        notification:
+        {
+          title: `Negotiation received`,
+          body: `${data.creator} has sent you a negotiation`,
+        },
+        data: {
+          offerId: offerId,
+          type: "fighter",
+        },
+      };
+      try {
+        await admin.messaging().send(notification);
+
+      } catch (error) {
+        console.error("Error sending notification:", error);
+      }
+    }
+  }
+
+  if (data.opponentId == lastNegotiation.createdBy) {
+    const fighterData = await admin
+      .firestore()
+      .collection("users")
+      .doc(data.createdBy)
+      .get().then((res) => res.data());
+
+    if (fighterData.deviceToken) {
+      const notification = {
+        token: fighterData.deviceToken,
+        notification:
+        {
+          title: `Negotiation received`,
+          body: `${data.opponent} has sent you a negotiation`,
+        },
+        data: {
+          offerId: offerId,
+          type: "fighter",
+        },
+      };
+      try {
+        await admin.messaging().send(notification);
+        console.log(data);
+        console.log(`${data.creator} success`);
+      } catch (error) {
+        console.error("Error sending notification:", error);
+      }
+    }
+  }
+}
+
 
 exports.sendNotificationOnOfferCreated = functions.firestore.document("fightOffers/{offerId}").onCreate(async (snap, context) => {
   const data = snap.data();
@@ -108,7 +174,7 @@ exports.sendNotificationOnNegotiation = functions.firestore.document("fightOffer
 
 
   if (before.negotiationValues.length !== after.negotiationValues.length) {
-    sendNotification(change.after.data(), "Negotiation received", `${change.after.data().creator} has sent you a negotiation`, offerId);
+    sendNotificationOnNegotiationSent(change.after.data(), offerId);
   }
 });
 
