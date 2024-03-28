@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/chat/chat_page.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/contract_split.dart';
 import 'package:ftf/reusableWidgets/date_picker.dart';
@@ -501,7 +502,13 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                       : const SizedBox(),
                   chatButtonVisible
                       ? BlackRoundedButton(
-                          isLoading: false, onPressed: () {}, text: 'Chat')
+                          isLoading: false,
+                          onPressed: () =>
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ChatPage(
+                                        offerId: snapshot.data['offerId'],
+                                      ))),
+                          text: 'Chat')
                       : const SizedBox(),
                   isCurrentUserLastNegotiator &&
                           snapshot.data['status'] == "PENDING"

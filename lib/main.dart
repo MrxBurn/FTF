@@ -13,6 +13,7 @@ import 'package:ftf/authentication/forgot_passwrod.dart';
 import 'package:ftf/authentication/login.dart';
 import 'package:ftf/authentication/register_fan.dart';
 import 'package:ftf/authentication/register_fighter.dart';
+import 'package:ftf/chat/chat_page.dart';
 import 'package:ftf/create_offer_page/create_offer_fighter.dart';
 import 'package:ftf/create_offer_page/dynamic_link_summary.dart';
 import 'package:ftf/dashboard/dashboard_page.dart';
@@ -313,7 +314,8 @@ class _MyAppState extends State<MyApp> {
         'fanFightsOverview': (context) => const FanFightsOverview(),
         'fightersOverview': (context) => const FightersOverview(),
         'myFighters': (context) => const MyFollowedFighters(),
-        'forgotPassword': (context) => const ForgotPasswordPage()
+        'forgotPassword': (context) => const ForgotPasswordPage(),
+        'chatPage': (context) => const ChatPage()
       },
       localizationsDelegates: const [
         MonthYearPickerLocalizations.delegate,
