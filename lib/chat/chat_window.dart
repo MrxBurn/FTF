@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/chat/message_buble.dart';
+import 'package:ftf/chat/message_class.dart';
 import 'package:ftf/styles/styles.dart';
 
 class ChatWindow extends StatelessWidget {
@@ -24,15 +26,33 @@ class ChatWindow extends StatelessWidget {
         height: MediaQuery.of(context).size.height / 2,
         decoration: const BoxDecoration(
             color: Color(lighterBlack),
-            borderRadius: BorderRadius.all(Radius.circular(15))),
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(15), topLeft: Radius.circular(15))),
         child: StreamBuilder(
             stream: getMessages(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, idx) {
-                    return Container();
-                  });
+              if (snapshot.connectionState == ConnectionState.active) {
+                List<Message> messages = (snapshot.data?.docs ?? [])
+                    .map<Message>((e) => Message(
+                          senderName: e['senderName'],
+                          message: e['message'],
+                          senderId: e['senderId'],
+                        ))
+                    .toList();
+
+                return ListView.builder(
+                    itemCount: messages.length,
+                    itemBuilder: (context, idx) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: MessageBuble(messageObject: messages[idx]),
+                      );
+                    });
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
             }),
       ),
     );

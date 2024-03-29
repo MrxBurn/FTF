@@ -456,8 +456,8 @@ class _FighterViewState extends State<FighterView> {
               child: StreamBuilder(
                 stream: getFighterOffers(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    List sentFights = snapshot.data
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    List sentFights = snapshot.data.docs
                         .toList()
                         .where((element) =>
                             element['createdBy'] == widget.fighterId)

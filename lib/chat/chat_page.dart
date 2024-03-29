@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ftf/chat/chat_window.dart';
+import 'package:ftf/chat/type_bar.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 
 class ChatPage extends StatelessWidget {
@@ -14,7 +15,11 @@ class ChatPage extends StatelessWidget {
           child: Column(
         children: [
           LogoHeader(backRequired: true),
-          ChatWindow(offerId: offerId)
+          ChatWindow(offerId: offerId),
+          const TypeBar(),
+          const SizedBox(
+            height: 16,
+          ),
         ],
       )),
     );
