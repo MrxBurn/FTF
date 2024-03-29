@@ -11,18 +11,35 @@ class TypeBar extends StatefulWidget {
 class _TypeBarState extends State<TypeBar> {
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.only(left: 8.0, right: 8),
-      child: TextField(
-        decoration: InputDecoration(
-            hintText: 'Press to type',
-            border: OutlineInputBorder(
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8),
+      child: Stack(
+        children: [
+          TextField(
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.only(left: 10.0, top: -15.0, bottom: 15.0),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      width: 1.2, color: Colors.grey.withOpacity(0.5)),
+                  borderRadius: const BorderRadius.all(Radius.circular(5))),
+              focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.yellow),
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+              hintText: 'Press to type',
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(15),
                     bottomRight: Radius.circular(15)),
-                borderSide: BorderSide(
-                  color: Colors.red,
-                ))),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+                onPressed: () {}, icon: const Icon(Icons.arrow_circle_left)),
+          )
+        ],
       ),
     );
   }
