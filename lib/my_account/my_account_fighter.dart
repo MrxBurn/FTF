@@ -178,7 +178,7 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                           onTap: () => chooseUploadOption(
                               context: context, uploadFunction: getImage),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 32),
                         const Text(
                           'My account',
                           style: headerStyle,

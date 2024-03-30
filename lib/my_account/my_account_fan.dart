@@ -37,6 +37,9 @@ class _MyAccountFanState extends State<MyAccountFan> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(
+              height: 16,
+            ),
             LogoHeader(backRequired: true),
             FutureBuilder(
                 future: getUser(),

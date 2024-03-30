@@ -37,7 +37,11 @@ class _TypeBarState extends State<TypeBar> {
           Align(
             alignment: Alignment.centerRight,
             child: IconButton(
-                onPressed: () {}, icon: const Icon(Icons.arrow_circle_left)),
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.arrow_circle_right,
+                  color: Colors.yellow,
+                )),
           )
         ],
       ),

@@ -26,7 +26,7 @@ class CustomImageHeader extends StatelessWidget {
           padding: const EdgeInsets.only(top: 170.0),
           child: Center(
             child: CircleAvatar(
-                radius: 90,
+                radius: 70,
                 backgroundImage: networkImage == false
                     ? AssetImage(
                         imagePath,
@@ -46,7 +46,7 @@ class CustomImageHeader extends StatelessWidget {
             : const SizedBox(),
         onTap != null
             ? Padding(
-                padding: const EdgeInsets.only(top: 300.0),
+                padding: const EdgeInsets.only(top: 260.0),
                 child: Center(
                   child: TextButton(
                     style: const ButtonStyle(

@@ -24,7 +24,8 @@ class _LogoHeaderState extends State<LogoHeader> {
         Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 100.0),
-            child: SvgPicture.asset('assets/illustrations/logo.svg'),
+            child: SvgPicture.asset('assets/illustrations/logo.svg',
+                height: 220, width: 220),
           ),
         ),
         widget.backRequired == true
