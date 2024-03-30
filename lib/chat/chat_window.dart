@@ -42,7 +42,7 @@ class ChatWindow extends StatelessWidget {
 
                 return ListView.separated(
                     separatorBuilder: (context, index) => const SizedBox(
-                          height: 12,
+                          height: 16,
                         ),
                     itemCount: messages.length,
                     itemBuilder: (context, idx) {

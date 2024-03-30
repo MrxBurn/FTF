@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ftf/styles/styles.dart';
 
 class TypeBar extends StatefulWidget {
   const TypeBar({super.key});
@@ -22,10 +21,14 @@ class _TypeBarState extends State<TypeBar> {
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       width: 1.2, color: Colors.grey.withOpacity(0.5)),
-                  borderRadius: const BorderRadius.all(Radius.circular(5))),
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(5),
+                      bottomRight: Radius.circular(5))),
               focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.yellow),
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(5),
+                      bottomRight: Radius.circular(5))),
               hintText: 'Press to type',
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.only(

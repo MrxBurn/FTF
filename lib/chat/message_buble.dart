@@ -20,23 +20,28 @@ class MessageBuble extends StatelessWidget {
           : Alignment.centerLeft,
       child: Wrap(
         direction: Axis.vertical,
+        crossAxisAlignment: isMessageSentByCurrentUser
+            ? WrapCrossAlignment.end
+            : WrapCrossAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 5.0),
+            padding: const EdgeInsets.only(left: 5.0, right: 12),
             child: Text(
               messageObject.senderName ?? '',
+              textAlign: TextAlign.right,
               style: TextStyle(
-                  fontSize: 10,
-                  color:
-                      isMessageSentByCurrentUser ? Colors.yellow : Colors.red,
-                  fontWeight: FontWeight.bold),
+                fontSize: 10,
+                color: isMessageSentByCurrentUser ? Colors.yellow : Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(
             height: 6,
           ),
           Container(
-            width: MediaQuery.of(context).size.width - 32,
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width - 32),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(
                   Radius.circular(15),
