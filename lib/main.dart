@@ -315,7 +315,7 @@ class _MyAppState extends State<MyApp> {
         'fightersOverview': (context) => const FightersOverview(),
         'myFighters': (context) => const MyFollowedFighters(),
         'forgotPassword': (context) => const ForgotPasswordPage(),
-        'chatPage': (context) => const ChatPage()
+        'chatPage': (context) => ChatPage()
       },
       localizationsDelegates: const [
         MonthYearPickerLocalizations.delegate,

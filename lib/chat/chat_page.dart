@@ -5,9 +5,11 @@ import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({super.key, this.offerId});
+  ChatPage({super.key, this.offerId});
 
   final String? offerId;
+
+  final ScrollController listScrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,14 @@ class ChatPage extends StatelessWidget {
           const SizedBox(
             height: 16,
           ),
-          ChatWindow(offerId: offerId),
-          const TypeBar(),
+          ChatWindow(
+            offerId: offerId,
+            listScrollController: listScrollController,
+          ),
+          TypeBar(
+            offerId: offerId,
+            listScrollController: listScrollController,
+          ),
           const SizedBox(
             height: 16,
           ),

@@ -5,15 +5,18 @@ import 'package:ftf/chat/message_class.dart';
 import 'package:ftf/styles/styles.dart';
 
 class ChatWindow extends StatelessWidget {
-  const ChatWindow({super.key, required this.offerId});
+  const ChatWindow(
+      {super.key, required this.offerId, required this.listScrollController});
 
   final String? offerId;
+  final ScrollController listScrollController;
 
   Stream getMessages() {
     return FirebaseFirestore.instance
         .collection('fightOffers')
         .doc(offerId)
         .collection('messages')
+        .orderBy('sentTime')
         .snapshots();
   }
 
@@ -40,14 +43,18 @@ class ChatWindow extends StatelessWidget {
                         ))
                     .toList();
 
-                return ListView.separated(
-                    separatorBuilder: (context, index) => const SizedBox(
-                          height: 16,
-                        ),
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  listScrollController
+                      .jumpTo(listScrollController.position.maxScrollExtent);
+                });
+
+                return ListView.builder(
+                    controller: listScrollController,
                     itemCount: messages.length,
                     itemBuilder: (context, idx) {
                       return Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        padding: const EdgeInsets.only(
+                            left: 8.0, right: 8, bottom: 16),
                         child: MessageBuble(messageObject: messages[idx]),
                       );
                     });

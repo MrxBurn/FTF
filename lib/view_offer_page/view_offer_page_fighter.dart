@@ -569,24 +569,24 @@ void showAlerDialog(
                   creatorValue: negotiateCreatorValue,
                   onTickChanged: (value) => {
                     alertState(
-                      () => {
-                        contractedChecked = value,
-                        if (contractedChecked)
-                          {
-                            negotiateCreatorValue.text = '0',
-                            negotiateOpponentValue.text = '0'
-                          }
+                      () {
+                        contractedChecked = value;
+                        if (contractedChecked) {
+                          negotiateCreatorValue.text = '0';
+                          negotiateOpponentValue.text = '0';
+                        }
+                        ;
                       },
                     )
                   },
                   opponentValue: negotiateOpponentValue,
                   onContractSplitChange: (value) => {
-                    alertState(() => {
-                          negotiateCreatorValue.text = value,
-                          negotiateOpponentValue.text =
-                              (100 - int.parse(negotiateCreatorValue.text))
-                                  .toString()
-                        })
+                    alertState(() {
+                      negotiateCreatorValue.text = value;
+                      negotiateOpponentValue.text =
+                          (100 - int.parse(negotiateCreatorValue.text))
+                              .toString();
+                    })
                   },
                   onEditingComplete: () {},
                 ),
