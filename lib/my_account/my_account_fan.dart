@@ -122,7 +122,7 @@ class _MyAccountFanState extends State<MyAccountFan> {
                     .update({'deviceToken': FieldValue.delete()}),
                 FirebaseAuth.instance.signOut().then((value) =>
                     Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (ctx) => LoginPage()),
+                        MaterialPageRoute(builder: (ctx) => const LoginPage()),
                         (route) => false))
               },
               text: 'Logout',

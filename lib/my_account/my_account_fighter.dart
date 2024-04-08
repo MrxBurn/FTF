@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ftf/authentication/login.dart';
+import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/custom_image_header.dart';
 import 'package:ftf/reusableWidgets/dropdown_box.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -15,6 +16,7 @@ import 'package:ftf/reusableWidgets/upload_option.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
+import 'package:ftf/utils/snack_bar_no_context.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MyAccountFighter extends StatefulWidget {
@@ -135,13 +137,9 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
 
       await saveImage(this.image);
     } on PlatformException catch (e) {
-      if (context.mounted) {
-        showSnackBar(text: e.toString(), context: context);
-      }
+      showSnackBarNoContext(text: e.toString(), snackbarKey: snackbarKey);
     }
-    if (context.mounted) {
-      Navigator.pop(context);
-    }
+    navigatorKey.currentState?.pop();
   }
 
   @override
@@ -411,7 +409,7 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                                           .pushAndRemoveUntil(
                                               MaterialPageRoute(
                                                   builder: (ctx) =>
-                                                      LoginPage()),
+                                                      const LoginPage()),
                                               (route) => false))
                                 },
                                 text: 'Logout',

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/chat/chat_page.dart';
+import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/contract_split.dart';
 import 'package:ftf/reusableWidgets/date_picker.dart';
@@ -14,6 +15,7 @@ import 'package:ftf/styles/styles.dart';
 
 import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
+import 'package:ftf/utils/snack_bar_no_context.dart';
 import 'package:video_player/video_player.dart';
 
 class ViewOfferPage extends StatefulWidget {
@@ -221,8 +223,10 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
         .doc(widget.offerId)
         .update({'status': status});
     if (context.mounted) {
-      showSnackBar(
-          text: confirmationMessage, context: context, color: Colors.green);
+      showSnackBarNoContext(
+          text: confirmationMessage,
+          snackbarKey: snackbarKey,
+          color: Colors.green);
     }
   }
 

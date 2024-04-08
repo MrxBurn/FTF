@@ -19,7 +19,6 @@ import 'package:ftf/reusableWidgets/upload_option.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/classes.dart';
 import 'package:ftf/utils/lists.dart';
-import 'package:ftf/utils/snack_bar.dart';
 import 'package:ftf/utils/snack_bar_no_context.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
@@ -230,9 +229,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       showSnackBarNoContext(
           text: e.message.toString(), snackbarKey: snackbarKey);
     }
-    if (context.mounted) {
-      Navigator.pop(context);
-    }
+    navigatorKey.currentState?.pop();
   }
 
   saveToFirebase(File? video, String offerId) async {
@@ -278,10 +275,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     final dynamicLink =
         await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
 
-    if (context.mounted) {
-      Navigator.pushNamed(context, 'dynamicLinkSummary',
-          arguments: {'link': dynamicLink.toString()});
-    }
+    navigatorKey.currentState?.pushNamed('dynamicLinkSummary',
+        arguments: {'link': dynamicLink.toString()});
   }
 
   void createOffer(Object offer) async {
@@ -289,9 +284,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       isLoading = true;
     });
     if (searchValue.isEmpty && !fighterNotFoundChecked) {
-      showSnackBar(
+      showSnackBarNoContext(
           text: 'Please select fighter or tick fighter not found',
-          context: context,
+          snackbarKey: snackbarKey,
           duration: const Duration(seconds: 5));
     } else {
       negotiationValues.add({
@@ -312,13 +307,12 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
             if (fighterNotFoundChecked) {createDynamicLink(value.id)}
           });
 
-      if (context.mounted) {
-        Navigator.pushNamed(context, 'fighterHome');
-        showSnackBar(
-            text: 'Offer successfully created!',
-            context: context,
-            color: Colors.green);
-      }
+      navigatorKey.currentState?.pushNamed('fighterHome');
+      showSnackBarNoContext(
+          text: 'Offer successfully created!',
+          snackbarKey: snackbarKey,
+          color: Colors.green);
+
       setState(() {
         isLoading = false;
       });

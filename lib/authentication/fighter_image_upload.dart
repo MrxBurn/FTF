@@ -1,23 +1,21 @@
-// ignore_for_file: must_be_immutable
-
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/styles/styles.dart';
-import 'package:ftf/utils/snack_bar.dart';
+import 'package:ftf/utils/snack_bar_no_context.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FighterImageUpload extends StatefulWidget {
-  String? offerId;
+  final String? offerId;
 
-  FighterImageUpload({super.key, this.offerId});
+  const FighterImageUpload({super.key, this.offerId});
 
   @override
   State<FighterImageUpload> createState() => _FighterImageUploadState();
@@ -71,40 +69,38 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
     }
   }
 
-  //TODO: implement dispose to get rid of memory leak error
-
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     var uid = firebaseAuth.currentUser?.uid;
     fighterUsers.doc(uid).get().then((DocumentSnapshot doc) => {
           setState(() {
             firstName = doc['firstName'];
           })
         });
+  }
 
-    uploadImage(ImageSource source) async {
-      try {
-        var image = await ImagePicker().pickImage(source: source);
+  uploadImage(ImageSource source) async {
+    try {
+      var image = await ImagePicker().pickImage(source: source);
 
-        if (image == null) return;
+      if (image == null) return;
 
-        final imageTemporary = File(image.path);
+      final imageTemporary = File(image.path);
 
-        imageName = image.name;
+      imageName = image.name;
 
-        setState(() {
-          this.image = imageTemporary;
-        });
-      } on PlatformException catch (e) {
-        if (context.mounted) {
-          showSnackBar(text: e.toString(), context: context);
-        }
-      }
-      if (context.mounted) {
-        Navigator.pop(context);
-      }
+      setState(() {
+        this.image = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      showSnackBarNoContext(text: e.toString(), snackbarKey: snackbarKey);
     }
+    navigatorKey.currentState?.pop();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

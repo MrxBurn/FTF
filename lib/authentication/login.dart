@@ -29,27 +29,33 @@ class _LoginPageState extends State<LoginPage> {
 
   var doc = FirebaseFirestore.instance.collection('users');
 
-  void loginFighter(String email, String password) async {
+  Future<void> loginFighter(String email, String password) async {
     try {
       isLogingIn = true;
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) => {
-                doc.doc(value.user?.uid).get().then((value) async => {
-                      FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(value.id)
-                          .set({
-                        'deviceToken':
-                            await FirebaseMessaging.instance.getToken()
-                      }, SetOptions(merge: true)),
-                      if (value.get('route') == 'fighter')
-                        {
-                          Navigator.pushReplacementNamed(context, 'fighterHome')
-                        },
-                      if (value.get('route') == 'fan')
-                        {Navigator.pushReplacementNamed(context, 'fanHome')}
-                    })
+                doc.doc(value.user?.uid).get().then(
+                      (value) async => {
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(value.id)
+                            .set({
+                          'deviceToken':
+                              await FirebaseMessaging.instance.getToken()
+                        }, SetOptions(merge: true)),
+                        if (value.get('route') == 'fighter')
+                          {
+                            navigatorKey.currentState
+                                ?.pushReplacementNamed('fighterHome')
+                          },
+                        if (value.get('route') == 'fan')
+                          {
+                            navigatorKey.currentState
+                                ?.pushReplacementNamed('fanHome')
+                          },
+                      },
+                    ),
               });
       isLogingIn = false;
     } on FirebaseAuthException catch (e) {
