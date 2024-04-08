@@ -20,8 +20,6 @@ class _TypeBarState extends State<TypeBar> {
 
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
-  //TODO: Move arrow when text is bigger
-
   void onMessageSent() async {
     messageController.clear();
     FocusManager.instance.primaryFocus?.unfocus();
@@ -53,8 +51,6 @@ class _TypeBarState extends State<TypeBar> {
       child: Stack(
         children: [
           TextField(
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
             controller: messageController,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(

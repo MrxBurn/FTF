@@ -575,7 +575,6 @@ void showAlerDialog(
                           negotiateCreatorValue.text = '0';
                           negotiateOpponentValue.text = '0';
                         }
-                        ;
                       },
                     )
                   },

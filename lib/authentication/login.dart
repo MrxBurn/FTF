@@ -1,19 +1,18 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/authentication/account_type.dart';
+import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/general.dart';
-import 'package:ftf/utils/snack_bar.dart';
+import 'package:ftf/utils/snack_bar_no_context.dart';
 
 class LoginPage extends StatefulWidget {
-  String? offerId;
-  LoginPage({super.key, this.offerId});
+  final String? offerId;
+  const LoginPage({super.key, this.offerId});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -54,10 +53,9 @@ class _LoginPageState extends State<LoginPage> {
               });
       isLogingIn = false;
     } on FirebaseAuthException catch (e) {
-      if (context.mounted) {
-        isLogingIn = false;
-        showSnackBar(text: e.toString(), context: context);
-      }
+      isLogingIn = false;
+      showSnackBarNoContext(
+          text: e.message.toString(), snackbarKey: snackbarKey);
     }
   }
 

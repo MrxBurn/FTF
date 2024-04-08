@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/snack_bar.dart';
+import 'package:ftf/utils/snack_bar_no_context.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -30,9 +32,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         isLoading = false;
       });
     } on FirebaseAuthException catch (err) {
-      if (context.mounted) {
-        showSnackBar(text: err.message.toString(), context: context);
-      }
+      showSnackBarNoContext(
+          text: err.message.toString(), snackbarKey: snackbarKey);
+
       setState(() {
         isLoading = false;
       });

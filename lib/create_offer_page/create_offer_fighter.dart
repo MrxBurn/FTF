@@ -6,6 +6,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
 import 'package:ftf/reusableWidgets/contract_split.dart';
 import 'package:ftf/reusableWidgets/date_picker.dart';
@@ -19,6 +20,7 @@ import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/classes.dart';
 import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
+import 'package:ftf/utils/snack_bar_no_context.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
@@ -220,14 +222,13 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
         _videoController = VideoPlayerController.file(this.video!);
         _initializeVideoPlayerFuture = _videoController?.initialize();
       });
-      if (context.mounted) {
-        showSnackBar(
-            text: 'Video uploaded', context: context, color: Colors.green);
-      }
+      showSnackBarNoContext(
+          text: 'Video uploaded',
+          snackbarKey: snackbarKey,
+          color: Colors.green);
     } on PlatformException catch (e) {
-      if (context.mounted) {
-        showSnackBar(text: e.toString(), context: context);
-      }
+      showSnackBarNoContext(
+          text: e.message.toString(), snackbarKey: snackbarKey);
     }
     if (context.mounted) {
       Navigator.pop(context);

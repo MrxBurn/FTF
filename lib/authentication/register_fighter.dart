@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/authentication/fighter_image_upload.dart';
+import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/input_field_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -13,7 +14,7 @@ import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/lists.dart';
-import 'package:ftf/utils/snack_bar.dart';
+import 'package:ftf/utils/snack_bar_no_context.dart';
 
 class RegisterFighter extends StatefulWidget {
   String? offerId;
@@ -55,7 +56,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
 
   String route = '';
 
-  void registerFighter(
+  Future<void> registerFighter(
       String email,
       String password,
       String firstName,
@@ -96,18 +97,12 @@ class _RegisterFighterState extends State<RegisterFighter> {
       setState(() {
         isLoading = false;
       });
-
-      if (context.mounted) {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => FighterImageUpload(
-                  offerId: widget.offerId,
-                )));
-      }
     } on FirebaseAuthException catch (e) {
       String authenticationError = e.message.toString();
       if (context.mounted) {
         isLoading = false;
-        showSnackBar(text: authenticationError, context: context);
+        showSnackBarNoContext(
+            text: authenticationError, snackbarKey: snackbarKey);
       }
     }
     firstNameController.clear();
@@ -293,16 +288,25 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   if (_formKey.currentState!.validate() == true)
                     {
                       registerFighter(
-                          emailController.text,
-                          passwordController.text,
-                          firstNameController.text,
-                          lastNameController.text,
-                          nationalityController.text,
-                          fighterType,
-                          genderValue,
-                          weightValue,
-                          fighterStatusValue,
-                          bioController.text)
+                              emailController.text,
+                              passwordController.text,
+                              firstNameController.text,
+                              lastNameController.text,
+                              nationalityController.text,
+                              fighterType,
+                              genderValue,
+                              weightValue,
+                              fighterStatusValue,
+                              bioController.text)
+                          .then((value) => {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => FighterImageUpload(
+                                      offerId: widget.offerId,
+                                    ),
+                                  ),
+                                ),
+                              })
                     }
                 },
                 text: 'Register',

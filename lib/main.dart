@@ -38,6 +38,9 @@ import 'package:month_year_picker/month_year_picker.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+final GlobalKey<ScaffoldMessengerState> snackbarKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 const bool useEmulator = false;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -112,7 +115,6 @@ Future<void> main() async {
 
 //when app terminated
   FirebaseMessaging.instance.getInitialMessage().then((value) => {
-        print(value?.data),
         if (value != null &&
             value.notification != null &&
             value.data.containsKey('userId'))
@@ -153,7 +155,6 @@ Future<void> main() async {
 
 //app in background
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
-    print(event.notification);
     if (event.notification != null && event.data.containsKey('userId')) {
       navigatorKey.currentState?.push(
         MaterialPageRoute(
@@ -254,6 +255,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: snackbarKey,
       navigatorKey: navigatorKey,
       title: 'Flutter Demo',
       theme: ThemeData(
