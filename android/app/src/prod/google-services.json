@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "231884814167",
+    "project_id": "ftfdb-prod",
+    "storage_bucket": "ftfdb-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231884814167:android:316b69015eb9ab1ce0b012",
+        "android_client_info": {
+          "package_name": "com.ftf.ftf"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCx46lZLOPK5kKcR-zgOCCajqpXbDjEVSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -62,6 +62,18 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "env"
+    productFlavors {
+        dev {
+            dimension "env"
+            applicationId "com.ftf.ftf"
+        }
+        prod {
+            dimension "env"
+            applicationId "com.ftf.ftf"
+        }
+    }
 }
 
 flutter {

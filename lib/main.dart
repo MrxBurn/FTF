@@ -329,6 +329,7 @@ class _MyAppState extends State<MyApp> {
             .get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          print(currentUser);
           if (snapshot.hasData &&
               !snapshot.data!.exists &&
               currentUser == null) {
@@ -337,7 +338,7 @@ class _MyAppState extends State<MyApp> {
             );
           }
           if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.data!.get('route') == 'fighter' &&
+              snapshot.data?.get('route') == 'fighter' &&
               deepLink != null &&
               deepLink.toString().contains('offerId') &&
               currentUser != null) {
@@ -352,7 +353,7 @@ class _MyAppState extends State<MyApp> {
           }
           if (snapshot.connectionState == ConnectionState.done &&
               currentUser != null &&
-              snapshot.data!.get('route') == 'fighter') {
+              snapshot.data?.get('route') == 'fighter') {
             return const FighterHomePage();
           }
 
