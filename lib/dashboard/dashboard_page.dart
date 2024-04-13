@@ -188,7 +188,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       MostLikedOffers(
                         likedOfferList: mostLikedOffers,
                       ),
-                      MostDislikedOffers(dislikedOfferList: mostDislikedOffers)
+                      MostDislikedOffers(dislikedOfferList: mostDislikedOffers),
+                      const SizedBox(
+                        height: 12,
+                      ),
                     ],
                   );
                 } else {
