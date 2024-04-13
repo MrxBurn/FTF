@@ -329,7 +329,6 @@ class _MyAppState extends State<MyApp> {
             .get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          print(currentUser);
           if (snapshot.hasData &&
               !snapshot.data!.exists &&
               currentUser == null) {

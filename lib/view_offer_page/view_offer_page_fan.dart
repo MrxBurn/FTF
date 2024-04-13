@@ -76,6 +76,23 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
     _future = getCurrentFighter();
   }
 
+  void updateEngagementCount(bool shouldUpdateLike, offer) async {
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      var postRef = FirebaseFirestore.instance
+          .collection('fightOffers')
+          .doc(offer['offerId']);
+
+      DocumentSnapshot snapshot = await transaction.get(postRef);
+      Map<String, dynamic> fightOffer = snapshot.data() as Map<String, dynamic>;
+      if (shouldUpdateLike) {
+        transaction.update(postRef, {'likeCount': fightOffer['like'].length});
+      } else {
+        transaction
+            .update(postRef, {'dislikeCount': fightOffer['dislike'].length});
+      }
+    });
+  }
+
   void onLikePress(offer) async {
     if (likeText != "Liked") {
       await FirebaseFirestore.instance
@@ -84,8 +101,8 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
           .update({
         'like': FieldValue.arrayUnion([currentUser]),
         'dislike': FieldValue.arrayRemove([currentUser]),
-        'likeCount': offer['like'].length + 1
-      });
+      }).then((value) => updateEngagementCount(true, offer));
+
       setState(() {
         likeText = 'Liked';
         likeButtonColour = Colors.yellow;
@@ -100,8 +117,7 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
           .doc(offer['offerId'])
           .update({
         'like': FieldValue.arrayRemove([currentUser]),
-        'likeCount': offer['like'].length
-      });
+      }).then((value) => updateEngagementCount(true, offer));
 
       setState(() {
         //reset like button if necessary
@@ -119,8 +135,8 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
           .update({
         'like': FieldValue.arrayRemove([currentUser]),
         'dislike': FieldValue.arrayUnion([currentUser]),
-        'dislikeCount': offer['dislike'].length + 1
-      });
+        // 'dislikeCount': offer['dislike'].length + 1,
+      }).then((value) => updateEngagementCount(false, offer));
       setState(() {
         dislikeText = 'Disliked';
         dislikeButtonColour = Colors.red;
@@ -135,8 +151,7 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
           .doc(offer['offerId'])
           .update({
         'dislike': FieldValue.arrayRemove([currentUser]),
-        'dislikeCount': offer['dislike'].length
-      });
+      }).then((value) => updateEngagementCount(false, offer));
       setState(() {
         dislikeText = 'Dislike';
         dislikeButtonColour = Colors.white;
@@ -389,11 +404,8 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                           ],
                         );
                       } else {
-                        return const SizedBox(
-                          height: double.infinity,
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
                       }
                     }),
@@ -401,6 +413,7 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     BlackRoundedButton(
+                      isDisabled: dislikeText == 'Disliked',
                       onPressed: () => onLikePress(dataForLikes),
                       text: likeText,
                       textColour: likeButtonColour,
@@ -416,6 +429,7 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                       width: 12,
                     ),
                     BlackRoundedButton(
+                      isDisabled: likeText == 'Liked',
                       onPressed: () => onDislikePress(dataForLikes),
                       text: dislikeText,
                       textColour: dislikeButtonColour,
