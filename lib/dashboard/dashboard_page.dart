@@ -61,11 +61,8 @@ class _DashboardPageState extends State<DashboardPage> {
         .then((value) => value.docs.map((e) => e.data()));
 
     for (var element in result) {
-      totalLikes = element['like'].length;
-    }
-
-    for (var element in result) {
-      totalDislikes = element['dislike'].length;
+      totalLikes += element['likeCount'] as int;
+      totalDislikes += element['dislikeCount'] as int;
     }
   }
 
@@ -74,6 +71,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .collection('fightOffers')
         .where(Filter.or(Filter('createdBy', isEqualTo: currentUser),
             Filter('opponentId', isEqualTo: currentUser)))
+        .where('likeCount', isNotEqualTo: 0)
         .orderBy('likeCount', descending: true)
         .orderBy('offerExpiryDate', descending: true)
         .limit(3)
@@ -91,6 +89,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .collection('fightOffers')
         .where(Filter.or(Filter('createdBy', isEqualTo: currentUser),
             Filter('opponentId', isEqualTo: currentUser)))
+        .where('dislikeCount', isNotEqualTo: 0)
         .orderBy('dislikeCount', descending: true)
         .orderBy('offerExpiryDate', descending: true)
         .limit(3)
@@ -103,12 +102,19 @@ class _DashboardPageState extends State<DashboardPage> {
     return result;
   }
 
+  late Future _future;
   Future<void> future() async {
     await getTotalLikes();
     dreamOpponentsList = await getDreamOpponents();
     followersNumber = await getFollowers();
     mostLikedOffers = await getMostLikedOffers();
     mostDislikedOffers = await getMostDislikedOffers();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _future = future();
   }
 
   @override
@@ -125,7 +131,7 @@ class _DashboardPageState extends State<DashboardPage> {
             height: 16,
           ),
           FutureBuilder(
-              future: future(),
+              future: _future,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return Column(

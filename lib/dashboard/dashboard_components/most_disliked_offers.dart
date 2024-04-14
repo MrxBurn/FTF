@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ftf/fan_fights_overview/fights_overview_widgets/number_of_likes_card.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 
 class MostDislikedOffers extends StatelessWidget {
   MostDislikedOffers({super.key, required this.dislikedOfferList});
@@ -40,7 +41,7 @@ class MostDislikedOffers extends StatelessWidget {
                     width: 8,
                   ),
                   const Text(
-                    'Most disliked offers',
+                    'Most recent disliked offers',
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
@@ -71,86 +72,101 @@ class DislikedOfferList extends StatelessWidget {
           itemBuilder: (context, idx) {
             return SizedBox(
               width: 300,
-              child: Card(
-                  color: Colors.black,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        NumberOfLikes(
-                            height: 26,
-                            valueSize: 16,
-                            iconSize: 16,
-                            likes: dislikedOfferList[idx]['like'].length,
-                            dislikes: dislikedOfferList[idx]['dislike'].length),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    currentUser ==
-                                            dislikedOfferList[idx]['createdBy']
-                                        ? dislikedOfferList[idx]['creator']
-                                        : dislikedOfferList[idx]['opponent'],
-                                    style: const TextStyle(color: Colors.grey),
-                                  ),
-                                  Text(
-                                    currentUser ==
-                                            dislikedOfferList[idx]['createdBy']
-                                        ? dislikedOfferList[idx]
-                                                ['negotiationValues']
-                                            .last['creatorValue']
-                                            .toString()
-                                        : dislikedOfferList[idx]
-                                                ['negotiationValues']
-                                            .last['opponentValue']
-                                            .toString(),
-                                    style: const TextStyle(color: Colors.grey),
-                                  )
-                                ],
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ViewOfferPage(
+                          offerId: dislikedOfferList[idx]['offerId'],
+                        ))),
+                child: Card(
+                    color: Colors.black,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          NumberOfLikes(
+                              height: 26,
+                              valueSize: 16,
+                              iconSize: 16,
+                              likes: dislikedOfferList[idx]['like'].length,
+                              dislikes:
+                                  dislikedOfferList[idx]['dislike'].length),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      currentUser ==
+                                              dislikedOfferList[idx]
+                                                  ['createdBy']
+                                          ? dislikedOfferList[idx]['creator']
+                                          : dislikedOfferList[idx]['opponent'],
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                    ),
+                                    Text(
+                                      currentUser ==
+                                              dislikedOfferList[idx]
+                                                  ['createdBy']
+                                          ? dislikedOfferList[idx]
+                                                  ['negotiationValues']
+                                              .last['creatorValue']
+                                              .toString()
+                                          : dislikedOfferList[idx]
+                                                  ['negotiationValues']
+                                              .last['opponentValue']
+                                              .toString(),
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            const Text('%'),
-                            SizedBox(
-                              width: 100,
-                              child: Column(
-                                children: [
-                                  Text(
-                                    currentUser !=
-                                            dislikedOfferList[idx]['createdBy']
-                                        ? dislikedOfferList[idx]['creator']
-                                        : dislikedOfferList[idx]['opponent'],
-                                    style: const TextStyle(color: Colors.grey),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    currentUser !=
-                                            dislikedOfferList[idx]['createdBy']
-                                        ? dislikedOfferList[idx]
-                                                ['negotiationValues']
-                                            .last['creatorValue']
-                                            .toString()
-                                        : dislikedOfferList[idx]
-                                                ['negotiationValues']
-                                            .last['opponentValue']
-                                            .toString(),
-                                    style: const TextStyle(color: Colors.grey),
-                                    textAlign: TextAlign.center,
-                                  )
-                                ],
+                              const Text('%'),
+                              SizedBox(
+                                width: 100,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      currentUser !=
+                                              dislikedOfferList[idx]
+                                                  ['createdBy']
+                                          ? dislikedOfferList[idx]['creator']
+                                          : dislikedOfferList[idx]['opponent'],
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      currentUser !=
+                                              dislikedOfferList[idx]
+                                                  ['createdBy']
+                                          ? dislikedOfferList[idx]
+                                                  ['negotiationValues']
+                                              .last['creatorValue']
+                                              .toString()
+                                          : dislikedOfferList[idx]
+                                                  ['negotiationValues']
+                                              .last['opponentValue']
+                                              .toString(),
+                                      style:
+                                          const TextStyle(color: Colors.grey),
+                                      textAlign: TextAlign.center,
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
+              ),
             );
           }),
     );
