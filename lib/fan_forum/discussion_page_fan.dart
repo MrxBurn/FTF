@@ -71,6 +71,7 @@ class _DiscussionPageFanState extends State<DiscussionPageFan> {
         .collection('forumDiscussions')
         .doc(widget.firebaseCollection)
         .collection('comments')
+        .orderBy('createdAt', descending: true)
         .get()
         .then((value) => value.docs.map((e) => e.data()));
 
