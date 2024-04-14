@@ -7,46 +7,6 @@ import 'package:ftf/dashboard/dashboard_components/most_liked_offers.dart';
 import 'package:ftf/dashboard/dashboard_components/number_followers.dart';
 import 'package:ftf/dashboard/dashboard_components/offers_engagement.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
-import 'package:ftf/utils/general.dart';
-
-List opponentList = [
-  {
-    "image": imgPlaceholder,
-    'name': 'Alex Todea',
-    'fighterType': 'Heavyweight, Boxer'
-  },
-  {
-    "image": imgPlaceholder,
-    'name': 'George Stokes',
-    'fighterType': 'Bantamweight, MMA'
-  },
-  {
-    "image": imgPlaceholder,
-    'name': 'Mark Robson',
-    'fighterType': 'Lightweight, Boxer'
-  }
-];
-
-List likedOffersList = [
-  {
-    'creator': 'Alex Todea',
-    'creatorValue': '65',
-    'opponent': 'George Stokes',
-    'opponentValue': '35',
-  },
-  {
-    'creator': 'Alex Todea',
-    'creatorValue': '20',
-    'opponent': 'Michael Nillson',
-    'opponentValue': '80',
-  },
-  {
-    'creator': 'Alex Todea',
-    'creatorValue': '30',
-    'opponent': 'Karl Grey',
-    'opponentValue': '70',
-  },
-];
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
