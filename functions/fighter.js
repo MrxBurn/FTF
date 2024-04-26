@@ -189,3 +189,93 @@ exports.sendNotificationOnApproveCreator = functions.firestore.document("fightOf
     sendNotificationOnOfferStatusChange(change.after.data(), "Offer declined", `One of your offers has been declined`, offerId);
   }
 });
+
+// *********************
+// *********************
+//  FIGHTER NOTIFICATION
+//  WHEN MESSAGE IS SENT/RECEIVED
+// *********************
+// *********************
+
+const sendNotificationOnMessageSent = async (messageData, offerId) => {
+
+  console.log(offerId);
+
+  //get offer
+  const offer = await admin
+  .firestore()
+  .collection("fightOffers")
+  .doc(offerId)
+  .get().then((res) => res.data());
+
+
+  //if sender is the creator
+  //then send a message to opponent
+  if(messageData.senderId == offer.createdBy)
+  {
+
+    const fighterData = await admin
+    .firestore()
+    .collection("users")
+    .doc(offer.opponentId)
+    .get().then((res) => res.data());
+
+    if (fighterData.deviceToken) {
+      const notification = {
+        token: fighterData.deviceToken,
+        notification:
+        {
+          title: `New message from ${offer.opponent}`,
+          body: `${messageData.message}`,
+        },
+        data: {
+          offerId: offerId,
+        },
+      };
+      try {
+        await admin.messaging().send(notification);
+      } catch (error) {
+        console.error("Error sending notification:", error);
+      }
+    }
+  }
+   //if sender is the opponent
+  //then send a message to creator
+  if(messageData.senderId == offer.opponentId)
+  {
+
+    const fighterData = await admin
+    .firestore()
+    .collection("users")
+    .doc(offer.createdBy)
+    .get().then((res) => res.data());
+
+    if (fighterData.deviceToken) {
+      const notification = {
+        token: fighterData.deviceToken,
+        notification:
+        {
+          title: `New message from ${offer.opponent}`,
+          body: `${messageData.message}`,
+        },
+        data: {
+          offerId: offerId,
+        },
+      };
+      try {
+        await admin.messaging().send(notification);
+      } catch (error) {
+        console.error("Error sending notification:", error);
+      }
+    }
+  }
+}
+
+
+exports.sendNotificationOnMessageSent = functions.firestore.document("fightOffers/{offerId}/messages/{messageId}").onCreate(async (snap, context) => {
+  const offerId = context.params.offerId;
+  if(offerId)
+  {
+    await sendNotificationOnMessageSent(snap.data(), offerId);
+  }
+})

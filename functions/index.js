@@ -14,3 +14,4 @@ exports.FANSendNotificationToFanOfferStatusChanged = fan.sendNotificationToFanOf
 exports.FIGHTERSendNotificationOnOfferCreated = fighter.sendNotificationOnOfferCreated;
 exports.FIGHTERSendNotificationOnNegotiation = fighter.sendNotificationOnNegotiation;
 exports.FIGHTERSendNotificationOnApproveCreator = fighter.sendNotificationOnApproveCreator;
+exports.FIGHTERSendNotificationOnMessageSent = fighter.sendNotificationOnMessageSent;
