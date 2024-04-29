@@ -198,27 +198,24 @@ exports.sendNotificationOnApproveCreator = functions.firestore.document("fightOf
 // *********************
 
 const sendNotificationOnMessageSent = async (messageData, offerId) => {
-
   console.log(offerId);
 
-  //get offer
+  // get offer
   const offer = await admin
-  .firestore()
-  .collection("fightOffers")
-  .doc(offerId)
-  .get().then((res) => res.data());
+      .firestore()
+      .collection("fightOffers")
+      .doc(offerId)
+      .get().then((res) => res.data());
 
 
-  //if sender is the creator
-  //then send a message to opponent
-  if(messageData.senderId == offer.createdBy)
-  {
-
+  // if sender is the creator
+  // then send a message to opponent
+  if (messageData.senderId == offer.createdBy) {
     const fighterData = await admin
-    .firestore()
-    .collection("users")
-    .doc(offer.opponentId)
-    .get().then((res) => res.data());
+        .firestore()
+        .collection("users")
+        .doc(offer.opponentId)
+        .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
@@ -230,6 +227,7 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
         },
         data: {
           offerId: offerId,
+          type: "fighter",
         },
       };
       try {
@@ -239,16 +237,14 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
       }
     }
   }
-   //if sender is the opponent
-  //then send a message to creator
-  if(messageData.senderId == offer.opponentId)
-  {
-
+  // if sender is the opponent
+  // then send a message to creator
+  if (messageData.senderId == offer.opponentId) {
     const fighterData = await admin
-    .firestore()
-    .collection("users")
-    .doc(offer.createdBy)
-    .get().then((res) => res.data());
+        .firestore()
+        .collection("users")
+        .doc(offer.createdBy)
+        .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
@@ -260,6 +256,7 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
         },
         data: {
           offerId: offerId,
+          type: "fighter",
         },
       };
       try {
@@ -269,13 +266,15 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
       }
     }
   }
-}
+};
 
 
-exports.sendNotificationOnMessageSent = functions.firestore.document("fightOffers/{offerId}/messages/{messageId}").onCreate(async (snap, context) => {
-  const offerId = context.params.offerId;
-  if(offerId)
-  {
-    await sendNotificationOnMessageSent(snap.data(), offerId);
-  }
-})
+exports.sendNotificationOnMessageSent = functions.
+    firestore
+    .document("fightOffers/{offerId}/messages/{messageId}")
+    .onCreate(async (snap, context) => {
+      const offerId = context.params.offerId;
+      if (offerId) {
+        await sendNotificationOnMessageSent(snap.data(), offerId);
+      }
+    });
