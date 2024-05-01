@@ -10,10 +10,10 @@ const admin = require("firebase-admin");
 
 const sendNotification = async (data, title, body, offerId) => {
   const fighterData = await admin
-    .firestore()
-    .collection("users")
-    .doc(data.opponentId)
-    .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(data.opponentId)
+      .get().then((res) => res.data());
 
   if (fighterData.deviceToken) {
     const notification = {
@@ -40,16 +40,16 @@ const sendNotification = async (data, title, body, offerId) => {
 
 const sendNotificationOnOfferStatusChange = async (data, title, body, offerId) => {
   const creatorData = await admin
-    .firestore()
-    .collection("users")
-    .doc(data.createdBy)
-    .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(data.createdBy)
+      .get().then((res) => res.data());
 
   const opponentData = await admin
-    .firestore()
-    .collection("users")
-    .doc(data.opponentId)
-    .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(data.opponentId)
+      .get().then((res) => res.data());
 
   if (creatorData.deviceToken) {
     const notification = {
@@ -101,10 +101,10 @@ const sendNotificationOnNegotiationSent = async (data, offerId) => {
   // check if creator negotiated
   if (data.createdBy == lastNegotiation.createdBy) {
     const fighterData = await admin
-      .firestore()
-      .collection("users")
-      .doc(data.opponentId)
-      .get().then((res) => res.data());
+        .firestore()
+        .collection("users")
+        .doc(data.opponentId)
+        .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
@@ -129,10 +129,10 @@ const sendNotificationOnNegotiationSent = async (data, offerId) => {
 
   if (data.opponentId == lastNegotiation.createdBy) {
     const fighterData = await admin
-      .firestore()
-      .collection("users")
-      .doc(data.createdBy)
-      .get().then((res) => res.data());
+        .firestore()
+        .collection("users")
+        .doc(data.createdBy)
+        .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
@@ -202,20 +202,20 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
 
   // get offer
   const offer = await admin
-    .firestore()
-    .collection("fightOffers")
-    .doc(offerId)
-    .get().then((res) => res.data());
+      .firestore()
+      .collection("fightOffers")
+      .doc(offerId)
+      .get().then((res) => res.data());
 
 
   // if sender is the creator
   // then send a message to opponent
   if (messageData.senderId == offer.createdBy) {
     const fighterData = await admin
-      .firestore()
-      .collection("users")
-      .doc(offer.opponentId)
-      .get().then((res) => res.data());
+        .firestore()
+        .collection("users")
+        .doc(offer.opponentId)
+        .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
@@ -241,10 +241,10 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
   // then send a message to creator
   if (messageData.senderId == offer.opponentId) {
     const fighterData = await admin
-      .firestore()
-      .collection("users")
-      .doc(offer.createdBy)
-      .get().then((res) => res.data());
+        .firestore()
+        .collection("users")
+        .doc(offer.createdBy)
+        .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
@@ -270,11 +270,11 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
 
 
 exports.sendNotificationOnMessageSent = functions.
-  firestore
-  .document("fightOffers/{offerId}/messages/{messageId}")
-  .onCreate(async (snap, context) => {
-    const offerId = context.params.offerId;
-    if (offerId) {
-      await sendNotificationOnMessageSent(snap.data(), offerId);
-    }
-  });
+    firestore
+    .document("fightOffers/{offerId}/messages/{messageId}")
+    .onCreate(async (snap, context) => {
+      const offerId = context.params.offerId;
+      if (offerId) {
+        await sendNotificationOnMessageSent(snap.data(), offerId);
+      }
+    });
