@@ -61,9 +61,10 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
+  remove_alpha_ios: true
   image_path: "assets/illustrations/ftf_icon.png"
-  adaptive_icon_foreground: "assets/illustrations/ftf_logo_foreground.png"
-  adaptive_icon_background: "assets/illustrations/ftf_logo_foreground.png"
+  # adaptive_icon_foreground: "assets/illustrations/ftf_logo_foreground.png"
+  # adaptive_icon_background: "assets/illustrations/ftf_logo_foreground.png"
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

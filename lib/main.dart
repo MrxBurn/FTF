@@ -41,7 +41,7 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
 
-const bool useEmulator = false;
+const bool useEmulator = true;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -200,8 +200,14 @@ Future<void> main() async {
         notification.title,
         notification.body,
         NotificationDetails(
-          android: AndroidNotificationDetails(channel.id, channel.name,
-              icon: android.smallIcon, playSound: true),
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            playSound: true,
+            icon: '@drawable/ftf_icon',
+            color: Colors.black,
+            colorized: true,
+          ),
         ),
         payload: constructedPayload,
       );
@@ -254,6 +260,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.instance.getToken().then((value) {
+      String? token = value;
+
+      print(token);
+    });
     return MaterialApp(
       scaffoldMessengerKey: snackbarKey,
       navigatorKey: navigatorKey,
@@ -349,7 +360,7 @@ class _MyAppState extends State<MyApp> {
           }
           if (snapshot.connectionState == ConnectionState.done &&
               currentUser != null &&
-              snapshot.data!.get('route') == 'fan') {
+              snapshot.data?.get('route') == 'fan') {
             return const FanHomePage();
           }
           if (snapshot.connectionState == ConnectionState.done &&
