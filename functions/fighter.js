@@ -10,10 +10,10 @@ const admin = require("firebase-admin");
 
 const sendNotification = async (data, title, body, offerId) => {
   const fighterData = await admin
-      .firestore()
-      .collection("users")
-      .doc(data.opponentId)
-      .get().then((res) => res.data());
+    .firestore()
+    .collection("users")
+    .doc(data.opponentId)
+    .get().then((res) => res.data());
 
   if (fighterData.deviceToken) {
     const notification = {
@@ -40,16 +40,16 @@ const sendNotification = async (data, title, body, offerId) => {
 
 const sendNotificationOnOfferStatusChange = async (data, title, body, offerId) => {
   const creatorData = await admin
-      .firestore()
-      .collection("users")
-      .doc(data.createdBy)
-      .get().then((res) => res.data());
+    .firestore()
+    .collection("users")
+    .doc(data.createdBy)
+    .get().then((res) => res.data());
 
   const opponentData = await admin
-      .firestore()
-      .collection("users")
-      .doc(data.opponentId)
-      .get().then((res) => res.data());
+    .firestore()
+    .collection("users")
+    .doc(data.opponentId)
+    .get().then((res) => res.data());
 
   if (creatorData.deviceToken) {
     const notification = {
@@ -101,18 +101,18 @@ const sendNotificationOnNegotiationSent = async (data, offerId) => {
   // check if creator negotiated
   if (data.createdBy == lastNegotiation.createdBy) {
     const fighterData = await admin
-        .firestore()
-        .collection("users")
-        .doc(data.opponentId)
-        .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(data.opponentId)
+      .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
         token: fighterData.deviceToken,
         notification:
         {
-          title: `Negotiation received`,
-          body: `${data.creator} has sent you a negotiation`,
+          title: `Negotiation Alert`,
+          body: `Finalize the details of your next fight`,
         },
         data: {
           offerId: offerId,
@@ -129,18 +129,18 @@ const sendNotificationOnNegotiationSent = async (data, offerId) => {
 
   if (data.opponentId == lastNegotiation.createdBy) {
     const fighterData = await admin
-        .firestore()
-        .collection("users")
-        .doc(data.createdBy)
-        .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(data.createdBy)
+      .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
         token: fighterData.deviceToken,
         notification:
         {
-          title: `Negotiation received`,
-          body: `${data.opponent} has sent you a negotiation`,
+          title: `Negotiation Alert`,
+          body: `Finalize the details of your next fight`,
         },
         data: {
           offerId: offerId,
@@ -163,7 +163,7 @@ exports.sendNotificationOnOfferCreated = functions.firestore.document("fightOffe
   const data = snap.data();
   const offerId = context.params.offerId;
 
-  sendNotification(data, "Offer received", `${data.creator} has sent you an offer`, offerId);
+  sendNotification(data, "New Fight Offer", `You've received a new offer`, offerId);
 });
 
 exports.sendNotificationOnNegotiation = functions.firestore.document("fightOffers/{offerId}").onUpdate(async (change, context) => {
@@ -202,20 +202,20 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
 
   // get offer
   const offer = await admin
-      .firestore()
-      .collection("fightOffers")
-      .doc(offerId)
-      .get().then((res) => res.data());
+    .firestore()
+    .collection("fightOffers")
+    .doc(offerId)
+    .get().then((res) => res.data());
 
 
   // if sender is the creator
   // then send a message to opponent
   if (messageData.senderId == offer.createdBy) {
     const fighterData = await admin
-        .firestore()
-        .collection("users")
-        .doc(offer.opponentId)
-        .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(offer.opponentId)
+      .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
@@ -241,10 +241,10 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
   // then send a message to creator
   if (messageData.senderId == offer.opponentId) {
     const fighterData = await admin
-        .firestore()
-        .collection("users")
-        .doc(offer.createdBy)
-        .get().then((res) => res.data());
+      .firestore()
+      .collection("users")
+      .doc(offer.createdBy)
+      .get().then((res) => res.data());
 
     if (fighterData.deviceToken) {
       const notification = {
@@ -270,11 +270,11 @@ const sendNotificationOnMessageSent = async (messageData, offerId) => {
 
 
 exports.sendNotificationOnMessageSent = functions.
-    firestore
-    .document("fightOffers/{offerId}/messages/{messageId}")
-    .onCreate(async (snap, context) => {
-      const offerId = context.params.offerId;
-      if (offerId) {
-        await sendNotificationOnMessageSent(snap.data(), offerId);
-      }
-    });
+  firestore
+  .document("fightOffers/{offerId}/messages/{messageId}")
+  .onCreate(async (snap, context) => {
+    const offerId = context.params.offerId;
+    if (offerId) {
+      await sendNotificationOnMessageSent(snap.data(), offerId);
+    }
+  });

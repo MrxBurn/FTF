@@ -48,22 +48,40 @@ class ChatWindow extends StatelessWidget {
                       .jumpTo(listScrollController.position.maxScrollExtent);
                 });
 
-                return ListView.builder(
-                    controller: listScrollController,
-                    itemCount: messages.length,
-                    itemBuilder: (context, idx) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            left: 8.0, right: 8, bottom: 16),
-                        child: MessageBuble(messageObject: messages[idx]),
-                      );
-                    });
+                return messages.length < 1
+                    ? PlaceholderText()
+                    : ListView.builder(
+                        controller: listScrollController,
+                        itemCount: messages.length,
+                        itemBuilder: (context, idx) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 8, bottom: 16),
+                            child: MessageBuble(messageObject: messages[idx]),
+                          );
+                        });
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
             }),
+      ),
+    );
+  }
+}
+
+class PlaceholderText extends StatelessWidget {
+  const PlaceholderText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text(
+        'This private chat feature is exclusively designed for fighters and their teams to discuss the finer details of their potential matchups in a secure environment. Here, you can finalize agreements on market share prices, venue hire, promotional responsibilities, fight logistics, and more, in private. Feel free to engage with your opponent to ensure all aspects of your upcoming fight are addressed and agreed upon.',
+        style: TextStyle(fontSize: 10, color: Colors.grey),
+        textAlign: TextAlign.center,
       ),
     );
   }

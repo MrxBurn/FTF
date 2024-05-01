@@ -512,7 +512,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                   builder: (context) => ChatPage(
                                         offerId: snapshot.data['offerId'],
                                       ))),
-                          text: 'Chat')
+                          text: 'Secure Negotiation Chat')
                       : const SizedBox(),
                   isCurrentUserLastNegotiator &&
                           snapshot.data['status'] == "PENDING"

@@ -110,5 +110,34 @@ List threads = [
             'https://boxinghighs.com/blogs/news/how-to-promote-yourself-as-an-upcoming-boxer#:~:text=Promoting%20yourself%20as%20an%20upcoming,and%20a%20strong%20support%20team.'
       },
     ]
-  }
+  },
+  // {
+  //   'collection': 'sparring',
+  //   'title': 'Good Sparring Options',
+  //   'imagePath': 'assets/illustrations/good_sparring.jpg',
+  //   'description':
+  //       'Share insights and recommendations for finding sparring opportunities during training camps or when traveling for fights. Discuss strategies for networking with other fighters and coaches to arrange productive sparring sessions.',
+  //   'subTitle': 'Boost Your Visibility',
+  //   'body':
+  //       "Engage in conversations on self-promotion, branding, and dynamic marketing strategies. Delve into the art of leveraging media effectively to amplify visibility and foster stronger connections with your fan base. Click the 'Chat forum' for valuable insights and practical tips from fighters at different levels.",
+  //   'links': [
+  //     {
+  //       'name': 'Using Social Media to Build Your Brand',
+  //       'url': 'https://www.youtube.com/watch?v=noVToUCCUXk'
+  //     },
+  //     {
+  //       'name': '10 Qualities of a Great Promoter',
+  //       'url': 'https://www.youtube.com/watch?v=mC7UMRzUc1g'
+  //     },
+  //     {
+  //       'name': 'How Boxers can Instantly Make More Money in Boxing',
+  //       'url': 'https://www.youtube.com/watch?v=7jtW30uKPIk'
+  //     },
+  //     {
+  //       'name': 'How to Promote Yourself as an Upcoming Fighter',
+  //       'url':
+  //           'https://boxinghighs.com/blogs/news/how-to-promote-yourself-as-an-upcoming-boxer#:~:text=Promoting%20yourself%20as%20an%20upcoming,and%20a%20strong%20support%20team.'
+  //     },
+  //   ]
+  // }
 ];
