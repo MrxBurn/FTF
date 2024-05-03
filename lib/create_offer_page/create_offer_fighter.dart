@@ -89,6 +89,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
 
   List negotiationValues = [];
 
+  String flavor = String.fromEnvironment('app.flavor');
+
   Future<void> getData() async {
     queriedList.clear();
     // Get docs from collection reference
@@ -266,7 +268,9 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       link: Uri.parse(
           "https://fightertofighter.wixsite.com/ftf-site?offerId=$offerId"),
 
-      uriPrefix: "https://f2foffer.page.link",
+      uriPrefix: appFlavor == 'dev'
+          ? "https://f2foffer.page.link"
+          : "https://f2fofferProd.page.link",
       androidParameters: AndroidParameters(
           packageName: "com.ftf.ftf", fallbackUrl: fallbackURL),
       // iosParameters: const IOSParameters(bundleId: "com.example.app.ios"),
@@ -345,6 +349,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'creator':
           '${loggedInUserObject?['firstName']} ${loggedInUserObject?['lastName']}'
     };
+
+    print(appFlavor);
 
     return Scaffold(
       body: SingleChildScrollView(

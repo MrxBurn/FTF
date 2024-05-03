@@ -50,6 +50,10 @@
                     android:host="f2foffer.page.link"
                     android:scheme="https"
                     android:pathPattern=".*" />
+                <data
+                    android:host="f2fofferProd.page.link"
+                    android:scheme="https"
+                    android:pathPattern=".*" />
                     
                     
             </intent-filter>
