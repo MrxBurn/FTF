@@ -268,7 +268,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       scaffoldMessengerKey: snackbarKey,
       navigatorKey: navigatorKey,
-      title: 'Flutter Demo',
+      title: 'FTF',
       theme: ThemeData(
         progressIndicatorTheme:
             ProgressIndicatorThemeData(color: Colors.yellow),

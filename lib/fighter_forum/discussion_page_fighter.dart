@@ -104,26 +104,26 @@ class _DiscussionPageFighterState extends State<DiscussionPageFighter> {
           padding: paddingLRT,
           child: Column(
             children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  widget.subTitle,
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                widget.body,
+                style: const TextStyle(fontSize: 14),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
               widget.links.isNotEmpty
                   ? Column(
                       children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            widget.subTitle,
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          widget.body,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                        const SizedBox(
-                          height: 24,
-                        ),
                         const Align(
                           alignment: Alignment.topLeft,
                           child: Text(
@@ -156,7 +156,7 @@ class _DiscussionPageFighterState extends State<DiscussionPageFighter> {
                         }).toList()),
                       ],
                     )
-                  : const SizedBox(),
+                  : SizedBox(),
               const SizedBox(
                 height: 16,
               ),
