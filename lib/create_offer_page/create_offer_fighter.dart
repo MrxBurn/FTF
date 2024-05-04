@@ -350,8 +350,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
           '${loggedInUserObject?['firstName']} ${loggedInUserObject?['lastName']}'
     };
 
-    print(appFlavor);
-
     return Scaffold(
       body: SingleChildScrollView(
         controller: scrollController,
