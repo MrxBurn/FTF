@@ -119,166 +119,151 @@ class _FighterViewState extends State<FighterView> {
                         style: headerStyle,
                       ),
                       Padding(
-                          padding: paddingLRT,
+                        padding: paddingLRT,
+                        child: Container(
+                          height: 170,
+                          decoration: BoxDecoration(
+                              boxShadow: [containerShadowWhite],
+                              color: const Color(lighterBlack)),
                           child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 170,
-                                  decoration: BoxDecoration(
-                                      boxShadow: [containerShadowWhite],
-                                      color: const Color(lighterBlack)),
-                                  child: Column(children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: GridView(
-                                            gridDelegate:
-                                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                                              maxCrossAxisExtent: 150.0,
-                                            ),
-                                            shrinkWrap: true,
-                                            padding: const EdgeInsets.only(
-                                                left: 8, top: 16),
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Weight class:',
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                  Text(
-                                                    'Type:',
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                  Text(
-                                                    'Status:',
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                  Text(
-                                                    'Gender:',
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                  Text(
-                                                    'Nationality:',
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    fighter['weightClass'],
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                  Text(
-                                                    fighter['fighterType'],
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                  Text(
-                                                    fighter['fighterStatus'],
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                  Text(
-                                                    fighter['gender'],
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                  Text(
-                                                    fighter['nationality'],
-                                                    style:
-                                                        fighterDescriptionStyle,
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 8.0, right: 6, left: 50),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                boxShadow: [
-                                                  containerShadowYellow
-                                                ]),
-                                            height: 25,
-                                            width: 100,
-                                            child: ElevatedButton(
-                                                style: ButtonStyle(
-                                                  shape: MaterialStateProperty
-                                                      .all<RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5.0),
-                                                  )),
-                                                ),
-                                                onPressed: onFollowTap,
-                                                child: Text(
-                                                  followText,
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: followColour),
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, top: 8),
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topRight,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 6),
+                                        child: Container(
+                                          decoration: BoxDecoration(boxShadow: [
+                                            containerShadowYellow
+                                          ]),
+                                          height: 25,
+                                          width: 100,
+                                          child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                shape: MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
                                                 )),
-                                          ),
+                                              ),
+                                              onPressed: onFollowTap,
+                                              child: Text(
+                                                followText,
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: followColour),
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                    Wrap(
+                                      spacing: 40,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Weight class:',
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                            Text(
+                                              'Type:',
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                            Text(
+                                              'Status:',
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                            Text(
+                                              'Gender:',
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                            Text(
+                                              'Nationality:',
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              fighter['weightClass'],
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                            Text(
+                                              fighter['fighterType'],
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                            Text(
+                                              fighter['fighterStatus'],
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                            Text(
+                                              fighter['gender'],
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                            Text(
+                                              fighter['nationality'],
+                                              style: fighterDescriptionStyle,
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 12,
-                                    ),
-                                    BlackButton(
-                                        width: 150,
-                                        height: 40,
-                                        fontSize: 12,
-                                        onPressed: () => showDreamOpponent(
-                                            context,
-                                            fightersList,
-                                            fighter['id']),
-                                        text: 'Suggest opponent')
-                                  ]),
+                                  ],
                                 ),
-                                const SizedBox(
-                                  height: 16,
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: BlackButton(
+                                      width: 150,
+                                      height: 40,
+                                      fontSize: 12,
+                                      onPressed: () => showDreamOpponent(
+                                          context, fightersList, fighter['id']),
+                                      text: 'Suggest opponent'),
                                 ),
-                                TextFormField(
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                  keyboardType: TextInputType.multiline,
-                                  readOnly: true,
-                                  maxLines: null,
-                                  controller: TextEditingController(
-                                      text: fighter['description']),
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 25.0, horizontal: 10.0),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.white),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.white)),
-                                  ),
-                                )
-                              ]))
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Padding(
+                        padding: paddingLRT,
+                        child: TextFormField(
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                          keyboardType: TextInputType.multiline,
+                          readOnly: true,
+                          maxLines: null,
+                          controller: TextEditingController(
+                              text: fighter['description']),
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 25.0, horizontal: 10.0),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                          ),
+                        ),
+                      )
                     ]);
                   } else {
                     return const SizedBox();
