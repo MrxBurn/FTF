@@ -59,11 +59,10 @@ class _DashboardPageState extends State<DashboardPage> {
             Filter('opponentId', isEqualTo: currentUser)))
         .get()
         .then((value) => value.docs.map((e) => e.data()));
-
-    for (var element in result) {
+    result.forEach((element) {
       totalLikes += element['likeCount'] as int;
       totalDislikes += element['dislikeCount'] as int;
-    }
+    });
   }
 
   Future<List<Map<String, dynamic>>> getMostLikedOffers() async {

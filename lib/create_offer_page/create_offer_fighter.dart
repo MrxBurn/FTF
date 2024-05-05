@@ -342,6 +342,8 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
       'calloutVideoURL': '',
       'like': [],
       'dislike': [],
+      'likeCount': 0,
+      'dislikeCount': 0,
       'createdBy': currentUser,
       'fighterStatus': fighterStatus,
       'negotiationValues': negotiationValues,
