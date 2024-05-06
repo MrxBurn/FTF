@@ -6,6 +6,7 @@ import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/reusableWidgets/rounded_text_box.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyAccountFan extends StatefulWidget {
   const MyAccountFan({super.key});
@@ -52,59 +53,80 @@ class _MyAccountFanState extends State<MyAccountFan> {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(children: [
                         Container(
-                            constraints: const BoxConstraints(minHeight: 150),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
-                                color: const Color(black),
-                                boxShadow: [containerShadowRed]),
-                            child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(children: [
-                                  const SizedBox(
-                                    height: 8,
+                          height: 150,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(15)),
+                              color: const Color(black),
+                              boxShadow: [containerShadowRed]),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Wrap(
+                                    spacing: 8,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      const SizedBox(
+                                          width: 80, child: Text('User name')),
+                                      RoundedTextInput(
+                                        disabled: true,
+                                        width: 95,
+                                        controller: userNameController,
+                                      ),
+                                    ],
                                   ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Wrap(
-                                      spacing: 8,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        const SizedBox(
-                                            width: 80,
-                                            child: Text('User name')),
-                                        RoundedTextInput(
-                                          disabled: true,
-                                          width: 95,
-                                          controller: userNameController,
-                                        ),
-                                      ],
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Wrap(
+                                    spacing: 8,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      const SizedBox(
+                                          width: 80, child: Text('First name')),
+                                      RoundedTextInput(
+                                        disabled: true,
+                                        width: 95,
+                                        controller: firstNameController,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: InkWell(
+                                      onTap: () => {
+                                        launchUrl(Uri.parse(
+                                            'https://fightertofighter.wixsite.com/ftf-site/general-8'))
+                                      },
+                                      child: Text(
+                                        'Privacy policy',
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 10,
+                                            decoration:
+                                                TextDecoration.underline),
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Wrap(
-                                      spacing: 8,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        const SizedBox(
-                                            width: 80,
-                                            child: Text('First name')),
-                                        RoundedTextInput(
-                                          disabled: true,
-                                          width: 95,
-                                          controller: firstNameController,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ])))
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ]),
                     );
                   } else {

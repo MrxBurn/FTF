@@ -31,7 +31,7 @@ class FanHomePage extends StatelessWidget {
                     children: [
                       ButtonCard(
                         path: imagePaths[0],
-                        name: 'Fights Overview',
+                        name: 'All Fights',
                         route: 'fanFightsOverview',
                       ),
                       ButtonCard(

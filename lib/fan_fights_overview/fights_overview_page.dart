@@ -28,7 +28,7 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
           children: [
             LogoHeader(backRequired: true),
             const Text(
-              'Fights overview',
+              'All fights',
               style: headerStyle,
             ),
             StreamBuilder(

@@ -14,10 +14,12 @@ import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/reusableWidgets/rounded_text_box.dart';
 import 'package:ftf/reusableWidgets/upload_option.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
 import 'package:ftf/utils/snack_bar_no_context.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyAccountFighter extends StatefulWidget {
   const MyAccountFighter({super.key});
@@ -172,7 +174,9 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                         CustomImageHeader(
                           networkImage: true,
                           backRequired: true,
-                          imagePath: snapshot.data['profileImageURL'],
+                          imagePath: snapshot.data['profileImageURL'] == null
+                              ? snapshot.data['profileImageURL']
+                              : imgPlaceholder,
                           onTap: () => chooseUploadOption(
                               context: context, uploadFunction: getImage),
                         ),
@@ -389,7 +393,27 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                                                   text: 'Save')
                                             ],
                                           )
-                                        : const SizedBox()
+                                        : const SizedBox(),
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: InkWell(
+                                        onTap: () => {
+                                          launchUrl(Uri.parse(
+                                              'https://fightertofighter.wixsite.com/ftf-site/general-8'))
+                                        },
+                                        child: Text(
+                                          'Privacy policy',
+                                          style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 10,
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        ),
+                                      ),
+                                    )
                                   ]),
                                 ),
                               ),
