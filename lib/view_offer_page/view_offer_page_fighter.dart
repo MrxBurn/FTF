@@ -504,6 +504,9 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                           ],
                         )
                       : const SizedBox(),
+                  SizedBox(
+                    height: 12,
+                  ),
                   chatButtonVisible
                       ? BlackRoundedButton(
                           isLoading: false,

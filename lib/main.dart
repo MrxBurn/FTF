@@ -260,11 +260,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseMessaging.instance.getToken().then((value) {
-      String? token = value;
-
-      print(token);
-    });
     return MaterialApp(
       scaffoldMessengerKey: snackbarKey,
       navigatorKey: navigatorKey,
