@@ -300,104 +300,101 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                             const SizedBox(
                               height: 16,
                             ),
-                            offer['calloutVideoURL'] != ''
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      BlackButton(
-                                          width: widget.width,
-                                          height: widget.height,
-                                          fontSize: widget.fontSize,
-                                          onPressed: () {
-                                            showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    actions: [
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      FutureBuilder(
-                                                        future:
-                                                            initializeVideoPlayerFuture,
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          if (snapshot
-                                                                  .connectionState ==
-                                                              ConnectionState
-                                                                  .done) {
-                                                            return AspectRatio(
-                                                              aspectRatio:
-                                                                  videoController
-                                                                      .value
-                                                                      .aspectRatio,
-                                                              child: VideoPlayer(
-                                                                  videoController),
-                                                            );
-                                                          } else {
-                                                            return const SizedBox();
-                                                          }
-                                                        },
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop(),
-                                                            child: const Text(
-                                                              'Cancel',
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                offer['calloutVideoURL'] != ''
+                                    ? BlackButton(
+                                        width: widget.width,
+                                        height: widget.height,
+                                        fontSize: widget.fontSize,
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  actions: [
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    FutureBuilder(
+                                                      future:
+                                                          initializeVideoPlayerFuture,
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .done) {
+                                                          return AspectRatio(
+                                                            aspectRatio:
+                                                                videoController
+                                                                    .value
+                                                                    .aspectRatio,
+                                                            child: VideoPlayer(
+                                                                videoController),
+                                                          );
+                                                        } else {
+                                                          return const SizedBox();
+                                                        }
+                                                      },
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(),
+                                                          child: const Text(
+                                                            'Cancel',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        ),
+                                                        ElevatedButton.icon(
+                                                            onPressed: () {
+                                                              videoController
+                                                                  .play();
+                                                            },
+                                                            icon: const Icon(
+                                                              Icons.play_arrow,
+                                                              color:
+                                                                  Colors.yellow,
+                                                            ),
+                                                            label: const Text(
+                                                              "Play",
                                                               style: TextStyle(
                                                                   color: Colors
-                                                                      .white),
-                                                            ),
-                                                          ),
-                                                          ElevatedButton.icon(
-                                                              onPressed: () {
-                                                                videoController
-                                                                    .play();
-                                                              },
-                                                              icon: const Icon(
-                                                                Icons
-                                                                    .play_arrow,
-                                                                color: Colors
-                                                                    .yellow,
-                                                              ),
-                                                              label: const Text(
-                                                                "Play",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .yellow),
-                                                              )),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  );
-                                                });
-                                          },
-                                          text: 'Press to review video'),
-                                      offer['negotiationValues'].length > 1
-                                          ? BlackButton(
-                                              width: widget.width,
-                                              height: widget.height,
-                                              fontSize: widget.fontSize,
-                                              onPressed: () =>
-                                                  showNegotiationHistory(
-                                                      context,
-                                                      offer['negotiationValues']
-                                                          .reversed
-                                                          .toList(),
-                                                      offer.data()),
-                                              text: 'Review negotiations ')
-                                          : const SizedBox(),
-                                    ],
-                                  )
-                                : const SizedBox(),
+                                                                      .yellow),
+                                                            )),
+                                                      ],
+                                                    )
+                                                  ],
+                                                );
+                                              });
+                                        },
+                                        text: 'Press to review video')
+                                    : SizedBox(),
+                                offer['negotiationValues'].length > 1
+                                    ? BlackButton(
+                                        width: widget.width,
+                                        height: widget.height,
+                                        fontSize: widget.fontSize,
+                                        onPressed: () => showNegotiationHistory(
+                                            context,
+                                            offer['negotiationValues']
+                                                .reversed
+                                                .toList(),
+                                            offer),
+                                        text: 'Review negotiations ')
+                                    : SizedBox()
+                              ],
+                            ),
                             const SizedBox(
                               height: 16,
                             ),
