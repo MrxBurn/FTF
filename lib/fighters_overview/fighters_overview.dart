@@ -6,11 +6,14 @@ import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 
 class FightersOverview extends StatefulWidget {
-  const FightersOverview({super.key, this.future, this.pageTitle});
+  const FightersOverview(
+      {super.key, this.future, this.pageTitle, this.isFighterRoute = false});
 
   final Future<List<dynamic>>? future;
 
   final String? pageTitle;
+
+  final bool isFighterRoute;
 
   @override
   State<FightersOverview> createState() => _FightersOverviewState();
@@ -63,6 +66,7 @@ class _FightersOverviewState extends State<FightersOverview> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => FighterView(
                                           fighterId: data[idx]['id'],
+                                          isFighterRoute: widget.isFighterRoute,
                                         ))),
                           );
                         }),

@@ -14,13 +14,16 @@ import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 import 'package:video_player/video_player.dart';
 
 class ViewOfferPageFan extends StatefulWidget {
-  const ViewOfferPageFan({super.key, required this.offerId});
+  const ViewOfferPageFan(
+      {super.key, required this.offerId, this.isFighterRoute = false});
 
   final String offerId;
 
   final double width = 170;
   final double height = 40;
   final double fontSize = 12;
+
+  final bool isFighterRoute;
 
   @override
   State<ViewOfferPageFan> createState() => _ViewOfferPageFanState();
@@ -406,39 +409,41 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                         );
                       }
                     }),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    BlackRoundedButton(
-                      isDisabled: dislikeText == 'Disliked',
-                      onPressed: () => onLikePress(dataForLikes),
-                      text: likeText,
-                      textColour: likeButtonColour,
-                      icon: Icon(
-                        Icons.thumb_up,
-                        size: 14,
-                        color: likeButtonColour,
-                      ),
-                      shadowColour: Colors.yellow,
-                      isLoading: false,
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    BlackRoundedButton(
-                      isDisabled: likeText == 'Liked',
-                      onPressed: () => onDislikePress(dataForLikes),
-                      text: dislikeText,
-                      textColour: dislikeButtonColour,
-                      icon: Icon(
-                        Icons.thumb_down,
-                        size: 14,
-                        color: dislikeButtonColour,
-                      ),
-                      isLoading: false,
-                    )
-                  ],
-                )
+                widget.isFighterRoute == false
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          BlackRoundedButton(
+                            isDisabled: dislikeText == 'Disliked',
+                            onPressed: () => onLikePress(dataForLikes),
+                            text: likeText,
+                            textColour: likeButtonColour,
+                            icon: Icon(
+                              Icons.thumb_up,
+                              size: 14,
+                              color: likeButtonColour,
+                            ),
+                            shadowColour: Colors.yellow,
+                            isLoading: false,
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          BlackRoundedButton(
+                            isDisabled: likeText == 'Liked',
+                            onPressed: () => onDislikePress(dataForLikes),
+                            text: dislikeText,
+                            textColour: dislikeButtonColour,
+                            icon: Icon(
+                              Icons.thumb_down,
+                              size: 14,
+                              color: dislikeButtonColour,
+                            ),
+                            isLoading: false,
+                          )
+                        ],
+                      )
+                    : SizedBox()
               ],
             ),
           ],

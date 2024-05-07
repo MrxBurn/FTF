@@ -1,8 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/fighters_overview/fighters_overview.dart';
+import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/button_cards.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
-import 'package:ftf/styles/styles.dart';
 
 class FighterHomePage extends StatefulWidget {
   const FighterHomePage({super.key});
@@ -35,7 +36,7 @@ class _FighterHomePageState extends State<FighterHomePage> {
           children: [
             LogoHeader(backRequired: false),
             Padding(
-              padding: paddingLRT,
+              padding: EdgeInsets.only(left: 24, right: 24),
               child: Column(
                 children: [
                   Row(
@@ -89,6 +90,18 @@ class _FighterHomePageState extends State<FighterHomePage> {
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  BlackButton(
+                      width: 150,
+                      height: 40,
+                      onPressed: () =>
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => FightersOverview(
+                                    isFighterRoute: true,
+                                  ))),
+                      text: 'All fighters')
                 ],
               ),
             ),

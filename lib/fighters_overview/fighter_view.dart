@@ -9,9 +9,12 @@ import 'package:ftf/styles/styles.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fan.dart';
 
 class FighterView extends StatefulWidget {
-  const FighterView({super.key, required this.fighterId});
+  const FighterView(
+      {super.key, required this.fighterId, this.isFighterRoute = false});
 
   final String fighterId;
+
+  final bool isFighterRoute;
 
   @override
   State<FighterView> createState() => _FighterViewState();
@@ -122,6 +125,7 @@ class _FighterViewState extends State<FighterView> {
                         padding: paddingLRT,
                         child: Container(
                           height: 170,
+                          width: double.infinity,
                           decoration: BoxDecoration(
                               boxShadow: [containerShadowWhite],
                               color: const Color(lighterBlack)),
@@ -133,37 +137,40 @@ class _FighterViewState extends State<FighterView> {
                                     const EdgeInsets.only(left: 8.0, top: 8),
                                 child: Stack(
                                   children: [
-                                    Align(
-                                      alignment: Alignment.topRight,
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 6),
-                                        child: Container(
-                                          decoration: BoxDecoration(boxShadow: [
-                                            containerShadowYellow
-                                          ]),
-                                          height: 25,
-                                          width: 100,
-                                          child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                shape: MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5.0),
-                                                )),
+                                    widget.isFighterRoute == false
+                                        ? Align(
+                                            alignment: Alignment.topRight,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 6),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      containerShadowYellow
+                                                    ]),
+                                                height: 25,
+                                                width: 100,
+                                                child: ElevatedButton(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty.all<
+                                                              RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5.0),
+                                                      )),
+                                                    ),
+                                                    onPressed: onFollowTap,
+                                                    child: Text(
+                                                      followText,
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: followColour),
+                                                    )),
                                               ),
-                                              onPressed: onFollowTap,
-                                              child: Text(
-                                                followText,
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: followColour),
-                                              )),
-                                        ),
-                                      ),
-                                    ),
+                                            ),
+                                          )
+                                        : SizedBox(),
                                     Wrap(
                                       spacing: 40,
                                       children: [
@@ -224,18 +231,22 @@ class _FighterViewState extends State<FighterView> {
                                   ],
                                 ),
                               ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: BlackButton(
-                                      width: 150,
-                                      height: 40,
-                                      fontSize: 12,
-                                      onPressed: () => showDreamOpponent(
-                                          context, fightersList, fighter['id']),
-                                      text: 'Suggest opponent'),
-                                ),
-                              )
+                              widget.isFighterRoute == false
+                                  ? Expanded(
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: BlackButton(
+                                            width: 150,
+                                            height: 40,
+                                            fontSize: 12,
+                                            onPressed: () => showDreamOpponent(
+                                                context,
+                                                fightersList,
+                                                fighter['id']),
+                                            text: 'Suggest opponent'),
+                                      ),
+                                    )
+                                  : SizedBox()
                             ],
                           ),
                         ),
@@ -281,12 +292,6 @@ class _FighterViewState extends State<FighterView> {
                             element['opponentId'] == widget.fighterId)
                         .toList();
 
-                    List sentFights = snapshot.data.docs
-                        .toList()
-                        .where((element) =>
-                            element['createdBy'] == widget.fighterId)
-                        .toList();
-
                     return Column(
                       children: [
                         receivedFights.isNotEmpty
@@ -318,6 +323,8 @@ class _FighterViewState extends State<FighterView> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     ViewOfferPageFan(
+                                                  isFighterRoute:
+                                                      widget.isFighterRoute,
                                                   offerId: receivedFights[idx]
                                                       ['offerId'],
                                                 ),
@@ -357,75 +364,6 @@ class _FighterViewState extends State<FighterView> {
                                 ],
                               )
                             : const SizedBox(),
-                        sentFights.isNotEmpty
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Sent fight offers',
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  SizedBox(
-                                    height: 170,
-                                    width: double.infinity,
-                                    child: ListView.separated(
-                                        separatorBuilder: (context, index) =>
-                                            const SizedBox(
-                                              width: 16,
-                                            ),
-                                        itemCount: sentFights.length,
-                                        scrollDirection: Axis.horizontal,
-                                        shrinkWrap: true,
-                                        itemBuilder:
-                                            (BuildContext context, idx) {
-                                          return GestureDetector(
-                                            onTap: () =>
-                                                Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ViewOfferPageFan(
-                                                  offerId: sentFights[idx]
-                                                      ['offerId'],
-                                                ),
-                                              ),
-                                            ),
-                                            child: OfferCard(
-                                                height: 30,
-                                                valueSize: 12,
-                                                iconSize: 12,
-                                                likes: sentFights[idx]['like']
-                                                    .length,
-                                                dislikes: sentFights[idx]
-                                                        ['dislike']
-                                                    .length,
-                                                creator: sentFights[idx]
-                                                    ['creator'],
-                                                opponent: sentFights[idx]
-                                                    ['opponent'],
-                                                creatorValue: sentFights[idx]
-                                                        ['negotiationValues']
-                                                    .last['creatorValue']
-                                                    .toString(),
-                                                opponentValue: sentFights[idx]
-                                                        ['negotiationValues']
-                                                    .last['opponentValue']
-                                                    .toString(),
-                                                weightClass: sentFights[idx]
-                                                        ['negotiationValues']
-                                                    .last['weightClass'],
-                                                fighterStatus: sentFights[idx]
-                                                    ['fighterStatus'],
-                                                fightDate: sentFights[idx]
-                                                        ['negotiationValues']
-                                                    .last['fightDate']),
-                                          );
-                                        }),
-                                  ),
-                                ],
-                              )
-                            : const SizedBox()
                       ],
                     );
                   } else {
@@ -475,6 +413,8 @@ class _FighterViewState extends State<FighterView> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 ViewOfferPageFan(
+                                              isFighterRoute:
+                                                  widget.isFighterRoute,
                                               offerId: sentFights[idx]
                                                   ['offerId'],
                                             ),
