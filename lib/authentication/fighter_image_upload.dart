@@ -115,73 +115,15 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        height: 12,
+                      ),
                       Text(
                         'Welcome, $firstName!',
                         style: headerStyle,
                       ),
-                      Row(
-                        children: [
-                          const Text(
-                            'Upload your profile picture?',
-                            style: bodyStyle,
-                          ),
-                          TextButton(
-                              style: const ButtonStyle(
-                                  splashFactory: NoSplash.splashFactory),
-                              onPressed: () => showModalBottomSheet(
-                                    context: context,
-                                    builder: ((context) {
-                                      return SizedBox(
-                                        height: 100,
-                                        child: Column(
-                                          children: [
-                                            ElevatedButton(
-                                              onPressed: () => uploadImage(
-                                                  ImageSource.camera),
-                                              style: ElevatedButton.styleFrom(
-                                                  elevation: 0,
-                                                  backgroundColor:
-                                                      Colors.transparent),
-                                              child: const Row(
-                                                children: [
-                                                  Icon(Icons.camera_alt),
-                                                  Text(
-                                                    'Camera',
-                                                    textAlign: TextAlign.left,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () => uploadImage(
-                                                  ImageSource.gallery),
-                                              style: ElevatedButton.styleFrom(
-                                                  elevation: 0,
-                                                  backgroundColor:
-                                                      Colors.transparent),
-                                              child: const Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.image,
-                                                  ),
-                                                  Text(
-                                                    'Gallery',
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                              child: const Text(
-                                'Upload',
-                                style:
-                                    TextStyle(color: Colors.red, fontSize: 16),
-                              )),
-                        ],
+                      SizedBox(
+                        height: 24,
                       ),
                       image != null
                           ? Center(
@@ -189,17 +131,67 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                               backgroundImage: FileImage(image!),
                               radius: 100,
                             ))
-                          : const Center(
-                              child: CircleAvatar(
-                                radius: 101,
-                                backgroundColor: Colors.grey,
+                          : Center(
+                              child: GestureDetector(
+                                onTap: () => showModalBottomSheet(
+                                  context: context,
+                                  builder: ((context) {
+                                    return SizedBox(
+                                      height: 100,
+                                      child: Column(
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () =>
+                                                uploadImage(ImageSource.camera),
+                                            style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                backgroundColor:
+                                                    Colors.transparent),
+                                            child: const Row(
+                                              children: [
+                                                Icon(Icons.camera_alt),
+                                                Text(
+                                                  'Camera',
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () => uploadImage(
+                                                ImageSource.gallery),
+                                            style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                backgroundColor:
+                                                    Colors.transparent),
+                                            child: const Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.image,
+                                                ),
+                                                Text(
+                                                  'Gallery',
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                                ),
                                 child: CircleAvatar(
-                                  radius: 100,
-                                  backgroundColor: Colors.black,
-                                  child: Center(
-                                    child: Text(
-                                      'image',
-                                      style: TextStyle(color: Colors.grey),
+                                  radius: 101,
+                                  backgroundColor: Colors.grey,
+                                  child: CircleAvatar(
+                                    radius: 100,
+                                    backgroundColor: Colors.black,
+                                    child: Center(
+                                      child: Text(
+                                        'Upload',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
                                     ),
                                   ),
                                 ),

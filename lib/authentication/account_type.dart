@@ -1,12 +1,10 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:ftf/authentication/register_fighter.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 
 class AccountType extends StatelessWidget {
-  String? offerId;
+  final String? offerId;
 
   AccountType({super.key, this.offerId});
 
