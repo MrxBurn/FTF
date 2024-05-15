@@ -174,7 +174,7 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                         CustomImageHeader(
                           networkImage: true,
                           backRequired: true,
-                          imagePath: snapshot.data['profileImageURL'] == null
+                          imagePath: snapshot.data['profileImageURL'] != null
                               ? snapshot.data['profileImageURL']
                               : imgPlaceholder,
                           onTap: () => chooseUploadOption(
