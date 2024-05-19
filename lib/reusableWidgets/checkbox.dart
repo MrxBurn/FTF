@@ -24,7 +24,7 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
     return CheckboxListTile(
       contentPadding: EdgeInsets.zero,
       checkColor: Colors.white,
-      fillColor: const MaterialStatePropertyAll(Colors.grey),
+      fillColor: const WidgetStatePropertyAll(Colors.grey),
       title: Text(widget.title),
       value: widget.checkValue,
       onChanged: (newValue) {

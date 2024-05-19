@@ -38,7 +38,6 @@ class _DatePickerState extends State<DatePicker> {
                   colorScheme: ColorScheme.fromSeed(
                       seedColor: Colors.black,
                       brightness: Brightness.dark,
-                      background: Colors.black,
                       surface: Colors.black,
                       surfaceTint: Colors.black,
                       tertiary: Colors.black,

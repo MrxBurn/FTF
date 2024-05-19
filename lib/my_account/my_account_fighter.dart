@@ -218,7 +218,7 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                                                 height: 25,
                                                 child: ElevatedButton(
                                                     style: ButtonStyle(
-                                                      shape: MaterialStateProperty.all<
+                                                      shape: WidgetStateProperty.all<
                                                               RoundedRectangleBorder>(
                                                           RoundedRectangleBorder(
                                                         borderRadius:

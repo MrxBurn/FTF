@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
-import 'package:month_year_picker/month_year_picker.dart';
+import 'package:month_year_picker2/month_year_picker2.dart';
 
 class YearPickerWidget extends StatefulWidget {
   String leadingText = '';
@@ -39,7 +39,6 @@ class _YearPickerWidgetState extends State<YearPickerWidget> {
                 colorScheme: ColorScheme.fromSeed(
                     seedColor: Colors.black,
                     brightness: Brightness.dark,
-                    background: Colors.black,
                     surface: Colors.black,
                     surfaceTint: Colors.black,
                     tertiary: Colors.black,

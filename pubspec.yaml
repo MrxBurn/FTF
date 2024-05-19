@@ -43,12 +43,12 @@ dependencies:
   firebase_storage: ^11.2.6
   easy_search_bar: ^2.5.0
   animate_do: ^3.1.2
-  month_year_picker: ^0.3.0+1
+  month_year_picker2: ^1.0.0+2
   firebase_dynamic_links: ^5.3.7
   video_player: ^2.7.2
   url_launcher: ^6.2.2
   http: ^1.1.2
-  intl: ^0.18.1
+  intl: ^0.19.0
   firebase_messaging: ^14.7.19
   flutter_local_notifications: ^17.0.0
   flutter_launcher_icons: ^0.13.1

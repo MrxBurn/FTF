@@ -34,7 +34,7 @@ import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/foreground_notification_service.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fan.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
-import 'package:month_year_picker/month_year_picker.dart';
+import 'package:month_year_picker2/month_year_picker2.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -292,11 +292,10 @@ class _MyAppState extends State<MyApp> {
         colorScheme: const ColorScheme.dark(),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-              overlayColor:
-                  MaterialStatePropertyAll(Colors.red.withOpacity(0.2)),
+              overlayColor: WidgetStatePropertyAll(Colors.red.withOpacity(0.2)),
               backgroundColor:
-                  const MaterialStatePropertyAll(Color(lighterBlack)),
-              foregroundColor: const MaterialStatePropertyAll(Colors.white)),
+                  const WidgetStatePropertyAll(Color(lighterBlack)),
+              foregroundColor: const WidgetStatePropertyAll(Colors.white)),
         ),
         textSelectionTheme: const TextSelectionThemeData(
             cursorColor: Colors.white,

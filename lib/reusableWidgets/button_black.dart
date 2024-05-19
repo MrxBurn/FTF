@@ -27,8 +27,8 @@ class BlackButton extends StatelessWidget {
         decoration: BoxDecoration(boxShadow: [containerShadowRed]),
         child: ElevatedButton(
             style: ButtonStyle(
-              backgroundColor: const MaterialStatePropertyAll(Colors.black),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              backgroundColor: const WidgetStatePropertyAll(Colors.black),
+              shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                 const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),

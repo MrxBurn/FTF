@@ -152,7 +152,7 @@ class _FighterViewState extends State<FighterView> {
                                                 width: 100,
                                                 child: ElevatedButton(
                                                     style: ButtonStyle(
-                                                      shape: MaterialStateProperty.all<
+                                                      shape: WidgetStateProperty.all<
                                                               RoundedRectangleBorder>(
                                                           RoundedRectangleBorder(
                                                         borderRadius:

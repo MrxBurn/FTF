@@ -102,7 +102,7 @@ class _ChoiceChipListState extends State<ChoiceChipList> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     checkmarkColor: Colors.yellow,
-                    color: MaterialStateProperty.all<Color>(Colors.black),
+                    color: WidgetStateProperty.all<Color>(Colors.black),
                     labelStyle: TextStyle(
                         color: _selectedIndex == idx
                             ? Colors.yellow
