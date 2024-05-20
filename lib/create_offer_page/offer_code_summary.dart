@@ -1,6 +1,3 @@
-// ignore_for_file: unused_import
-
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ftf/reusableWidgets/circle_navigation_button.dart';
@@ -9,19 +6,14 @@ import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/snack_bar.dart';
 
-class DynamicLinkSummary extends StatefulWidget {
-  const DynamicLinkSummary({super.key});
+class OfferCodeSummary extends StatelessWidget {
+  const OfferCodeSummary({super.key, this.offerId});
 
-  @override
-  State<DynamicLinkSummary> createState() => _DynamicLinkSummaryState();
-}
-
-class _DynamicLinkSummaryState extends State<DynamicLinkSummary> {
+  final String? offerId;
   @override
   Widget build(BuildContext context) {
     final routes =
         ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -42,7 +34,7 @@ class _DynamicLinkSummaryState extends State<DynamicLinkSummary> {
             Padding(
               padding: paddingLRT,
               child: Text(
-                routes['link'] ?? '',
+                routes['offerId'] ?? '',
                 style: const TextStyle(fontSize: 16, color: Colors.red),
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
@@ -55,11 +47,11 @@ class _DynamicLinkSummaryState extends State<DynamicLinkSummary> {
                 isLoading: false,
                 onPressed: () async {
                   await Clipboard.setData(
-                      ClipboardData(text: routes['link'] ?? ''));
+                      ClipboardData(text: routes['offerId'] ?? ''));
 
                   if (context.mounted) {
                     showSnackBar(
-                        text: 'Link copied',
+                        text: 'Offer code copied',
                         context: context,
                         color: Colors.grey);
                   }

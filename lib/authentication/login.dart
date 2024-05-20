@@ -11,8 +11,7 @@ import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/snack_bar_no_context.dart';
 
 class LoginPage extends StatefulWidget {
-  final String? offerId;
-  const LoginPage({super.key, this.offerId});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -93,11 +92,9 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                       style: const ButtonStyle(
                           splashFactory: NoSplash.splashFactory),
-                      onPressed: () =>
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => AccountType(
-                                    offerId: widget.offerId,
-                                  ))),
+                      onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => AccountType())),
                       child: const Text(
                         'Register',
                         style: TextStyle(color: Colors.red, fontSize: 16),

@@ -17,9 +17,7 @@ import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar_no_context.dart';
 
 class RegisterFighter extends StatefulWidget {
-  String? offerId;
-
-  RegisterFighter({super.key, this.offerId});
+  RegisterFighter({super.key});
 
   @override
   State<RegisterFighter> createState() => _RegisterFighterState();
@@ -301,9 +299,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                           .then((value) => {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => FighterImageUpload(
-                                      offerId: widget.offerId,
-                                    ),
+                                    builder: (context) => FighterImageUpload(),
                                   ),
                                 ),
                               })

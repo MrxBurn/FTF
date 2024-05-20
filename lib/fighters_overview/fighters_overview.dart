@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/fighters_overview/fighter_view.dart';
 import 'package:ftf/fighters_overview/fighters_overview_widgets/fighter_card.dart';
@@ -21,6 +22,7 @@ class FightersOverview extends StatefulWidget {
 
 class _FightersOverviewState extends State<FightersOverview> {
   CollectionReference fighters = FirebaseFirestore.instance.collection('users');
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
   Future<List<dynamic>> getFighters() async {
     var result = await fighters
@@ -46,13 +48,17 @@ class _FightersOverviewState extends State<FightersOverview> {
               future: widget.future ?? getFighters(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  var data = snapshot.data;
+                  var data = widget.isFighterRoute
+                      ? snapshot.data
+                          .where((fighter) => fighter['id'] != currentUser)
+                          .toList()
+                      : snapshot.data;
 
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: snapshot.data.length,
+                        itemCount: data.length,
                         itemBuilder: (BuildContext context, idx) {
                           return FighterCard(
                             imageUrl: data[idx]['profileImageURL'],

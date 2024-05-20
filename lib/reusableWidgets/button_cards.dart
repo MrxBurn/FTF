@@ -7,14 +7,21 @@ class ButtonCard extends StatelessWidget {
   final String route;
   final String name;
   final String path;
+  final Future<dynamic> Function()?
+      navigate; // used for navigation with arguments
 
   const ButtonCard(
-      {super.key, required this.route, required this.name, required this.path});
+      {super.key,
+      required this.route,
+      required this.name,
+      required this.path,
+      this.navigate});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, route),
+      onTap: () =>
+          navigate != null ? navigate!() : Navigator.pushNamed(context, route),
       child: Container(
         decoration: BoxDecoration(
             boxShadow: [containerShadowRed],

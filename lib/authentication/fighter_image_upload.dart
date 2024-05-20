@@ -9,13 +9,10 @@ import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/snack_bar_no_context.dart';
-import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FighterImageUpload extends StatefulWidget {
-  final String? offerId;
-
-  const FighterImageUpload({super.key, this.offerId});
+  const FighterImageUpload({super.key});
 
   @override
   State<FighterImageUpload> createState() => _FighterImageUploadState();
@@ -52,17 +49,8 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
       });
       await fighterUsers
           .doc(currentUser)
-          .update({'profileImageURL': imageURL}).then((value) => {
-                if (widget.offerId == null)
-                  {Navigator.pushReplacementNamed(context, 'fighterHome')}
-                else
-                  {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ViewOfferPage(
-                              offerId: widget.offerId,
-                            )))
-                  }
-              });
+          .update({'profileImageURL': imageURL}).then((value) =>
+              Navigator.pushReplacementNamed(context, 'fighterHome'));
       setState(() {
         isLoading = false;
       });

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -15,7 +14,7 @@ import 'package:ftf/authentication/register_fan.dart';
 import 'package:ftf/authentication/register_fighter.dart';
 import 'package:ftf/chat/chat_page.dart';
 import 'package:ftf/create_offer_page/create_offer_fighter.dart';
-import 'package:ftf/create_offer_page/dynamic_link_summary.dart';
+import 'package:ftf/create_offer_page/offer_code_summary.dart';
 import 'package:ftf/dashboard/dashboard_page.dart';
 import 'package:ftf/fan_fights_overview/fights_overview_page.dart';
 import 'package:ftf/fan_forum/fan_forum_page.dart';
@@ -221,8 +220,6 @@ User? currentUser = FirebaseAuth.instance.currentUser;
 
 Widget initialWidget = const Placeholder();
 
-Uri? deepLink;
-
 class MyApp extends StatefulWidget {
   const MyApp({
     super.key,
@@ -236,26 +233,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initDynamicLink();
-  }
-
-  Future<void> initDynamicLink() async {
-    final PendingDynamicLinkData? initialLink =
-        await FirebaseDynamicLinks.instance.getInitialLink();
-
-    if (Platform.isIOS) {
-      FirebaseDynamicLinks.instance.onLink.listen(
-        (pendingDynamicLinkData) {
-          setState(() {
-            deepLink = pendingDynamicLinkData.link;
-          });
-        },
-      );
-    }
-
-    setState(() {
-      deepLink = initialLink?.link;
-    });
   }
 
   @override
@@ -311,7 +288,7 @@ class _MyAppState extends State<MyApp> {
         'loginPage': (context) => const LoginPage(),
         'fighterImageUpload': (context) => const FighterImageUpload(),
         'createOfferFighter': (context) => const CreateOfferFighter(),
-        'dynamicLinkSummary': (context) => const DynamicLinkSummary(),
+        'offerCodeSummary': (context) => const OfferCodeSummary(),
         'viewOffer': (context) => ViewOfferPage(),
         'dashboard': (context) => const DashboardPage(),
         'myOffers': (context) => MyOffersPage(),
@@ -339,18 +316,7 @@ class _MyAppState extends State<MyApp> {
           if (snapshot.hasData &&
               !snapshot.data!.exists &&
               currentUser == null) {
-            return LoginPage(
-              offerId: deepLink?.queryParameters['offerId'],
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.data?.get('route') == 'fighter' &&
-              deepLink != null &&
-              deepLink.toString().contains('offerId') &&
-              currentUser != null) {
-            return ViewOfferPage(
-              offerId: deepLink?.queryParameters['offerId'],
-            );
+            return LoginPage();
           }
           if (snapshot.connectionState == ConnectionState.done &&
               currentUser != null &&

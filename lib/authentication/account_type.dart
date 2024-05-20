@@ -4,9 +4,7 @@ import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 
 class AccountType extends StatelessWidget {
-  final String? offerId;
-
-  AccountType({super.key, this.offerId});
+  AccountType({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +15,8 @@ class AccountType extends StatelessWidget {
             backRequired: true,
           ),
           BlackButton(
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => RegisterFighter(
-                      offerId: offerId,
-                    ))),
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => RegisterFighter())),
             text: 'I am a fighter',
           ),
           const SizedBox(

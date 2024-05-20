@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -259,30 +258,6 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
     });
   }
 
-  Future<void> createDynamicLink(String offerId) async {
-    //TODO: Implement for IOS
-    var fallbackURL =
-        Uri.parse('https://fightertofighter.wixsite.com/ftf-site');
-
-    final dynamicLinkParams = DynamicLinkParameters(
-      link: Uri.parse(
-          "https://fightertofighter.wixsite.com/ftf-site?offerId=$offerId"),
-
-      uriPrefix: appFlavor == 'dev'
-          ? "https://f2foffer.page.link"
-          : "https://f2fofferProd.page.link",
-      androidParameters: AndroidParameters(
-          packageName: "com.ftf.ftf", fallbackUrl: fallbackURL),
-      // iosParameters: const IOSParameters(bundleId: "com.example.app.ios"),
-    );
-
-    final dynamicLink =
-        await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
-
-    navigatorKey.currentState?.pushNamed('dynamicLinkSummary',
-        arguments: {'link': dynamicLink.toString()});
-  }
-
   void createOffer(Object offer) async {
     setState(() {
       isLoading = true;
@@ -308,14 +283,18 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
               'offerId': value.id,
             }),
             saveToFirebase(video, value.id),
-            if (fighterNotFoundChecked) {createDynamicLink(value.id)}
+            if (fighterNotFoundChecked)
+              navigatorKey.currentState?.pushNamed('offerCodeSummary',
+                  arguments: {'offerId': value.id})
           });
 
-      navigatorKey.currentState?.pushNamed('fighterHome');
-      showSnackBarNoContext(
-          text: 'Offer successfully created!',
-          snackbarKey: snackbarKey,
-          color: Colors.green);
+      if (!fighterNotFoundChecked) {
+        navigatorKey.currentState?.pushNamed('fighterHome');
+        showSnackBarNoContext(
+            text: 'Offer successfully created!',
+            snackbarKey: snackbarKey,
+            color: Colors.green);
+      }
 
       setState(() {
         isLoading = false;
