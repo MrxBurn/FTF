@@ -26,6 +26,7 @@ class InputFieldWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, right: 24),
       child: TextFormField(
+          onTapOutside: (e) => FocusManager.instance.primaryFocus?.unfocus(),
           controller: controller,
           decoration: InputDecoration(
             enabledBorder: const UnderlineInputBorder(

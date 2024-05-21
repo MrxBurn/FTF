@@ -51,8 +51,7 @@ class _FighterHomePageState extends State<FighterHomePage> {
                       ButtonCard(
                         path: imagePaths[7],
                         name: 'Enter offer code',
-                        route: '' //TODO: Offer code page logic,
-                        ,
+                        route: 'enterOfferCodePage',
                       ),
                     ],
                   ),

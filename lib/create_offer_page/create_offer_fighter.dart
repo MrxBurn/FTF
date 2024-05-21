@@ -369,7 +369,11 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                 child: Center(
                   child: Text(
                     searchValue,
-                    style: const TextStyle(fontSize: 28, color: Colors.red),
+                    style: const TextStyle(
+                        fontSize: 28,
+                        color: Colors.red,
+                        overflow: TextOverflow.ellipsis),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),

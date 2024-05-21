@@ -275,7 +275,11 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                     child: Center(
                       child: Text(
                         snapshot.data['opponent'],
-                        style: const TextStyle(fontSize: 28, color: Colors.red),
+                        style: const TextStyle(
+                            fontSize: 28,
+                            color: Colors.red,
+                            overflow: TextOverflow.ellipsis),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
