@@ -63,8 +63,7 @@ class _EnterOfferCodePageState extends State<EnterOfferCodePage> {
                       Center(
                         child: Text(
                           textAlign: TextAlign.center,
-                          'Enter the code received from another fighter to join the offer',
-                          style: TextStyle(),
+                          'Please enter the code received from your potential opponent to accept, negotiate, or reject the offer.',
                         ),
                       ),
                       InputFieldWidget(

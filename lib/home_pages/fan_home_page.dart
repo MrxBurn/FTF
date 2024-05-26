@@ -5,7 +5,7 @@ import 'package:ftf/styles/styles.dart';
 
 List<String> imagePaths = [
   'assets/illustrations/fight_offers_fan.jpg',
-  'assets/illustrations/all_fighters.jpg',
+  'assets/illustrations/all_fighters.jpeg',
   'assets/illustrations/my_fighters.jpg',
   'assets/illustrations/events.png',
   'assets/illustrations/forum.png',

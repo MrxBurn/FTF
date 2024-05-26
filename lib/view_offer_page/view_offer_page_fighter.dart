@@ -472,7 +472,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                                         'APPROVED',
                                         'Offer approved successfully!'),
                                     child: const Text(
-                                      'Approve',
+                                      'Accept',
                                       style: TextStyle(color: Colors.green),
                                     ),
                                   ),
