@@ -17,6 +17,11 @@ class _MMAEventsState extends State<MMAEvents> {
         future: getEvents('mma_mixed_martial_arts', 'mmaEvents'),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            var filteredEvents = snapshot.data[0]['events']
+                .where((ev) =>
+                    DateTime.parse(ev['commence_time']).isAfter(DateTime.now()))
+                .toList();
+
             return SizedBox(
               width: 225,
               child: Column(
@@ -38,7 +43,7 @@ class _MMAEventsState extends State<MMAEvents> {
                     height: 500,
                     width: 190,
                     child: ListView.builder(
-                        itemCount: snapshot.data[0]['events'].length,
+                        itemCount: filteredEvents.length,
                         itemBuilder: (BuildContext context, idx) {
                           return SizedBox(
                             height: 85,
@@ -49,8 +54,8 @@ class _MMAEventsState extends State<MMAEvents> {
                                     SizedBox(
                                       width: 80,
                                       child: Text(
-                                        '''${snapshot.data[0]['events'][idx]['home_team'].toString().split(' ').first}
-${snapshot.data[0]['events'][idx]['home_team'].toString().split(' ').last}''',
+                                        '''${filteredEvents[idx]['home_team'].toString().split(' ').first}
+${filteredEvents[idx]['home_team'].toString().split(' ').last}''',
                                         textAlign: TextAlign.center,
                                         maxLines: 3,
                                         style: const TextStyle(
@@ -61,8 +66,8 @@ ${snapshot.data[0]['events'][idx]['home_team'].toString().split(' ').last}''',
                                     SizedBox(
                                       width: 80,
                                       child: Text(
-                                        '''${snapshot.data[0]['events'][idx]['away_team'].toString().split(' ').first}
-${snapshot.data[0]['events'][idx]['away_team'].toString().split(' ').last}''',
+                                        '''${filteredEvents[idx]['away_team'].toString().split(' ').first}
+${filteredEvents[idx]['away_team'].toString().split(' ').last}''',
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                             color: Colors.red, fontSize: 12),
@@ -72,8 +77,8 @@ ${snapshot.data[0]['events'][idx]['away_team'].toString().split(' ').last}''',
                                   const Spacer(),
                                   Text(
                                     DateFormat("hh:mm:ss - dd-MM-yyyy").format(
-                                        DateTime.parse(snapshot.data[0]
-                                            ['events'][idx]['commence_time'])),
+                                        DateTime.parse(filteredEvents[idx]
+                                            ['commence_time'])),
                                     style: const TextStyle(fontSize: 10),
                                   )
                                 ],

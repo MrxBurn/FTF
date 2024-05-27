@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/button_cards.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -12,11 +13,14 @@ List<String> imagePaths = [
   'assets/illustrations/my_account.png',
 ];
 
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
 class FanHomePage extends StatelessWidget {
   const FanHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    _firebaseMessaging.requestPermission();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
