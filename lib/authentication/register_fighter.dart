@@ -86,7 +86,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   'profileImageURL': '',
                   'id': value.user?.uid,
                   'followers': [],
-                  'deviceToken': await FirebaseMessaging.instance.getToken()
+                  'deviceToken': await FirebaseMessaging.instance.getToken(),
+                  'eula': false
                 })
               });
       await FirebaseAuth.instance

@@ -62,7 +62,7 @@ class BlackRoundedButton extends StatelessWidget {
                   )
                 : Text(
                     text,
-                    style: TextStyle(fontSize: fontSize),
+                    style: TextStyle(fontSize: fontSize, color: textColour),
                   ),
       ),
     );

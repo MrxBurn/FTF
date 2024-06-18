@@ -17,6 +17,8 @@ import 'package:ftf/create_offer_page/create_offer_fighter.dart';
 import 'package:ftf/create_offer_page/offer_code_summary.dart';
 import 'package:ftf/dashboard/dashboard_page.dart';
 import 'package:ftf/enter_offer_code/enter_offer_code_page.dart';
+import 'package:ftf/eula/decline_eula_page.dart';
+import 'package:ftf/eula/eula_page.dart';
 import 'package:ftf/fan_fights_overview/fights_overview_page.dart';
 import 'package:ftf/fan_forum/fan_forum_page.dart';
 import 'package:ftf/fighter_forum/fighter_forum.dart';
@@ -303,7 +305,9 @@ class _MyAppState extends State<MyApp> {
         'myFighters': (context) => const MyFollowedFighters(),
         'forgotPassword': (context) => const ForgotPasswordPage(),
         'chatPage': (context) => ChatPage(),
-        'enterOfferCodePage': (context) => EnterOfferCodePage()
+        'enterOfferCodePage': (context) => EnterOfferCodePage(),
+        'eula': (context) => EULAPage(),
+        'declineEula': (context) => DeclineEULAPage()
       },
       localizationsDelegates: const [
         MonthYearPickerLocalizations.delegate,

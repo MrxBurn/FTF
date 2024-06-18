@@ -66,7 +66,8 @@ class _RegisterFanState extends State<RegisterFan> {
                             'route': 'fan',
                             'id': value.user?.uid,
                             'deviceToken':
-                                await FirebaseMessaging.instance.getToken()
+                                await FirebaseMessaging.instance.getToken(),
+                            'eula': false
                           }),
                           await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
