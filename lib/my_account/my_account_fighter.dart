@@ -10,10 +10,12 @@ import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/custom_image_header.dart';
 import 'package:ftf/reusableWidgets/dropdown_box.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/reusableWidgets/popup_menu_button.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/reusableWidgets/rounded_text_box.dart';
 import 'package:ftf/reusableWidgets/upload_option.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/delete_user.dart';
 import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar.dart';
@@ -172,9 +174,9 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                     child: Column(
                       children: [
                         CustomImageHeader(
-                          networkImage: true,
+                          networkImage: snapshot.data['profileImageURL'] == '',
                           backRequired: true,
-                          imagePath: snapshot.data['profileImageURL'] != null
+                          imagePath: snapshot.data['profileImageURL'] != ''
                               ? snapshot.data['profileImageURL']
                               : imgPlaceholder,
                           onTap: () => chooseUploadOption(
@@ -209,32 +211,91 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                                           'Your details',
                                           style: TextStyle(fontSize: 16),
                                         ),
-                                        isDisabled != false
-                                            ? Container(
-                                                decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      containerShadowYellow
-                                                    ]),
-                                                height: 25,
-                                                child: ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      shape: WidgetStateProperty.all<
-                                                              RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
-                                                      )),
+                                        Wrap(
+                                          alignment: WrapAlignment.center,
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: [
+                                            isDisabled != false
+                                                ? Container(
+                                                    decoration: BoxDecoration(
+                                                        boxShadow: [
+                                                          containerShadowYellow
+                                                        ]),
+                                                    height: 25,
+                                                    child: ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          shape: WidgetStateProperty.all<
+                                                                  RoundedRectangleBorder>(
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5.0),
+                                                          )),
+                                                        ),
+                                                        onPressed: onEditPress,
+                                                        child: const Text(
+                                                          'Edit',
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: Colors
+                                                                  .yellow),
+                                                        )),
+                                                  )
+                                                : const SizedBox(),
+                                            CustomPopupMenuButton(
+                                              children: [
+                                                PopupMenuItem(
+                                                  child: Text(
+                                                    'Delete Account',
+                                                    style: TextStyle(
+                                                        color: Colors.red),
+                                                  ),
+                                                  onTap: () => showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                      title: Text(
+                                                        'Account deletion',
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontSize: 18),
+                                                      ),
+                                                      content: Text(
+                                                          'Are you sure you want to delete your account?'),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                            child: Text(
+                                                              'Cancel',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            )),
+                                                        TextButton(
+                                                            onPressed: () =>
+                                                                deleteFighter(
+                                                                    currentUser),
+                                                            child: Text(
+                                                              'Yes',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .red),
+                                                            ))
+                                                      ],
                                                     ),
-                                                    onPressed: onEditPress,
-                                                    child: const Text(
-                                                      'Edit',
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.yellow),
-                                                    )),
-                                              )
-                                            : const SizedBox()
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        )
                                       ],
                                     ),
                                     const SizedBox(

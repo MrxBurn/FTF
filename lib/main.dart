@@ -312,26 +312,29 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: const [
         MonthYearPickerLocalizations.delegate,
       ],
-      home: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance
+      home: StreamBuilder(
+        stream: FirebaseFirestore.instance
             .collection('users')
             .doc(currentUser?.uid)
-            .get(),
+            .snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasData &&
-              !snapshot.data!.exists &&
-              currentUser == null) {
+          var dta = snapshot.data?.data() as Map<String, dynamic>?;
+
+          if (dta?.isEmpty == null || currentUser == null) {
             return LoginPage();
           }
-          if (snapshot.connectionState == ConnectionState.done &&
+          if (snapshot.connectionState == ConnectionState.active &&
               currentUser != null &&
-              snapshot.data?.get('route') == 'fan') {
+              dta?.isEmpty != null &&
+              dta?['route'] == 'fan') {
             return const FanHomePage();
           }
-          if (snapshot.connectionState == ConnectionState.done &&
+          if (snapshot.connectionState == ConnectionState.active &&
               currentUser != null &&
-              snapshot.data?.get('route') == 'fighter') {
+              dta?.isEmpty != null &&
+              dta?['route'] == 'fighter') {
+            print('bara');
             return const FighterHomePage();
           }
 

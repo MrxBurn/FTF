@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -33,7 +32,7 @@ class _FighterHomePageState extends State<FighterHomePage> {
 
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
-  Stream getUser() {
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getUser() {
     Stream<DocumentSnapshot<Map<String, dynamic>>> result = FirebaseFirestore
         .instance
         .collection('users')
@@ -53,11 +52,13 @@ class _FighterHomePageState extends State<FighterHomePage> {
           LogoHeader(backRequired: false),
           StreamBuilder(
               stream: getUser(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.active) {
-                  print(snapshot.data.data()['eula']);
+                  Map<String, dynamic>? data =
+                      snapshot.data?.data() as Map<String, dynamic>?;
 
-                  if (snapshot.data.data()['eula'] == true) {
+                  if (data?['eula'] == true) {
                     return Padding(
                       padding: EdgeInsets.only(left: 24, right: 24),
                       child: Column(
@@ -146,7 +147,7 @@ class _FighterHomePageState extends State<FighterHomePage> {
                     );
                   } else {
                     return EULAPage(
-                      user: snapshot.data.data(),
+                      user: data,
                     );
                   }
                 } else {

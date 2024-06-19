@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/eula/eula_text.dart';
-import 'package:ftf/home_pages/fan_home_page.dart';
-import 'package:ftf/home_pages/fighter_home_page.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 
 class EULAPage extends StatefulWidget {
@@ -51,24 +49,7 @@ class _EULAPageState extends State<EULAPage> {
             ),
             BlackRoundedButton(
               isLoading: false,
-              onPressed: () => onAccept().then((callback) => {
-                    if (widget.user?['route'] == 'fighter')
-                      {
-                        Navigator.of(context).pop(
-                          MaterialPageRoute(
-                            builder: (context) => FighterHomePage(),
-                          ),
-                        ),
-                      }
-                    else
-                      {
-                        Navigator.of(context).pop(
-                          MaterialPageRoute(
-                            builder: (context) => FanHomePage(),
-                          ),
-                        ),
-                      }
-                  }),
+              onPressed: () => onAccept(),
               text: 'Accept',
               textColour: Colors.green,
             )
