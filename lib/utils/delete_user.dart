@@ -49,3 +49,17 @@ Future<void> deleteFighter(String? currentUser) async {
 
   showSnackBarNoContext(text: 'Account deleted', snackbarKey: snackbarKey);
 }
+
+Future<void> deleteFan(String? currentUser) async {
+  // delete user data
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(currentUser)
+      .delete();
+
+  await FirebaseAuth.instance.currentUser?.delete().then((v) => navigatorKey
+      .currentState
+      ?.pushNamedAndRemoveUntil('loginPage', (route) => false));
+
+  showSnackBarNoContext(text: 'Account deleted', snackbarKey: snackbarKey);
+}

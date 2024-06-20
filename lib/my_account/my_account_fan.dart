@@ -3,9 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/authentication/login.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/reusableWidgets/popup_menu_button.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
 import 'package:ftf/reusableWidgets/rounded_text_box.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/delete_user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyAccountFan extends StatefulWidget {
@@ -62,64 +64,108 @@ class _MyAccountFanState extends State<MyAccountFan> {
                               boxShadow: [containerShadowRed]),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Column(
+                            child: Stack(
                               children: [
-                                const SizedBox(
-                                  height: 8,
-                                ),
                                 Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Wrap(
-                                    spacing: 8,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
+                                  alignment: Alignment.topRight,
+                                  child: CustomPopupMenuButton(
                                     children: [
-                                      const SizedBox(
-                                          width: 80, child: Text('User name')),
-                                      RoundedTextInput(
-                                        disabled: true,
-                                        width: 95,
-                                        controller: userNameController,
+                                      PopupMenuItem(
+                                        child: Text(
+                                          'Delete Account',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                        onTap: () => showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text(
+                                              'Account deletion',
+                                              style: TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 18),
+                                            ),
+                                            content: Text(
+                                                'Are you sure you want to delete your account?'),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                  child: Text(
+                                                    'Cancel',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  )),
+                                              TextButton(
+                                                  onPressed: () =>
+                                                      deleteFan(currentUser),
+                                                  child: Text(
+                                                    'Yes',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.red),
+                                                  ))
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 8,
+                                Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Wrap(
+                                        spacing: 8,
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          const SizedBox(
+                                              width: 80,
+                                              child: Text('User name')),
+                                          RoundedTextInput(
+                                            disabled: true,
+                                            controller: userNameController,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Wrap(
+                                        spacing: 8,
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          const SizedBox(
+                                              width: 80,
+                                              child: Text('First name')),
+                                          RoundedTextInput(
+                                            disabled: true,
+                                            controller: firstNameController,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Wrap(
-                                    spacing: 8,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                          width: 80, child: Text('First name')),
-                                      RoundedTextInput(
-                                        disabled: true,
-                                        width: 95,
-                                        controller: firstNameController,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: InkWell(
-                                      onTap: () => {
-                                        launchUrl(Uri.parse(
-                                            'https://fightertofighter.wixsite.com/ftf-site/general-8'))
-                                      },
-                                      child: Text(
-                                        'Privacy policy',
-                                        style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 10,
-                                            decoration:
-                                                TextDecoration.underline),
-                                      ),
+                                  alignment: Alignment.bottomCenter,
+                                  child: InkWell(
+                                    onTap: () => {
+                                      launchUrl(Uri.parse(
+                                          'https://fightertofighter.wixsite.com/ftf-site/general-8'))
+                                    },
+                                    child: Text(
+                                      'Privacy policy',
+                                      style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 10,
+                                          decoration: TextDecoration.underline),
                                     ),
                                   ),
                                 )

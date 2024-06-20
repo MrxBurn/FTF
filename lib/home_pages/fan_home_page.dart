@@ -50,7 +50,9 @@ class _FanHomePageState extends State<FanHomePage> {
                 stream: getUser(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.active) {
-                    if (snapshot.data.data()['eula'] == true) {
+                    Map<String, dynamic>? data =
+                        snapshot.data?.data() as Map<String, dynamic>?;
+                    if (data?['eula'] == true) {
                       return Padding(
                         padding: paddingLRT,
                         child: Column(
@@ -114,7 +116,7 @@ class _FanHomePageState extends State<FanHomePage> {
                       );
                     } else {
                       return EULAPage(
-                        user: snapshot.data.data(),
+                        user: data,
                       );
                     }
                   } else {
