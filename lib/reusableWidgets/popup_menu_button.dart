@@ -13,6 +13,7 @@ class _CustomPopupMenuButtonState extends State<CustomPopupMenuButton> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
+        padding: EdgeInsets.zero,
         icon: Icon(Icons.more_vert, color: Colors.white),
         itemBuilder: (BuildContext context) {
           return widget.children;

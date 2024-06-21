@@ -43,11 +43,12 @@ Future<void> deleteFighter(String? currentUser) async {
       .doc(currentUser)
       .delete();
 
-  await FirebaseAuth.instance.currentUser?.delete().then((v) => navigatorKey
-      .currentState
-      ?.pushNamedAndRemoveUntil('loginPage', (route) => false));
-
-  showSnackBarNoContext(text: 'Account deleted', snackbarKey: snackbarKey);
+  await FirebaseAuth.instance.currentUser?.delete().then((v) => {
+        showSnackBarNoContext(
+            text: 'Account deleted', snackbarKey: snackbarKey),
+        navigatorKey.currentState
+            ?.pushNamedAndRemoveUntil('loginPage', (route) => false)
+      });
 }
 
 Future<void> deleteFan(String? currentUser) async {
@@ -57,9 +58,12 @@ Future<void> deleteFan(String? currentUser) async {
       .doc(currentUser)
       .delete();
 
-  await FirebaseAuth.instance.currentUser?.delete().then((v) => navigatorKey
-      .currentState
-      ?.pushNamedAndRemoveUntil('loginPage', (route) => false));
+  await FirebaseAuth.instance.currentUser?.delete().then((v) => {
+        showSnackBarNoContext(
+            text: 'Account deleted', snackbarKey: snackbarKey),
+        navigatorKey.currentState
+            ?.pushNamedAndRemoveUntil('loginPage', (route) => false)
+      });
 
   showSnackBarNoContext(text: 'Account deleted', snackbarKey: snackbarKey);
 }

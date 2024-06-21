@@ -5,7 +5,9 @@ import 'package:ftf/fighters_overview/fighters_overview_widgets/select_dream_opp
 import 'package:ftf/my_offers/my_offers_widgets/offer_card.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/reusableWidgets/popup_menu_button.dart';
 import 'package:ftf/styles/styles.dart';
+import 'package:ftf/utils/radio_button_options.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fan.dart';
 
 class FighterView extends StatefulWidget {
@@ -137,40 +139,128 @@ class _FighterViewState extends State<FighterView> {
                                     const EdgeInsets.only(left: 8.0, top: 8),
                                 child: Stack(
                                   children: [
-                                    widget.isFighterRoute == false
-                                        ? Align(
-                                            alignment: Alignment.topRight,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 6),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      containerShadowYellow
-                                                    ]),
-                                                height: 25,
-                                                width: 100,
-                                                child: ElevatedButton(
-                                                    style: ButtonStyle(
-                                                      shape: WidgetStateProperty.all<
-                                                              RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5.0),
-                                                      )),
-                                                    ),
-                                                    onPressed: onFollowTap,
-                                                    child: Text(
-                                                      followText,
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        widget.isFighterRoute == false
+                                            ? Align(
+                                                alignment: Alignment.topRight,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 6),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        boxShadow: [
+                                                          containerShadowYellow
+                                                        ]),
+                                                    height: 25,
+                                                    width: 100,
+                                                    child: ElevatedButton(
+                                                        style: ButtonStyle(
+                                                          shape: WidgetStateProperty.all<
+                                                                  RoundedRectangleBorder>(
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5.0),
+                                                          )),
+                                                        ),
+                                                        onPressed: onFollowTap,
+                                                        child: Text(
+                                                          followText,
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  followColour),
+                                                        )),
+                                                  ),
+                                                ),
+                                              )
+                                            : SizedBox(),
+                                        SizedBox(
+                                          height: 30,
+                                          child: CustomPopupMenuButton(
+                                            children: [
+                                              PopupMenuItem(
+                                                child: Text(
+                                                  'Report user',
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                                onTap: () => showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    title: Text(
+                                                      'Report reason',
                                                       style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: followColour),
-                                                    )),
+                                                          color: Colors.red,
+                                                          fontSize: 18),
+                                                    ),
+                                                    content: SizedBox(
+                                                      height: 350,
+                                                      child: Column(
+                                                          children: List<
+                                                                  Widget>.generate(
+                                                              reportUserOptions
+                                                                  .length,
+                                                              (idx) =>
+                                                                  RadioListTile(
+                                                                    title: Text(
+                                                                        reportUserOptions[idx]['text'] ??
+                                                                            ''),
+                                                                    value: reportUserOptions[
+                                                                            idx]
+                                                                        [
+                                                                        'value'],
+                                                                    groupValue:
+                                                                        reportUserOptions[idx]
+                                                                            [
+                                                                            'value'],
+                                                                    onChanged:
+                                                                        (value) {
+                                                                      setState(
+                                                                          () {
+                                                                        value;
+                                                                      });
+                                                                    },
+                                                                  ))),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                          child: Text(
+                                                            'Cancel',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          )),
+                                                      TextButton(
+                                                          onPressed: () {},
+                                                          child: Text(
+                                                            'Report',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color:
+                                                                    Colors.red),
+                                                          ))
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          )
-                                        : SizedBox(),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                     Wrap(
                                       spacing: 40,
                                       children: [
@@ -200,31 +290,39 @@ class _FighterViewState extends State<FighterView> {
                                             ),
                                           ],
                                         ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              fighter['weightClass'],
-                                              style: fighterDescriptionStyle,
-                                            ),
-                                            Text(
-                                              fighter['fighterType'],
-                                              style: fighterDescriptionStyle,
-                                            ),
-                                            Text(
-                                              fighter['fighterStatus'],
-                                              style: fighterDescriptionStyle,
-                                            ),
-                                            Text(
-                                              fighter['gender'],
-                                              style: fighterDescriptionStyle,
-                                            ),
-                                            Text(
-                                              fighter['nationality'],
-                                              style: fighterDescriptionStyle,
-                                            ),
-                                          ],
+                                        SizedBox(
+                                          width: 80,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                fighter['weightClass'],
+                                                style: fighterDescriptionStyle,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                fighter['fighterType'],
+                                                style: fighterDescriptionStyle,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                fighter['fighterStatus'],
+                                                style: fighterDescriptionStyle,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                fighter['gender'],
+                                                style: fighterDescriptionStyle,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                fighter['nationality'],
+                                                style: fighterDescriptionStyle,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
