@@ -35,10 +35,20 @@ class MyOffersPage extends StatelessWidget {
 
     List combinedList = [];
 
+    List reportedFighters = await FirebaseFirestore.instance
+        .collection('reportUsers')
+        .get()
+        .then((data) =>
+            data.docs.map((report) => report.data()['reportedUser']).toList());
+
     combinedList.addAll(createdByData);
     combinedList.addAll(opponentData);
 
-    return combinedList;
+    return combinedList
+        .where((offer) =>
+            !reportedFighters.contains(offer['createdBy']) &&
+            !reportedFighters.contains(offer['opponentId']))
+        .toList();
   }
 
   final double cardHeight = 200;

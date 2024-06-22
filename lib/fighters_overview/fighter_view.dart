@@ -212,7 +212,6 @@ class _FighterViewState extends State<FighterView> {
                                                       StatefulBuilder(builder:
                                                           (context,
                                                               dialogState) {
-                                                    print(_groupValue);
                                                     return AlertDialog(
                                                       title: Text(
                                                         'Report reason',

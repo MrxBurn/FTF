@@ -16,13 +16,22 @@ class _MyFollowedFightersState extends State<MyFollowedFighters> {
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
   Future<List<dynamic>> getFollowedFighters() async {
-    var result = await fighters
+    List followedFighters = await fighters
         .where('route', isEqualTo: 'fighter')
         .where('followers', arrayContains: currentUser)
         .get()
-        .then((value) => value.docs.map((e) => e.data()));
+        .then((value) => value.docs.map((e) => e.data()).toList());
 
-    return result.toList();
+    List reportedFighters = await FirebaseFirestore.instance
+        .collection('reportUsers')
+        .get()
+        .then((data) =>
+            data.docs.map((report) => report.data()['reportedUser']).toList());
+
+    var filteredReportedFighters = followedFighters
+        .where((fighter) => !reportedFighters.contains(fighter['id']));
+
+    return filteredReportedFighters.toList();
   }
 
   @override

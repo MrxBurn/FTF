@@ -16,8 +16,30 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
   CollectionReference offers =
       FirebaseFirestore.instance.collection('fightOffers');
 
-  Stream getAllOffers() {
-    return offers.snapshots();
+  Stream<List<DocumentSnapshot>> getAllOffers() async* {
+    // Get the reported users
+    List reportedUsers = await FirebaseFirestore.instance
+        .collection('reportUsers')
+        .get()
+        .then((report) =>
+            report.docs.map((v) => v.data()['reportedUser']).toList());
+
+    var allOffers =
+        FirebaseFirestore.instance.collection('fightOffers').snapshots();
+
+    List<DocumentSnapshot<Object>> filteredOffers = [];
+
+    await for (var offerSnapshot in allOffers) {
+      // Filter offers based on reported users
+      filteredOffers = offerSnapshot.docs.where((offer) {
+        String createdBy = offer.data()['createdBy'];
+        String opponentId = offer.data()['opponentId'];
+        return !reportedUsers.contains(createdBy) &&
+            !reportedUsers.contains(opponentId);
+      }).toList();
+      // Yield the filtered offers
+      yield filteredOffers;
+    }
   }
 
   @override
@@ -35,7 +57,9 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
                 stream: getAllOffers(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.active) {
-                    List snapshotList = snapshot.data.docs.toList();
+                    List snapshotList = snapshot.data;
+
+                    print(snapshotList);
                     return Column(children: [
                       Padding(
                         padding: const EdgeInsets.only(
