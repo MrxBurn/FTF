@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/fighters_overview/fighters_overview_widgets/select_dream_opponent.dart';
+import 'package:ftf/main.dart';
 import 'package:ftf/my_offers/my_offers_widgets/offer_card.dart';
 import 'package:ftf/reusableWidgets/button_black.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/popup_menu_button.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/radio_button_options.dart';
+import 'package:ftf/utils/snack_bar_no_context.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fan.dart';
 
 class FighterView extends StatefulWidget {
@@ -105,6 +107,19 @@ class _FighterViewState extends State<FighterView> {
     getFighters();
   }
 
+  String? _groupValue = '';
+
+  Future<void> reportUser(String reportedUser) async {
+    await FirebaseFirestore.instance.collection('reportUsers').add({
+      "reporter": currentUser,
+      "reason": _groupValue,
+      "reportedUser": reportedUser
+    });
+
+    showSnackBarNoContext(
+        text: 'User reported', snackbarKey: snackbarKey, color: Colors.green);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -194,66 +209,100 @@ class _FighterViewState extends State<FighterView> {
                                                 onTap: () => showDialog(
                                                   context: context,
                                                   builder: (context) =>
-                                                      AlertDialog(
-                                                    title: Text(
-                                                      'Report reason',
-                                                      style: TextStyle(
-                                                          color: Colors.red,
-                                                          fontSize: 18),
-                                                    ),
-                                                    content: SizedBox(
-                                                      height: 350,
-                                                      child: Column(
-                                                          children: List<
+                                                      StatefulBuilder(builder:
+                                                          (context,
+                                                              dialogState) {
+                                                    print(_groupValue);
+                                                    return AlertDialog(
+                                                      title: Text(
+                                                        'Report reason',
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontSize: 18),
+                                                      ),
+                                                      content: SizedBox(
+                                                        height: 350,
+                                                        child: Column(
+                                                          children: [
+                                                            Column(
+                                                              children: List<
                                                                   Widget>.generate(
-                                                              reportUserOptions
-                                                                  .length,
-                                                              (idx) =>
-                                                                  RadioListTile(
-                                                                    title: Text(
-                                                                        reportUserOptions[idx]['text'] ??
-                                                                            ''),
-                                                                    value: reportUserOptions[
-                                                                            idx]
-                                                                        [
-                                                                        'value'],
-                                                                    groupValue:
-                                                                        reportUserOptions[idx]
-                                                                            [
-                                                                            'value'],
-                                                                    onChanged:
-                                                                        (value) {
-                                                                      setState(
-                                                                          () {
-                                                                        value;
-                                                                      });
-                                                                    },
-                                                                  ))),
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                          onPressed: () =>
-                                                              Navigator.pop(
-                                                                  context),
-                                                          child: Text(
-                                                            'Cancel',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white),
-                                                          )),
-                                                      TextButton(
-                                                          onPressed: () {},
-                                                          child: Text(
-                                                            'Report',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color:
-                                                                    Colors.red),
-                                                          ))
-                                                    ],
-                                                  ),
+                                                                reportUserOptions
+                                                                    .length,
+                                                                (idx) =>
+                                                                    RadioListTile(
+                                                                  title: Text(
+                                                                      reportUserOptions[idx]
+                                                                              [
+                                                                              'text'] ??
+                                                                          ''),
+                                                                  value: reportUserOptions[
+                                                                          idx]
+                                                                      ['value'],
+                                                                  groupValue:
+                                                                      _groupValue,
+                                                                  onChanged:
+                                                                      (value) {
+                                                                    dialogState(
+                                                                        () {
+                                                                      _groupValue =
+                                                                          value;
+                                                                    });
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 12,
+                                                            ),
+                                                            Text(
+                                                              "Note: Once reported, you can’t see this user anymore",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .grey),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                            child: Text(
+                                                              'Cancel',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            )),
+                                                        TextButton(
+                                                            onPressed: _groupValue !=
+                                                                    ''
+                                                                ? () => reportUser(fighter['id']).then((v) => widget
+                                                                        .isFighterRoute
+                                                                    ? Navigator.pushNamed(
+                                                                        context,
+                                                                        'fighterHome')
+                                                                    : Navigator.pushNamed(
+                                                                        context,
+                                                                        'fanHome'))
+                                                                : null,
+                                                            child: Text(
+                                                              'Report',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: _groupValue !=
+                                                                          ''
+                                                                      ? Colors
+                                                                          .red
+                                                                      : Colors
+                                                                          .grey),
+                                                            ))
+                                                      ],
+                                                    );
+                                                  }),
                                                 ),
                                               ),
                                             ],

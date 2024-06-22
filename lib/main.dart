@@ -245,6 +245,8 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: navigatorKey,
       title: 'FTF',
       theme: ThemeData(
+        radioTheme:
+            RadioThemeData(fillColor: WidgetStatePropertyAll(Colors.yellow)),
         progressIndicatorTheme:
             ProgressIndicatorThemeData(color: Colors.yellow),
         primaryColor: Colors.black,
