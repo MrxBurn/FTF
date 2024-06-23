@@ -24,6 +24,7 @@ class _MyFollowedFightersState extends State<MyFollowedFighters> {
 
     List reportedFighters = await FirebaseFirestore.instance
         .collection('reportUsers')
+        .where('reporter', isEqualTo: currentUser)
         .get()
         .then((data) =>
             data.docs.map((report) => report.data()['reportedUser']).toList());

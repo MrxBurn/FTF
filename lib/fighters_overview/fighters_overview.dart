@@ -27,6 +27,7 @@ class _FightersOverviewState extends State<FightersOverview> {
   Future<List<dynamic>> getFighters() async {
     List reportedFighters = await FirebaseFirestore.instance
         .collection('reportUsers')
+        .where('reporter', isEqualTo: currentUser)
         .get()
         .then((data) =>
             data.docs.map((report) => report.data()['reportedUser']).toList());

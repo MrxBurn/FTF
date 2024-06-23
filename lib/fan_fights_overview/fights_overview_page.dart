@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/fan_fights_overview/fights_overview_widgets/fights_overview_card.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
@@ -16,10 +17,13 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
   CollectionReference offers =
       FirebaseFirestore.instance.collection('fightOffers');
 
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+
   Stream<List<DocumentSnapshot>> getAllOffers() async* {
     // Get the reported users
     List reportedUsers = await FirebaseFirestore.instance
         .collection('reportUsers')
+        .where('reporter', isEqualTo: currentUser)
         .get()
         .then((report) =>
             report.docs.map((v) => v.data()['reportedUser']).toList());
