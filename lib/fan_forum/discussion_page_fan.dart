@@ -47,12 +47,16 @@ class _DiscussionPageFanState extends State<DiscussionPageFan> {
         .collection('forumDiscussions')
         .doc(widget.firebaseCollection)
         .collection('comments')
-        .doc()
-        .set({
-      'userName': userData['userName'],
+        .add({
       'comment': comment,
+      'firstName': userData['firstName'],
       'createdAt': DateTime.now(),
-    });
+      'userId': currentUser?.uid,
+      'userName': userData['userName']
+    }).then((value) => {
+              print(value.id),
+              value.update({"commentId": value.id})
+            });
 
     setState(() {
       isLoading = false;
@@ -75,7 +79,16 @@ class _DiscussionPageFanState extends State<DiscussionPageFan> {
         .get()
         .then((value) => value.docs.map((e) => e.data()));
 
-    return comments.toList();
+    List reportedComments = await FirebaseFirestore.instance
+        .collection('reportComments')
+        .where('reporter', isEqualTo: currentUser?.uid)
+        .get()
+        .then((dta) =>
+            dta.docs.map((comment) => comment.data()['commentId']).toList());
+
+    return comments
+        .where((comment) => !reportedComments.contains(comment['commentId']))
+        .toList();
   }
 
   @override
@@ -165,6 +178,7 @@ class _DiscussionPageFanState extends State<DiscussionPageFan> {
                     )
                   : const SizedBox(),
               CommentsSectionFan(
+                firebaseCollection: widget.firebaseCollection,
                 getComments: future,
                 // isFighterForum: false,
               ),
