@@ -1,16 +1,45 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/main.dart';
+import 'package:ftf/reusableWidgets/popup_menu_button.dart';
 import 'package:ftf/utils/general.dart';
+import 'package:ftf/utils/radio_button_options.dart';
+import 'package:ftf/utils/snack_bar_no_context.dart';
 
 class CommentsSectionFighter extends StatefulWidget {
-  const CommentsSectionFighter({super.key, required this.getComments});
+  const CommentsSectionFighter(
+      {super.key, required this.getComments, required this.firebaseCollection});
 
   final Future<List<Map<String, dynamic>>> getComments;
+  final String firebaseCollection;
 
   @override
   State<CommentsSectionFighter> createState() => _CommentsSectionFighterState();
 }
 
 class _CommentsSectionFighterState extends State<CommentsSectionFighter> {
+  String? _groupValue = '';
+
+  String? currentUser = FirebaseAuth.instance.currentUser?.uid;
+
+  Future<void> reportComment(
+      String comment, String commentId, String commentOwner) async {
+    await FirebaseFirestore.instance.collection('reportComments').add({
+      "reporter": currentUser,
+      "reason": _groupValue,
+      "comment": comment,
+      "commentId": commentId,
+      "forumTopic": widget.firebaseCollection,
+      "commentOwner": commentOwner
+    });
+
+    showSnackBarNoContext(
+        text: 'Comment reported',
+        snackbarKey: snackbarKey,
+        color: Colors.green);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -31,7 +60,9 @@ class _CommentsSectionFighterState extends State<CommentsSectionFighter> {
                         CircleAvatar(
                             radius: 15,
                             backgroundImage: NetworkImage(
-                              data['profileImage'] ?? imgPlaceholder,
+                              data['profileImage'] != ''
+                                  ? data['profileImage']
+                                  : imgPlaceholder,
                             )),
                         const SizedBox(
                           width: 12,
@@ -46,6 +77,100 @@ class _CommentsSectionFighterState extends State<CommentsSectionFighter> {
                               ),
                               Text(data['comment'])
                             ]),
+                        Spacer(),
+                        data['userId'] != currentUser
+                            ? CustomPopupMenuButton(
+                                children: [
+                                  PopupMenuItem(
+                                    child: Text(
+                                      'Report user',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    onTap: () => showDialog(
+                                      context: context,
+                                      builder: (context) => StatefulBuilder(
+                                          builder: (context, dialogState) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Report reason',
+                                            style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 18),
+                                          ),
+                                          content: SizedBox(
+                                            height: 450,
+                                            child: Column(
+                                              children: [
+                                                Column(
+                                                  children:
+                                                      List<Widget>.generate(
+                                                    reportCommentOptions.length,
+                                                    (idx) => RadioListTile(
+                                                      title: Text(
+                                                          reportCommentOptions[
+                                                                      idx]
+                                                                  ['text'] ??
+                                                              ''),
+                                                      value:
+                                                          reportCommentOptions[
+                                                              idx]['value'],
+                                                      groupValue: _groupValue,
+                                                      onChanged: (value) {
+                                                        dialogState(() {
+                                                          _groupValue = value;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 12,
+                                                ),
+                                                Text(
+                                                  "Note: Once reported, you can’t see this comment anymore",
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: Text(
+                                                  'Cancel',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                )),
+                                            TextButton(
+                                                onPressed: _groupValue != ''
+                                                    ? () => reportComment(
+                                                            data['comment'],
+                                                            data['commentId'],
+                                                            data['userId'])
+                                                        .then((v) =>
+                                                            Navigator.pushNamed(
+                                                                context,
+                                                                'fighterHome'))
+                                                    : null,
+                                                child: Text(
+                                                  'Report',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: _groupValue != ''
+                                                          ? Colors.red
+                                                          : Colors.grey),
+                                                ))
+                                          ],
+                                        );
+                                      }),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox()
                       ],
                     ),
                   ),

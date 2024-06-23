@@ -174,7 +174,7 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                     child: Column(
                       children: [
                         CustomImageHeader(
-                          networkImage: snapshot.data['profileImageURL'] == '',
+                          isNetworkImage: true,
                           backRequired: true,
                           imagePath: snapshot.data['profileImageURL'] != ''
                               ? snapshot.data['profileImageURL']

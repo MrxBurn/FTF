@@ -4,15 +4,15 @@ class CustomImageHeader extends StatelessWidget {
   final bool backRequired;
   final Function? onPressed;
   final String imagePath;
-  final bool networkImage;
   final Function()? onTap;
+  final bool? isNetworkImage;
 
   const CustomImageHeader(
       {super.key,
       required this.backRequired,
       this.onPressed,
       required this.imagePath,
-      this.networkImage = false,
+      this.isNetworkImage = false,
       this.onTap});
 
   @override
@@ -26,12 +26,11 @@ class CustomImageHeader extends StatelessWidget {
           padding: const EdgeInsets.only(top: 170.0),
           child: Center(
             child: CircleAvatar(
-                radius: 70,
-                backgroundImage: networkImage == false
-                    ? AssetImage(
-                        imagePath,
-                      )
-                    : NetworkImage(imagePath) as ImageProvider),
+              radius: 70,
+              backgroundImage: isNetworkImage == false
+                  ? AssetImage(imagePath) as ImageProvider
+                  : NetworkImage(imagePath),
+            ),
           ),
         ),
         backRequired == true
