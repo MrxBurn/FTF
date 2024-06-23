@@ -54,7 +54,8 @@ class _DiscussionPageFighterState extends State<DiscussionPageFighter> {
       'lastName': userData['lastName'],
       'createdAt': DateTime.now(),
       'profileImage': userData['profileImageURL'],
-      'userId': currentUser?.uid
+      'userId': currentUser?.uid,
+      'reportCount': 0,
     }).then((value) => {
               print(value.id),
               value.update({"commentId": value.id})

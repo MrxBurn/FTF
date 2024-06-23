@@ -52,7 +52,8 @@ class _DiscussionPageFanState extends State<DiscussionPageFan> {
       'firstName': userData['firstName'],
       'createdAt': DateTime.now(),
       'userId': currentUser?.uid,
-      'userName': userData['userName']
+      'userName': userData['userName'],
+      'reportCount': 0,
     }).then((value) => {
               print(value.id),
               value.update({"commentId": value.id})

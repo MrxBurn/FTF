@@ -87,7 +87,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   'id': value.user?.uid,
                   'followers': [],
                   'deviceToken': await FirebaseMessaging.instance.getToken(),
-                  'eula': false
+                  'eula': false,
+                  'reportCount': 0
                 })
               });
       await FirebaseAuth.instance
