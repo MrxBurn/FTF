@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ftf/main.dart';
+import 'package:ftf/utils/forum_data.dart';
 import 'package:ftf/utils/snack_bar_no_context.dart';
 
 Future<void> deleteFighter(String? currentUser) async {
@@ -37,6 +38,18 @@ Future<void> deleteFighter(String? currentUser) async {
     item.delete();
   });
 
+  for (var thread in threads) {
+    await FirebaseFirestore.instance
+        .collection('forumDiscussions')
+        .doc(thread['collection'])
+        .collection('comments')
+        .where('userId', isEqualTo: currentUser)
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((doc) => doc.reference.delete());
+    });
+  }
+
   // delete user data
   await FirebaseFirestore.instance
       .collection('users')
@@ -57,6 +70,19 @@ Future<void> deleteFan(String? currentUser) async {
       .collection('users')
       .doc(currentUser)
       .delete();
+
+  // delete comments
+  for (var thread in threads) {
+    await FirebaseFirestore.instance
+        .collection('forumDiscussions')
+        .doc(thread['collection'])
+        .collection('comments')
+        .where('userId', isEqualTo: currentUser)
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((doc) => doc.reference.delete());
+    });
+  }
 
   await FirebaseAuth.instance.currentUser?.delete().then((v) => {
         showSnackBarNoContext(
