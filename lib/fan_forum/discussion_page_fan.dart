@@ -87,8 +87,19 @@ class _DiscussionPageFanState extends State<DiscussionPageFan> {
         .then((dta) =>
             dta.docs.map((comment) => comment.data()['commentId']).toList());
 
+    List reportedUsers = await FirebaseFirestore.instance
+        .collection('reportUsers')
+        .where('reporter', isEqualTo: currentUser?.uid)
+        .get()
+        .then((report) =>
+            report.docs.map((v) => v.data()['reportedUser']).toList());
+
+    print(reportedUsers);
+
     return comments
-        .where((comment) => !reportedComments.contains(comment['commentId']))
+        .where((comment) =>
+            !reportedComments.contains(comment['commentId']) ||
+            !reportedUsers.contains(comment['userId']))
         .toList();
   }
 
