@@ -75,7 +75,7 @@ class _CommentsSectionFanState extends State<CommentsSectionFan> {
                                 children: [
                                   PopupMenuItem(
                                     child: Text(
-                                      'Report user',
+                                      'Report comment',
                                       style: TextStyle(color: Colors.red),
                                     ),
                                     onTap: () => showDialog(

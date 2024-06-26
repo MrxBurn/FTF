@@ -98,7 +98,7 @@ class _DiscussionPageFanState extends State<DiscussionPageFan> {
 
     return comments
         .where((comment) =>
-            !reportedComments.contains(comment['commentId']) ||
+            !reportedComments.contains(comment['commentId']) &&
             !reportedUsers.contains(comment['userId']))
         .toList();
   }

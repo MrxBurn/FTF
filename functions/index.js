@@ -2,6 +2,7 @@
 
 const fan = require("./fan");
 const fighter = require("./fighter");
+const report = require("./report");
 
 
 // fan functions
@@ -15,3 +16,9 @@ exports.FIGHTERSendNotificationOnOfferCreated = fighter.sendNotificationOnOfferC
 exports.FIGHTERSendNotificationOnNegotiation = fighter.sendNotificationOnNegotiation;
 exports.FIGHTERSendNotificationOnApproveCreator = fighter.sendNotificationOnApproveCreator;
 exports.FIGHTERSendNotificationOnMessageSent = fighter.sendNotificationOnMessageSent;
+
+// report comments
+exports.deleteCommentOnReport = report.deleteCommentOnReport;
+
+//report users
+exports.deleteUserOnReport = report.deleteUserOnReport

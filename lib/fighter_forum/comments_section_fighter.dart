@@ -83,7 +83,7 @@ class _CommentsSectionFighterState extends State<CommentsSectionFighter> {
                                 children: [
                                   PopupMenuItem(
                                     child: Text(
-                                      'Report user',
+                                      'Report comment',
                                       style: TextStyle(color: Colors.red),
                                     ),
                                     onTap: () => showDialog(

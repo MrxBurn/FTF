@@ -77,16 +77,16 @@ void onForegroundNotificationTap(NotificationResponse response) {
 }
 
 Future connectEmulator() async {
-  final localHostString = Platform.isAndroid ? "10.0.2.2" : 'localhost';
+  final localHostString = Platform.isAndroid ? "10.0.2.2" : '127.0.0.1';
 
+  print(localHostString);
   FirebaseFirestore.instance.settings = Settings(
     host: '$localHostString:8080',
     sslEnabled: false,
     persistenceEnabled: false,
   );
 
-  await FirebaseAuth.instance
-      .useAuthEmulator('http://$localHostString:9099', 9099);
+  await FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);
 }
 
 Future<void> main() async {
