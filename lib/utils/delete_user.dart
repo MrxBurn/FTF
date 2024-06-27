@@ -26,16 +26,18 @@ Future<void> deleteFighter(String? currentUser) async {
       .ref('fighterProfiles/${currentUser}')
       .listAll();
 
-  ListResult userCalloutVideos = await FirebaseStorage.instance
-      .ref('calloutVideos/${currentUser}')
-      .listAll();
-
   userProfilePictures.items.forEach((item) {
     item.delete();
   });
 
-  userCalloutVideos.items.forEach((item) {
-    item.delete();
+  userOffers.forEach((offer) async {
+    ListResult userCalloutVideos = await FirebaseStorage.instance
+        .ref('calloutVideos/${offer['offerId']}')
+        .listAll();
+
+    userCalloutVideos.items.forEach((item) {
+      item.delete();
+    });
   });
 
   for (var thread in threads) {
