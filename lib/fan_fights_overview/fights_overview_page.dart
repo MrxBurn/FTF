@@ -63,7 +63,6 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
                   if (snapshot.connectionState == ConnectionState.active) {
                     List snapshotList = snapshot.data;
 
-                    print(snapshotList);
                     return Column(children: [
                       Padding(
                         padding: const EdgeInsets.only(

@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -95,7 +93,6 @@ class _RegisterFanState extends State<RegisterFan> {
 
   @override
   Widget build(BuildContext context) {
-    print(authenticationError);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(

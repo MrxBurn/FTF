@@ -57,7 +57,6 @@ class _DiscussionPageFighterState extends State<DiscussionPageFighter> {
       'userId': currentUser?.uid,
       'reportCount': 0,
     }).then((value) => {
-              print(value.id),
               value.update({"commentId": value.id})
             });
 

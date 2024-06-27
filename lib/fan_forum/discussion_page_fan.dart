@@ -55,7 +55,6 @@ class _DiscussionPageFanState extends State<DiscussionPageFan> {
       'userName': userData['userName'],
       'reportCount': 0,
     }).then((value) => {
-              print(value.id),
               value.update({"commentId": value.id})
             });
 
@@ -93,8 +92,6 @@ class _DiscussionPageFanState extends State<DiscussionPageFan> {
         .get()
         .then((report) =>
             report.docs.map((v) => v.data()['reportedUser']).toList());
-
-    print(reportedUsers);
 
     return comments
         .where((comment) =>
