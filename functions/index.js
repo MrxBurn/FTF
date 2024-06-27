@@ -20,5 +20,5 @@ exports.FIGHTERSendNotificationOnMessageSent = fighter.sendNotificationOnMessage
 // report comments
 exports.deleteCommentOnReport = report.deleteCommentOnReport;
 
-//report users
-exports.deleteUserOnReport = report.deleteUserOnReport
+// report users
+exports.deleteUserOnReport = report.deleteUserOnReport;

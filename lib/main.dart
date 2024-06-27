@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ftf/authentication/account_type.dart';
@@ -79,14 +80,15 @@ void onForegroundNotificationTap(NotificationResponse response) {
 Future connectEmulator() async {
   final localHostString = Platform.isAndroid ? "10.0.2.2" : '127.0.0.1';
 
-  print(localHostString);
   FirebaseFirestore.instance.settings = Settings(
     host: '$localHostString:8080',
     sslEnabled: false,
     persistenceEnabled: false,
   );
 
-  await FirebaseAuth.instance.useAuthEmulator('127.0.0.1', 9099);
+  FirebaseStorage.instance.useStorageEmulator(localHostString, 9199);
+
+  await FirebaseAuth.instance.useAuthEmulator(localHostString, 9099);
 }
 
 Future<void> main() async {
@@ -336,7 +338,6 @@ class _MyAppState extends State<MyApp> {
               currentUser != null &&
               dta?.isEmpty != null &&
               dta?['route'] == 'fighter') {
-            print('bara');
             return const FighterHomePage();
           }
 
