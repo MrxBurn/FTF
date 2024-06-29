@@ -109,6 +109,36 @@ class _MyAccountFanState extends State<MyAccountFan> {
                                           ),
                                         ),
                                       ),
+                                      PopupMenuItem(
+                                        child: Text(
+                                          'Contact us',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                        onTap: () => showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text(
+                                              'Contact us',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            content: Text(
+                                                'If any user has posted something of a serious nature, please email us at fightertofighter.official@gmail.com. We will investigate and take appropriate action within 24 hours.'),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                  child: Text(
+                                                    'Close',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
