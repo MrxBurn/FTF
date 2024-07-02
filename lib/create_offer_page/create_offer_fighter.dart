@@ -460,7 +460,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.white)),
                       labelStyle: TextStyle(color: Colors.grey),
-                      hintText: 'Write a message...(200 characters)'),
+                      hintText: 'Send a message to the opponent...'),
                 ),
               ),
               Padding(
