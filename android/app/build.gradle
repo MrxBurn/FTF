@@ -50,7 +50,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.ftf.ftf"
+        applicationId "com.ftf.f2f"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
@@ -79,11 +79,11 @@ android {
     productFlavors {
         dev {
             dimension "env"
-            applicationId "com.ftf.ftf"
+            applicationId "com.ftf.f2f"
         }
         prod {
             dimension "env"
-            applicationId "com.ftf.ftf"
+            applicationId "com.ftf.f2f"
         }
     }
 }
