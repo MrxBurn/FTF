@@ -45,7 +45,7 @@ class _CommentsSectionFanState extends State<CommentsSectionFan> {
       future: widget.getComments,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
+          return snapshot.data.length > 0 ? ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: snapshot.data.length,
@@ -167,7 +167,10 @@ class _CommentsSectionFanState extends State<CommentsSectionFan> {
                     ),
                   ),
                 );
-              });
+              }) : Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text('There are currently no comments on this page', style: TextStyle(color: Colors.grey),),
+              );
         } else {
           return const CircularProgressIndicator();
         }

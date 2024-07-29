@@ -64,7 +64,7 @@ class DislikedOfferList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return dislikedOfferList.length > 0 ? SizedBox(
       width: 300,
       height: 180,
       child: ListView.builder(
@@ -169,6 +169,9 @@ class DislikedOfferList extends StatelessWidget {
               ),
             );
           }),
-    );
+    ) : Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text('You do not have any disliked offers', style: TextStyle(color: Colors.grey),),
+              );
   }
 }

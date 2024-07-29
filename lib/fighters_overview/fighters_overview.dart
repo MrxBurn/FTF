@@ -8,13 +8,15 @@ import 'package:ftf/styles/styles.dart';
 
 class FightersOverview extends StatefulWidget {
   const FightersOverview(
-      {super.key, this.future, this.pageTitle, this.isFighterRoute = false});
+      {super.key, this.future, this.pageTitle, this.isFighterRoute = false, this.text = 'There are currently no fighters but make sure you keep an eye on this page for updates.'});
 
   final Future<List<dynamic>>? future;
 
   final String? pageTitle;
 
   final bool isFighterRoute;
+
+  final String text;
 
   @override
   State<FightersOverview> createState() => _FightersOverviewState();
@@ -64,9 +66,10 @@ class _FightersOverviewState extends State<FightersOverview> {
                           .toList()
                       : snapshot.data;
 
-                  return Padding(
+                  return data.length > 0 ? Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: data.length,
                         itemBuilder: (BuildContext context, idx) {
@@ -86,7 +89,10 @@ class _FightersOverviewState extends State<FightersOverview> {
                                         ))),
                           );
                         }),
-                  );
+                  ): Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(widget.text, textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),),
+              );
                 } else {
                   return const Center(
                     child: CircularProgressIndicator(),

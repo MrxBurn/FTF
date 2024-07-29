@@ -42,7 +42,7 @@ class DreamOpponentsList extends StatelessWidget {
   final List opponentsList;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return opponentsList.length > 0 ? SizedBox(
       width: 300,
       height: 100,
       child: ListView.builder(
@@ -79,6 +79,9 @@ class DreamOpponentsList extends StatelessWidget {
               ),
             );
           }),
-    );
+    ): Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text('You do not have any assigned dream opponents', style: TextStyle(color: Colors.grey),),
+              );
   }
 }

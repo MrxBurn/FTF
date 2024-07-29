@@ -40,6 +40,7 @@ class _MyFollowedFightersState extends State<MyFollowedFighters> {
     return FightersOverview(
       pageTitle: 'Your fighters',
       future: getFollowedFighters(),
+      text: 'You are not following any fighters. Please go to "All Fighters" page to see fighters registered in the app.',
     );
   }
 }

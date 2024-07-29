@@ -63,7 +63,7 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
                   if (snapshot.connectionState == ConnectionState.active) {
                     List snapshotList = snapshot.data;
 
-                    return Column(children: [
+                    return snapshotList.length > 0 ? Column(children: [
                       Padding(
                         padding: const EdgeInsets.only(
                           left: 24,
@@ -108,7 +108,10 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
                               );
                             }),
                       )
-                    ]);
+                    ]): Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text('There are currently no fights available but keep an eye on this page for new updates', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),),
+              );
                   } else {
                     return const Center(
                       child: CircularProgressIndicator(),

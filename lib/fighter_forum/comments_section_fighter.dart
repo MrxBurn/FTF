@@ -46,7 +46,7 @@ class _CommentsSectionFighterState extends State<CommentsSectionFighter> {
       future: widget.getComments,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return ListView.builder(
+          return snapshot.data.length > 0 ? ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: snapshot.data.length,
@@ -71,7 +71,7 @@ class _CommentsSectionFighterState extends State<CommentsSectionFighter> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  '${data['firstName']} ${data['lastName']} - ${data['createdAt'].toDate().day}/${data['createdAt'].toDate().month}/${data['createdAt'].toDate().year} - ${data['createdAt'].toDate().hour}:${data['createdAt'].toDate().minute}'),
+                                  '${data['firstName']} ${data['lastName']}\n${data['createdAt'].toDate().day}/${data['createdAt'].toDate().month}/${data['createdAt'].toDate().year} - ${data['createdAt'].toDate().hour}:${data['createdAt'].toDate().minute}'),
                               const SizedBox(
                                 height: 6,
                               ),
@@ -175,7 +175,10 @@ class _CommentsSectionFighterState extends State<CommentsSectionFighter> {
                     ),
                   ),
                 );
-              });
+              }) : Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text('There are currently no comments on this page', style: TextStyle(color: Colors.grey),),
+              );
         } else {
           return const CircularProgressIndicator();
         }

@@ -651,6 +651,7 @@ class MyOffersPage extends StatelessWidget {
                           Padding(
                             padding: paddingLRT,
                             child: const Text(
+                              textAlign: TextAlign.center,
                                 "You have no offers on the table. Start engaging with the fight fan base and other fighters by creating exciting fight offers! Set up your first offer now to connect with potential opponents and fans.\nLet the world know what you're about."),
                           ),
                         ],

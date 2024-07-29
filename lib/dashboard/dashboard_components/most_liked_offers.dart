@@ -61,7 +61,7 @@ class LikedOffersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return likedOfferList.length > 0 ? SizedBox(
       width: 300,
       height: 180,
       child: ListView.builder(
@@ -159,6 +159,9 @@ class LikedOffersList extends StatelessWidget {
               ),
             );
           }),
-    );
+    ): Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text('You do not have any liked offers', style: TextStyle(color: Colors.grey),),
+              );
   }
 }
