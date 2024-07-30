@@ -111,6 +111,11 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                         style: headerStyle,
                       ),
                       SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                          'Upload your display image here, or skip this step if you prefer.'),
+                      SizedBox(
                         height: 24,
                       ),
                       image != null

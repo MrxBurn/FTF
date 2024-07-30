@@ -5,6 +5,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ftf/authentication/fighter_image_upload.dart';
 import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/dropdown_widget.dart';
@@ -260,6 +261,9 @@ class _RegisterFighterState extends State<RegisterFighter> {
                   Padding(
                     padding: const EdgeInsets.only(left: 24.0, right: 24),
                     child: TextFormField(
+                      inputFormatters: [
+                        new LengthLimitingTextInputFormatter(200),
+                      ],
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       controller: bioController,
@@ -272,7 +276,8 @@ class _RegisterFighterState extends State<RegisterFighter> {
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.white)),
                           labelStyle: TextStyle(color: Colors.grey),
-                          hintText: 'Press to type...'),
+                          hintText:
+                              'Provide a brief description of yourself\nand your accomplishments,\n maximum of 200 characters.'),
                     ),
                   ),
                 ],

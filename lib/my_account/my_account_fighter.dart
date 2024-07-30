@@ -49,6 +49,8 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
 
   ScrollController scrollController = ScrollController();
 
+  bool isEditMode = false;
+
   CollectionReference<Map<String, dynamic>> userCollection =
       FirebaseFirestore.instance.collection('users');
 
@@ -84,6 +86,7 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
   void onEditPress() {
     setState(() {
       isDisabled = false;
+      isEditMode = true;
     });
     scrollController.jumpTo(50);
   }
@@ -91,6 +94,7 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
   void onCancelPress() {
     setState(() {
       isDisabled = true;
+      isEditMode = false;
     });
   }
 
@@ -103,6 +107,7 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
         .update({'weightClass': weightClass, 'description': bio});
     setState(() {
       isLoading = false;
+      isEditMode = false;
     });
   }
 
@@ -154,6 +159,7 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
 
   @override
   Widget build(BuildContext context) {
+    print(isEditMode);
     return Scaffold(
         body: FutureBuilder(
             future: future,
@@ -422,34 +428,45 @@ class _MyAccountFighterState extends State<MyAccountFighter> {
                                     const SizedBox(
                                       height: 16,
                                     ),
-                                    TextFormField(
-                                      style: TextStyle(
-                                          color: isDisabled == true
-                                              ? Colors.grey
-                                              : Colors.white,
-                                          fontSize: 14),
-                                      keyboardType: TextInputType.multiline,
-                                      readOnly: isDisabled,
-                                      maxLines: null,
-                                      controller: bioController,
-                                      decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 25.0,
-                                                horizontal: 10.0),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: isDisabled == true
-                                                  ? Colors.grey
-                                                  : Colors.white),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
+                                    snapshot.data['description'] != '' ||
+                                            isEditMode
+                                        ? TextFormField(
+                                            inputFormatters: [
+                                              new LengthLimitingTextInputFormatter(
+                                                  200),
+                                            ],
+                                            style: TextStyle(
                                                 color: isDisabled == true
                                                     ? Colors.grey
-                                                    : Colors.white)),
-                                      ),
-                                    ),
+                                                    : Colors.white,
+                                                fontSize: 14),
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            readOnly: isDisabled,
+                                            maxLines: null,
+                                            controller: bioController,
+                                            decoration: InputDecoration(
+                                              hintText: isEditMode
+                                                  ? 'Provide a brief description of yourself\nand your accomplishments,\n maximum of 200 characters.'
+                                                  : '',
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 25.0,
+                                                      horizontal: 10.0),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: isDisabled == true
+                                                        ? Colors.grey
+                                                        : Colors.white),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: isDisabled == true
+                                                          ? Colors.grey
+                                                          : Colors.white)),
+                                            ),
+                                          )
+                                        : SizedBox(),
                                     const SizedBox(
                                       height: 16,
                                     ),

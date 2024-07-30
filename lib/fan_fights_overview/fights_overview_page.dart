@@ -62,7 +62,9 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
                   'All fights',
                   style: headerStyle,
                 ),
-                SizedBox(width: 8,),
+                SizedBox(
+                  width: 8,
+                ),
                 InfoButton()
               ],
             ),
@@ -72,55 +74,63 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
                   if (snapshot.connectionState == ConnectionState.active) {
                     List snapshotList = snapshot.data;
 
-                    return snapshotList.length > 0 ? Column(children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 24,
-                          right: 24,
-                        ),
-                        child: ListView.separated(
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: snapshotList.length,
-                            itemBuilder: (BuildContext context, idx) {
-                              return FightsOverviewCard(
-                                creator: snapshotList[idx]['creator'],
-                                opponent: snapshotList[idx]['opponent'],
-                                creatorValue: snapshotList[idx]
-                                        ['negotiationValues']
-                                    .last['creatorValue']
-                                    .toString(),
-                                opponentValue: snapshotList[idx]
-                                        ['negotiationValues']
-                                    .last['opponentValue']
-                                    .toString(),
-                                weightClass: snapshotList[idx]
-                                        ['negotiationValues']
-                                    .last['weightClass'],
-                                fighterStatus: snapshotList[idx]
-                                    ['fighterStatus'],
-                                fightDate: snapshotList[idx]
-                                        ['negotiationValues']
-                                    .last['fightDate'],
-                                likes: snapshotList[idx]['like'].length,
-                                dislikes: snapshotList[idx]['dislike'].length,
-                                onTap: () => Navigator.of(context)
-                                    .push(MaterialPageRoute(
-                                        builder: (context) => ViewOfferPageFan(
-                                              offerId: snapshotList[idx]
-                                                  ['offerId'],
-                                            ))),
-                              );
-                            }),
-                      )
-                    ]): Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Text('There are currently no fights available but keep an eye on this page for new updates', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),),
-              );
+                    return snapshotList.length > 0
+                        ? Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 24,
+                                right: 24,
+                              ),
+                              child: ListView.separated(
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: snapshotList.length,
+                                  itemBuilder: (BuildContext context, idx) {
+                                    return FightsOverviewCard(
+                                      creator: snapshotList[idx]['creator'],
+                                      opponent: snapshotList[idx]['opponent'],
+                                      creatorValue: snapshotList[idx]
+                                              ['negotiationValues']
+                                          .last['creatorValue']
+                                          .toString(),
+                                      opponentValue: snapshotList[idx]
+                                              ['negotiationValues']
+                                          .last['opponentValue']
+                                          .toString(),
+                                      weightClass: snapshotList[idx]
+                                              ['negotiationValues']
+                                          .last['weightClass'],
+                                      fighterStatus: snapshotList[idx]
+                                          ['fighterStatus'],
+                                      fightDate: snapshotList[idx]
+                                              ['negotiationValues']
+                                          .last['fightDate'],
+                                      likes: snapshotList[idx]['like'].length,
+                                      dislikes:
+                                          snapshotList[idx]['dislike'].length,
+                                      onTap: () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ViewOfferPageFan(
+                                                    offerId: snapshotList[idx]
+                                                        ['offerId'],
+                                                  ))),
+                                    );
+                                  }),
+                            )
+                          ])
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Text(
+                              'There are no fights available at the moment,\nbut check this page regularly for updates.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          );
                   } else {
                     return const Center(
                       child: CircularProgressIndicator(),

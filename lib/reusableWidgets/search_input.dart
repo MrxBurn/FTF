@@ -92,37 +92,50 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(15),
                                     bottomRight: Radius.circular(15))),
-                            child: ListView.builder(
-                                itemCount: widget.suggestions.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundImage: widget.suggestions[index]
-                                              .profileImageURL.isNotEmpty
-                                          ? NetworkImage(widget
-                                              .suggestions[index]
-                                              .profileImageURL)
-                                          : NetworkImage(imgPlaceholder),
-                                      radius: 20,
-                                    ),
-                                    title: Text(
-                                        widget.suggestions[index].firstName +
+                            child: widget.suggestions.length > 0
+                                ? ListView.builder(
+                                    itemCount: widget.suggestions.length,
+                                    itemBuilder: (context, index) {
+                                      return ListTile(
+                                        leading: CircleAvatar(
+                                          backgroundImage: widget
+                                                  .suggestions[index]
+                                                  .profileImageURL
+                                                  .isNotEmpty
+                                              ? NetworkImage(widget
+                                                  .suggestions[index]
+                                                  .profileImageURL)
+                                              : NetworkImage(imgPlaceholder),
+                                          radius: 20,
+                                        ),
+                                        title: Text(widget
+                                                .suggestions[index].firstName +
                                             " " +
                                             widget.suggestions[index].lastName),
-                                    onTap: () {
-                                      widget.onSelectedSuggestion(
-                                          widget.suggestions[index]);
+                                        onTap: () {
+                                          widget.onSelectedSuggestion(
+                                              widget.suggestions[index]);
 
-                                      widget.onListTileTap(widget
-                                              .suggestions[index].firstName +
-                                          " " +
-                                          widget.suggestions[index].lastName);
+                                          widget.onListTileTap(widget
+                                                  .suggestions[index]
+                                                  .firstName +
+                                              " " +
+                                              widget
+                                                  .suggestions[index].lastName);
 
-                                      FocusScope.of(context).unfocus();
-                                      _textEditingController.clear();
-                                    },
-                                  );
-                                }),
+                                          FocusScope.of(context).unfocus();
+                                          _textEditingController.clear();
+                                        },
+                                      );
+                                    })
+                                : Padding(
+                                    padding: const EdgeInsets.only(top: 16.0),
+                                    child: Text(
+                                      'There are no users (fighters) at the moment.\nUsers will be displayed here once they register.',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
                           ),
                         ),
                       )

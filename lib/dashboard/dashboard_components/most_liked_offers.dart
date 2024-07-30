@@ -61,107 +61,123 @@ class LikedOffersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return likedOfferList.length > 0 ? SizedBox(
-      width: 300,
-      height: 180,
-      child: ListView.builder(
-          itemCount: likedOfferList.length,
-          itemBuilder: (context, idx) {
-            return SizedBox(
-              width: 300,
-              child: GestureDetector(
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ViewOfferPage(
-                          offerId: likedOfferList[idx]['offerId'],
-                        ))),
-                child: Card(
-                    color: Colors.black,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          NumberOfLikes(
-                              height: 26,
-                              valueSize: 16,
-                              iconSize: 16,
-                              likes: likedOfferList[idx]['like'].length,
-                              dislikes: likedOfferList[idx]['dislike'].length),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: Column(
+    return likedOfferList.length > 0
+        ? SizedBox(
+            width: 300,
+            height: 180,
+            child: ListView.builder(
+                itemCount: likedOfferList.length,
+                itemBuilder: (context, idx) {
+                  return SizedBox(
+                    width: 300,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ViewOfferPage(
+                                offerId: likedOfferList[idx]['offerId'],
+                              ))),
+                      child: Card(
+                          color: Colors.black,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                NumberOfLikes(
+                                    height: 26,
+                                    valueSize: 16,
+                                    iconSize: 16,
+                                    likes: likedOfferList[idx]['like'].length,
+                                    dislikes:
+                                        likedOfferList[idx]['dislike'].length),
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      currentUser ==
-                                              likedOfferList[idx]['createdBy']
-                                          ? likedOfferList[idx]['creator']
-                                          : likedOfferList[idx]['opponent'],
-                                      style:
-                                          const TextStyle(color: Colors.yellow),
+                                    SizedBox(
+                                      width: 100,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            currentUser ==
+                                                    likedOfferList[idx]
+                                                        ['createdBy']
+                                                ? likedOfferList[idx]['creator']
+                                                : likedOfferList[idx]
+                                                    ['opponent'],
+                                            style: const TextStyle(
+                                                color: Colors.yellow),
+                                          ),
+                                          Text(
+                                            currentUser ==
+                                                    likedOfferList[idx]
+                                                        ['createdBy']
+                                                ? likedOfferList[idx]
+                                                        ['negotiationValues']
+                                                    .last['creatorValue']
+                                                    .toString()
+                                                : likedOfferList[idx]
+                                                        ['negotiationValues']
+                                                    .last['opponentValue']
+                                                    .toString(),
+                                            style: const TextStyle(
+                                                color: Colors.yellow),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                    Text(
-                                      currentUser ==
-                                              likedOfferList[idx]['createdBy']
-                                          ? likedOfferList[idx]
-                                                  ['negotiationValues']
-                                              .last['creatorValue']
-                                              .toString()
-                                          : likedOfferList[idx]
-                                                  ['negotiationValues']
-                                              .last['opponentValue']
-                                              .toString(),
-                                      style:
-                                          const TextStyle(color: Colors.yellow),
-                                    )
+                                    const Text('%'),
+                                    SizedBox(
+                                      width: 100,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            currentUser !=
+                                                    likedOfferList[idx]
+                                                        ['createdBy']
+                                                ? likedOfferList[idx]['creator']
+                                                : likedOfferList[idx]
+                                                    ['opponent'],
+                                            style: const TextStyle(
+                                                color: Colors.red),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          Text(
+                                            currentUser !=
+                                                    likedOfferList[idx]
+                                                        ['createdBy']
+                                                ? likedOfferList[idx]
+                                                        ['negotiationValues']
+                                                    .last['creatorValue']
+                                                    .toString()
+                                                : likedOfferList[idx]
+                                                        ['negotiationValues']
+                                                    .last['opponentValue']
+                                                    .toString(),
+                                            style: const TextStyle(
+                                                color: Colors.red),
+                                            textAlign: TextAlign.center,
+                                          )
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              ),
-                              const Text('%'),
-                              SizedBox(
-                                width: 100,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      currentUser !=
-                                              likedOfferList[idx]['createdBy']
-                                          ? likedOfferList[idx]['creator']
-                                          : likedOfferList[idx]['opponent'],
-                                      style: const TextStyle(color: Colors.red),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    Text(
-                                      currentUser !=
-                                              likedOfferList[idx]['createdBy']
-                                          ? likedOfferList[idx]
-                                                  ['negotiationValues']
-                                              .last['creatorValue']
-                                              .toString()
-                                          : likedOfferList[idx]
-                                                  ['negotiationValues']
-                                              .last['opponentValue']
-                                              .toString(),
-                                      style: const TextStyle(color: Colors.red),
-                                      textAlign: TextAlign.center,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )),
-              ),
-            );
-          }),
-    ): Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Text('You do not have any liked offers', style: TextStyle(color: Colors.grey),),
-              );
+                              ],
+                            ),
+                          )),
+                    ),
+                  );
+                }),
+          )
+        : Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 16.0),
+            child: Text(
+              textAlign: TextAlign.center,
+              'Currently, there are no users (fighters) signed up to FTF, so you do not have any liked offers.',
+              style: TextStyle(color: Colors.grey),
+            ),
+          );
   }
 }
