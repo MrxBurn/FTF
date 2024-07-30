@@ -358,7 +358,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
               const SizedBox(
                 height: 16,
               ),
-              Container(
+               searchValue.isNotEmpty && searchValue != '-' ? Container(
                 width: 205,
                 height: 68,
                 decoration: BoxDecoration(
@@ -376,7 +376,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-              ),
+              ) : SizedBox(),
               Padding(
                 padding: paddingLRT,
                 child: const Text(
