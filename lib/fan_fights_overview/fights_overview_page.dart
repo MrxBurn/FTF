@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/fan_fights_overview/fights_overview_widgets/fights_overview_card.dart';
+import 'package:ftf/reusableWidgets/info_button.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fan.dart';
@@ -53,9 +54,17 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
         child: Column(
           children: [
             LogoHeader(backRequired: true),
-            const Text(
-              'All fights',
-              style: headerStyle,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Text(
+                  'All fights',
+                  style: headerStyle,
+                ),
+                SizedBox(width: 8,),
+                InfoButton()
+              ],
             ),
             StreamBuilder(
                 stream: getAllOffers(),

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/my_offers/my_offers_widgets/offer_card.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
+import 'package:ftf/reusableWidgets/info_button.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/view_offer_page/view_offer_page_fighter.dart';
 
@@ -99,9 +100,17 @@ class MyOffersPage extends StatelessWidget {
                 child: snapshot.data.length != 0
                     ? Column(children: [
                         LogoHeader(backRequired: true),
-                        const Text(
-                          'Offers overview',
-                          style: headerStyle,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Text(
+                              'Offers overview',
+                              style: headerStyle,
+                            ),
+                            SizedBox(width: 8,),
+                            InfoButton()
+                          ],
                         ),
                         Padding(
                           padding: paddingLRT,
