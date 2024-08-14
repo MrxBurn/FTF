@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,14 +15,14 @@ import 'package:ftf/utils/general.dart';
 import 'package:ftf/utils/lists.dart';
 import 'package:ftf/utils/snack_bar_no_context.dart';
 
-class RegisterFighter extends StatefulWidget {
-  RegisterFighter({super.key});
+class RegisterFighterPage extends StatefulWidget {
+  RegisterFighterPage({super.key});
 
   @override
-  State<RegisterFighter> createState() => _RegisterFighterState();
+  State<RegisterFighterPage> createState() => _RegisterFighterPageState();
 }
 
-class _RegisterFighterState extends State<RegisterFighter> {
+class _RegisterFighterPageState extends State<RegisterFighterPage> {
   String genderValue = genderList.first;
 
   var weightValue = weightList.first;
@@ -55,7 +53,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
 
   String route = '';
 
-  Future<void> registerFighter(
+  Future<void> registerFighterPage(
       String email,
       String password,
       String firstName,
@@ -292,7 +290,7 @@ class _RegisterFighterState extends State<RegisterFighter> {
                 onPressed: () => {
                   if (_formKey.currentState!.validate() == true)
                     {
-                      registerFighter(
+                      registerFighterPage(
                               emailController.text,
                               passwordController.text,
                               firstNameController.text,

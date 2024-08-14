@@ -3,14 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/fighters_overview/fighters_overview.dart';
 
-class MyFollowedFighters extends StatefulWidget {
-  const MyFollowedFighters({super.key});
+class MyFollowedFightersPage extends StatefulWidget {
+  const MyFollowedFightersPage({super.key});
 
   @override
-  State<MyFollowedFighters> createState() => _MyFollowedFightersState();
+  State<MyFollowedFightersPage> createState() => _MyFollowedFightersPageState();
 }
 
-class _MyFollowedFightersState extends State<MyFollowedFighters> {
+class _MyFollowedFightersPageState extends State<MyFollowedFightersPage> {
   CollectionReference fighters = FirebaseFirestore.instance.collection('users');
 
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;

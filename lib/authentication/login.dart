@@ -24,13 +24,13 @@ class _LoginPageState extends State<LoginPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool isLogingIn = false;
+  bool isLoggingIn = false;
 
   var doc = FirebaseFirestore.instance.collection('users');
 
   Future<void> loginFighter(String email, String password) async {
     try {
-      isLogingIn = true;
+      isLoggingIn = true;
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) => {
@@ -56,9 +56,9 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
               });
-      isLogingIn = false;
+      isLoggingIn = false;
     } on FirebaseAuthException catch (e) {
-      isLogingIn = false;
+      isLoggingIn = false;
       showSnackBarNoContext(
           text: e.message.toString(), snackbarKey: snackbarKey);
     }
@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                                           passwordController.text)
                                     }
                                 },
-                            child: isLogingIn == true
+                            child: isLoggingIn == true
                                 ? const CircularProgressIndicator()
                                 : const Text(
                                     'Login',

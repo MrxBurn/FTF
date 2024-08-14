@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ftf/authentication/account_type.dart';
 import 'package:ftf/authentication/fighter_image_upload.dart';
-import 'package:ftf/authentication/forgot_passwrod.dart';
+import 'package:ftf/authentication/forgot_password.dart';
 import 'package:ftf/authentication/login.dart';
 import 'package:ftf/authentication/register_fan.dart';
 import 'package:ftf/authentication/register_fighter.dart';
@@ -290,8 +290,8 @@ class _MyAppState extends State<MyApp> {
         'fighterHome': (context) => const FighterHomePage(),
         'fanHome': (context) => const FanHomePage(),
         'accountType': (context) => AccountType(),
-        'registerFighter': (context) => RegisterFighter(),
-        'registerFan': (context) => const RegisterFan(),
+        'registerFighter': (context) => RegisterFighterPage(),
+        'registerFan': (context) => const RegisterFanPage(),
         'loginPage': (context) => const LoginPage(),
         'fighterImageUpload': (context) => const FighterImageUpload(),
         'createOfferFighter': (context) => const CreateOfferFighter(),
@@ -302,11 +302,11 @@ class _MyAppState extends State<MyApp> {
         'fighterForum': (context) => const FighterForum(),
         'fanForum': (context) => const FanForumPage(),
         'newsEvents': (context) => const NewsAndEventsPage(),
-        'myAccountFighter': (context) => const MyAccountFighter(),
-        'myAccountFan': (context) => const MyAccountFan(),
+        'myAccountFighter': (context) => const MyAccountFighterPage(),
+        'myAccountFan': (context) => const MyAccountFanPage(),
         'fanFightsOverview': (context) => const FanFightsOverview(),
         'fightersOverview': (context) => const FightersOverview(),
-        'myFighters': (context) => const MyFollowedFighters(),
+        'myFighters': (context) => const MyFollowedFightersPage(),
         'forgotPassword': (context) => const ForgotPasswordPage(),
         'chatPage': (context) => ChatPage(),
         'enterOfferCodePage': (context) => EnterOfferCodePage(),

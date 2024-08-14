@@ -11,14 +11,14 @@ import 'package:ftf/utils/snack_bar.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/snack_bar_no_context.dart';
 
-class RegisterFan extends StatefulWidget {
-  const RegisterFan({super.key});
+class RegisterFanPage extends StatefulWidget {
+  const RegisterFanPage({super.key});
 
   @override
-  State<RegisterFan> createState() => _RegisterFanState();
+  State<RegisterFanPage> createState() => _RegisterFanPageState();
 }
 
-class _RegisterFanState extends State<RegisterFan> {
+class _RegisterFanPageState extends State<RegisterFanPage> {
   var firstNameController = TextEditingController();
 
   var userNameController = TextEditingController();
@@ -41,7 +41,7 @@ class _RegisterFanState extends State<RegisterFan> {
 
   bool isLoading = false;
 
-  void registerFan(
+  void registerFanPage(
       String email, String password, String userName, String firstName) async {
     setState(() {
       isLoading = true;
@@ -171,7 +171,7 @@ class _RegisterFanState extends State<RegisterFan> {
                     isLoading: false,
                     onPressed: () {
                       if (_formKey.currentState!.validate() == true) {
-                        registerFan(
+                        registerFanPage(
                             emailController.text,
                             passwordController.text,
                             userNameController.text,

@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 
 class CircleNavigationButton extends StatelessWidget {
@@ -9,9 +7,9 @@ class CircleNavigationButton extends StatelessWidget {
       required this.icon,
       required this.color});
 
-  Function onPressed;
-  Widget icon;
-  Color color;
+  final Function onPressed;
+  final Widget icon;
+  final Color color;
   @override
   Widget build(BuildContext context) {
     return Container(

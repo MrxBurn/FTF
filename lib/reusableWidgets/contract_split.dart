@@ -1,26 +1,24 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
 import 'package:ftf/styles/styles.dart';
 
 class ContractSplit extends StatefulWidget {
-  bool contractedChecked;
-  TextEditingController creatorValue;
-  TextEditingController opponentValue;
-  Function onTickChanged;
-  Function onContractSplitChange;
-  Function onEditingComplete;
-  double minWidth;
-  double maxWidth;
-  double minHeight;
-  bool readOnly;
-  bool checkBoxRequired;
-  String title;
-  String creator;
-  String opponent;
-  Color creatorColour;
-  Color opponentColour;
+  final bool contractedChecked;
+  final TextEditingController creatorValue;
+  final TextEditingController opponentValue;
+  final Function onTickChanged;
+  final Function onContractSplitChange;
+  final Function onEditingComplete;
+  final double minWidth;
+  final double maxWidth;
+  final double minHeight;
+  final bool readOnly;
+  final bool checkBoxRequired;
+  final String title;
+  final String creator;
+  final String opponent;
+  final Color creatorColour;
+  final Color opponentColour;
 
   ContractSplit(
       {super.key,

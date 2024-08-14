@@ -1,15 +1,13 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:month_year_picker2/month_year_picker2.dart';
 
 class YearPickerWidget extends StatefulWidget {
-  String leadingText = '';
-  bool disabled;
-  TextEditingController controller;
-  Function(DateTime) callback;
-  EdgeInsets padding;
+  final String leadingText;
+  final bool disabled;
+  final TextEditingController controller;
+  final Function(DateTime) callback;
+  final EdgeInsets padding;
   YearPickerWidget(
       {super.key,
       required this.leadingText,

@@ -1,5 +1,3 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ftf/styles/styles.dart';
@@ -7,8 +5,8 @@ import 'package:ftf/styles/styles.dart';
 class OffersEngagement extends StatelessWidget {
   OffersEngagement({super.key, required this.likes, required this.dislikes});
 
-  String likes;
-  String dislikes;
+  final String likes;
+  final String dislikes;
 
   @override
   Widget build(BuildContext context) {

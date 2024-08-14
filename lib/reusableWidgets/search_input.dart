@@ -1,26 +1,24 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/general.dart';
 
 class SearchBarWidget extends StatefulWidget {
-  String searchbarText = '';
+ final  String searchbarText;
 
-  Function onTap;
+ final  Function onTap;
 
-  List suggestions;
+ final  List suggestions;
 
-  ValueChanged<String> onChanged;
+ final  ValueChanged<String> onChanged;
 
-  bool displaySuggestions;
+ final  bool displaySuggestions;
 
-  ScrollController scrollController;
+  final ScrollController scrollController;
 
-  Function onListTileTap;
+ final  Function onListTileTap;
 
-  Function onSelectedSuggestion;
+ final  Function onSelectedSuggestion;
 
   SearchBarWidget(
       {super.key,

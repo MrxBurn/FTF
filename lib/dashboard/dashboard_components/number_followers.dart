@@ -1,12 +1,10 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
 
 class NumberFollowers extends StatelessWidget {
   NumberFollowers({super.key, required this.numberFollowers});
 
-  String numberFollowers;
+  final String numberFollowers;
 
   @override
   Widget build(BuildContext context) {

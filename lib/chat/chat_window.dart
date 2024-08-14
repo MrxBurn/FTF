@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ftf/chat/message_buble.dart';
+import 'package:ftf/chat/message_bubble.dart';
 import 'package:ftf/chat/message_class.dart';
 import 'package:ftf/styles/styles.dart';
 

@@ -1,22 +1,17 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 
 class InputFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
 
-  // String fieldValue;
+  final String? pLabelText;
 
-  String? pLabelText;
+  final String? Function(String?)? validatorFunction;
 
-  String? Function(String?)? validatorFunction;
-
-  bool? passwordField;
+  final bool? passwordField;
 
   InputFieldWidget(
       {super.key,
       this.controller,
-      // required this.fieldValue,
       required this.pLabelText,
       this.validatorFunction,
       this.passwordField});

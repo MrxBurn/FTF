@@ -10,14 +10,14 @@ import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/delete_user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MyAccountFan extends StatefulWidget {
-  const MyAccountFan({super.key});
+class MyAccountFanPage extends StatefulWidget {
+  const MyAccountFanPage({super.key});
 
   @override
-  State<MyAccountFan> createState() => _MyAccountFanState();
+  State<MyAccountFanPage> createState() => _MyAccountFanPageState();
 }
 
-class _MyAccountFanState extends State<MyAccountFan> {
+class _MyAccountFanPageState extends State<MyAccountFanPage> {
   String? currentUser = FirebaseAuth.instance.currentUser?.uid;
 
   TextEditingController firstNameController = TextEditingController();

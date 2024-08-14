@@ -1,11 +1,9 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class LogoHeader extends StatefulWidget {
-  bool backRequired;
-  Function? onPressed;
+  final bool backRequired;
+  final Function? onPressed;
 
   LogoHeader({super.key, required this.backRequired, this.onPressed});
 

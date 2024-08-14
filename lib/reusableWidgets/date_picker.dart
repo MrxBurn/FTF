@@ -1,16 +1,14 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:ftf/styles/styles.dart';
 
 class DatePicker extends StatefulWidget {
-  String leadingText = '';
+  final String leadingText;
 
-  TextEditingController displayDate;
+  final TextEditingController displayDate;
 
-  Function(DateTime) callback;
+  final Function(DateTime) callback;
 
-  bool disabled;
+  final bool disabled;
 
   DatePicker(
       {super.key,
