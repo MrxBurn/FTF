@@ -57,14 +57,14 @@ dev_dependencies:
     sdk: flutter
 
 flutter_launcher_icons:
-  android: true
+  android: "launcher_icon"
   ios: true
   remove_alpha_ios: true
   image_path_android: "assets/illustrations/ftf_icon.png"
   image_path_ios: "assets/illustrations/logo_ios.png"
 
-  # adaptive_icon_foreground: "assets/illustrations/ftf_logo_foreground.png"
-  # adaptive_icon_background: "assets/illustrations/ftf_logo_foreground.png"
+  adaptive_icon_background: "#FFFF00"
+  adaptive_icon_foreground: "assets/illustrations/ftf_icon.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

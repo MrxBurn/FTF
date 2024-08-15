@@ -253,7 +253,7 @@ class _MyAppState extends State<MyApp> {
             ProgressIndicatorThemeData(color: Colors.yellow),
         primaryColor: Colors.black,
         primaryColorDark: Colors.red,
-        scaffoldBackgroundColor: Colors.black,
+        scaffoldBackgroundColor: Colors.black87,
         textTheme: const TextTheme(
           bodyMedium: TextStyle(
             color: Colors.white,

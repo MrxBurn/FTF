@@ -55,7 +55,7 @@ class _MyAccountFanPageState extends State<MyAccountFanPage> {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(children: [
                         Container(
-                          height: 150,
+                          height: 200,
                           width: double.infinity,
                           decoration: BoxDecoration(
                               borderRadius:
@@ -146,19 +146,17 @@ class _MyAccountFanPageState extends State<MyAccountFanPage> {
                                   children: [
                                     Align(
                                       alignment: Alignment.topLeft,
-                                      child: Wrap(
-                                        spacing: 8,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: [
-                                          const SizedBox(
-                                              width: 80,
-                                              child: Text('User name')),
-                                          RoundedTextInput(
-                                            disabled: true,
-                                            controller: userNameController,
-                                          ),
-                                        ],
+                                      child: const SizedBox(
+                                          width: 80, child: Text('User name')),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: RoundedTextInput(
+                                        disabled: true,
+                                        controller: userNameController,
                                       ),
                                     ),
                                     const SizedBox(
@@ -166,19 +164,17 @@ class _MyAccountFanPageState extends State<MyAccountFanPage> {
                                     ),
                                     Align(
                                       alignment: Alignment.topLeft,
-                                      child: Wrap(
-                                        spacing: 8,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: [
-                                          const SizedBox(
-                                              width: 80,
-                                              child: Text('First name')),
-                                          RoundedTextInput(
-                                            disabled: true,
-                                            controller: firstNameController,
-                                          ),
-                                        ],
+                                      child: const SizedBox(
+                                          width: 80, child: Text('First name')),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: RoundedTextInput(
+                                        disabled: true,
+                                        controller: firstNameController,
                                       ),
                                     ),
                                   ],
