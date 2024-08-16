@@ -19,7 +19,7 @@ class OffersEngagement extends StatelessWidget {
         child: Column(
           children: [
             const Text(
-              'Offers engagement',
+              'Engagement',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(

@@ -38,10 +38,10 @@ class _MyFollowedFightersPageState extends State<MyFollowedFightersPage> {
   @override
   Widget build(BuildContext context) {
     return FightersOverview(
-      pageTitle: 'Your fighters',
+      pageTitle: 'Your athletes',
       future: getFollowedFighters(),
       text:
-          'You are not following any fighters.\nPlease visit the "All Fighters" page to view the fighters currently registered in the app.',
+          'You’re Not Following Anyone Yet.\nVisit the “All Athletes” section to explore and follow the competitors currently registered in the app.',
     );
   }
 }

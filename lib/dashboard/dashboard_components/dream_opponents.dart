@@ -87,7 +87,7 @@ class DreamOpponentsList extends StatelessWidget {
             padding: const EdgeInsets.only(top: 16.0, left: 8, right: 8),
             child: Text(
               textAlign: TextAlign.center,
-              'Currently, there are no users (fighters) signed up to FTF, so you do not have any dream opponents.',
+              "It looks like you haven't been matched with any dream opponents by FTF Fans. Level up your profile and start promoting it to attract your ideal opponents",
               style: TextStyle(color: Colors.grey),
             ),
           );

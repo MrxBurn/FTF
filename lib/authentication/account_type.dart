@@ -17,7 +17,7 @@ class AccountType extends StatelessWidget {
           BlackButton(
             onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => RegisterFighterPage())),
-            text: 'I am a fighter',
+            text: 'I am an athlete',
           ),
           const SizedBox(
             height: 32,

@@ -58,7 +58,7 @@ class _FighterHomePageState extends State<FighterHomePage> {
                   if (snapshot.connectionState == ConnectionState.active) {
                     Map<String, dynamic>? data =
                         snapshot.data?.data() as Map<String, dynamic>?;
-        
+
                     if (data?['eula'] == true) {
                       return Padding(
                         padding: EdgeInsets.only(left: 24, right: 24),
@@ -87,7 +87,7 @@ class _FighterHomePageState extends State<FighterHomePage> {
                               children: [
                                 ButtonCard(
                                   path: imagePaths[6],
-                                  name: 'All fighters',
+                                  name: 'All athletes',
                                   route: 'fightersOverview',
                                   navigate: () => Navigator.push(
                                       context,
@@ -118,7 +118,7 @@ class _FighterHomePageState extends State<FighterHomePage> {
                                 ButtonCard(
                                   path: imagePaths[3],
                                   route: 'fighterForum',
-                                  name: 'Fighter forum',
+                                  name: 'Forum',
                                 ),
                               ],
                             ),

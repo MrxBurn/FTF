@@ -7,7 +7,7 @@ List threads = [
         'Exploring retirement planning, pension options, and long-term financial security strategies for your career.',
     'subTitle': 'Secure Your Financial Future',
     'body':
-        "Explore retirement planning, pension options, and long-term financial strategies for your fighting career. Join discussions and access insights from a range of fighters. Click 'Chat forum' for valuable insights and start planning your secure future today.",
+        "Explore retirement planning, pension options, and long-term financial strategies for your career.",
     'links': [
       {'name': 'Wealth and Tax Advice', 'url': 'https://www.evelyn.com/'},
       {
@@ -15,24 +15,24 @@ List threads = [
         'url': 'https://www.youtube.com/watch?v=E2RDvUiRRG8'
       },
       {
-        'name': 'Fighter Uses Pension for Inspiration',
+        'name': 'Retirement Plan',
         'url': 'https://www.youtube.com/watch?v=-jCWvQLcqCc'
       },
       {
-        'name': 'For Fighters: Achieving Financial Goals',
+        'name': 'Achieving Financial Goals',
         'url': 'https://www.devere-group.com/'
       },
     ]
   },
   {
     'collection': 'fighterManagement',
-    'title': 'Fighter Management Tips',
+    'title': 'Management Tips',
     'imagePath': 'assets/illustrations/management.jpg',
     'description':
         'Discussions on effective management, handling contracts, negotiations, and developing successful partnerships with managers and promoters.',
     'subTitle': 'Masterful Career Management',
     'body':
-        "Engage in discussions on effective fighter management, handling contracts, negotiations, and cultivating successful partnerships with managers and promoters. Click 'Chat forum' for invaluable discussions and tips from experienced fighters.",
+        "Engage in discussions on effective management, handling contracts, negotiations, and cultivating successful partnerships with managers and promoters.",
     'links': [
       {
         'name': 'How Much Money I Made from Boxing',
@@ -43,11 +43,11 @@ List threads = [
         'url': 'https://www.englishmma.org/'
       },
       {
-        'name': 'Early Stage Fighter Managers',
+        'name': 'Early Stage Managers',
         'url': 'https://www.youtube.com/watch?v=BUbBNRXdbRs'
       },
       {
-        'name': 'How to make money from fighting',
+        'name': 'How to earn from competitions',
         'url':
             'https://medium.com/@chsai0065/how-to-make-money-from-fighting-a-guide-for-aspiring-fighters-8d72885e1863'
       },
@@ -61,7 +61,7 @@ List threads = [
         'Topics focusing on specialized diets, meal plans, supplements, and nutrition strategies to enhance your performance and recovery.',
     'subTitle': 'Elevate Your Game',
     'body':
-        "Explore specialized diets, meal plans, supplements, and nutrition strategies tailored to enhance your performance and accelerate recovery. Dive into the 'Chat forum' for in-depth discussions and advice from fellow fighters.",
+        "Explore specialized diets, meal plans, supplements, and nutrition strategies tailored to enhance your performance and accelerate recovery.",
     'links': [
       {
         'name': 'Are You Eating for Performance?',
@@ -77,7 +77,7 @@ List threads = [
         'url': 'https://www.youtube.com/watch?v=rr7moQfYQy4'
       },
       {
-        'name': 'Pre Fight Nutrition',
+        'name': 'Pre Nutrition',
         'url': 'https://boxingscience.co.uk/pre-fight-nutrition-refuel/'
       },
     ]
@@ -90,7 +90,7 @@ List threads = [
         'Conversations about self-promotion, branding, marketing strategies, and leveraging social media to boost visibility and fan engagement.',
     'subTitle': 'Boost Your Visibility',
     'body':
-        "Engage in conversations on self-promotion, branding, and dynamic marketing strategies. Delve into the art of leveraging media effectively to amplify visibility and foster stronger connections with your fan base. Click the 'Chat forum' for valuable insights and practical tips from fighters at different levels.",
+        "Engage in conversations on self-promotion, branding, and dynamic marketing strategies. Delve into the art of leveraging media effectively to amplify visibility and foster stronger connections with your fan base.",
     'links': [
       {
         'name': 'Using Social Media to Build Your Brand',
@@ -101,11 +101,11 @@ List threads = [
         'url': 'https://www.youtube.com/watch?v=mC7UMRzUc1g'
       },
       {
-        'name': 'How Boxers can Instantly Make More Money in Boxing',
+        'name': 'How to earn more',
         'url': 'https://www.youtube.com/watch?v=7jtW30uKPIk'
       },
       {
-        'name': 'How to Promote Yourself as an Upcoming Fighter',
+        'name': 'How to Promote Yourself',
         'url':
             'https://boxinghighs.com/blogs/news/how-to-promote-yourself-as-an-upcoming-boxer#:~:text=Promoting%20yourself%20as%20an%20upcoming,and%20a%20strong%20support%20team.'
       },
@@ -119,7 +119,7 @@ List threads = [
         'Discover the best places and strategies for locating top-notch sparring partners to enhance your training regimen.',
     'subTitle': 'Good Sparring Options',
     'body':
-        "Join the 'Finding Quality Sparring Partners' forum to discover the best places and strategies for locating top-notch sparring partners. Here, fighters can exchange insights on gyms, training sessions, and networks where quality sparring can be found. Get valuable tips and personal experiences to elevate your training regimen and connect with the perfect sparring partners tailored to your needs and goals.",
+        "Join the 'Finding Quality Sparring Partners' forum to discover the best places and strategies for locating top-notch sparring partners.",
     'links': []
   }
 ];

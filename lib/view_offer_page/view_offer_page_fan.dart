@@ -251,7 +251,7 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                                 changeParentValue: null,
                                 dropDownValue: offer['fighterStatus'],
                                 dropDownList: fighterStatusList,
-                                dropDownName: 'Fighter status*'),
+                                dropDownName: 'Athlete status*'),
                             DropDownWidget(
                                 disabled: true,
                                 changeParentValue: null,
@@ -263,7 +263,7 @@ class _ViewOfferPageFanState extends State<ViewOfferPageFan> {
                             YearPickerWidget(
                               callback: (v) {},
                               disabled: true,
-                              leadingText: 'Fight date*',
+                              leadingText: 'Match date*',
                               controller: TextEditingController(
                                   text: offer['negotiationValues']
                                       .last['fightDate']

@@ -79,7 +79,7 @@ class PlaceholderText extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Text(
-        'This private chat feature is exclusively designed for fighters and their teams to discuss the finer details of their potential matchups in a secure environment. Here, you can finalize agreements on market share prices, venue hire, promotional responsibilities, fight logistics, and more, in private. Feel free to engage with your opponent to ensure all aspects of your upcoming fight are addressed and agreed upon.',
+        'This private chat feature is exclusively designed for athletes and their teams to discuss the finer details of their potential matchups in a secure environment. Here, you can finalize agreements on market share prices, venue hire, promotional responsibilities, fight logistics, and more, in private. Feel free to engage with your opponent to ensure all aspects of your upcoming fight are addressed and agreed upon.',
         style: TextStyle(fontSize: 10, color: Colors.grey),
         textAlign: TextAlign.center,
       ),

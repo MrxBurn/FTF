@@ -338,7 +338,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                       changeParentValue: null,
                       dropDownValue: data['fighterStatus'],
                       dropDownList: fighterStatusList,
-                      dropDownName: 'Fighter status*'),
+                      dropDownName: 'Athlete status*'),
                   DropDownWidget(
                       disabled: true,
                       changeParentValue: null,
@@ -350,7 +350,7 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                   YearPickerWidget(
                     callback: (v) {},
                     disabled: true,
-                    leadingText: 'Fight date*',
+                    leadingText: 'Match date*',
                     controller: yearController,
                   ),
                   DatePicker(
@@ -613,7 +613,7 @@ void showAlerDialog(
                     alertState(
                         () => alertYearController.text = '${v.month}-${v.year}')
                   },
-                  leadingText: 'Fight date*',
+                  leadingText: 'Match date*',
                   controller: alertYearController,
                 ),
                 Align(
@@ -740,7 +740,7 @@ void showNegotiationHistory(
                                 Text(
                                     'Weight class: ${negotiations[index]['weightClass']}'),
                                 Text(
-                                    'Fight date: ${negotiations[index]['fightDate']}'),
+                                    'Match date: ${negotiations[index]['fightDate']}'),
                                 negotiations[index]['contractedChecked'] == true
                                     ? const Row(
                                         mainAxisAlignment:

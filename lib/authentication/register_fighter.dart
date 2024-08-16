@@ -239,7 +239,7 @@ class _RegisterFighterPageState extends State<RegisterFighterPage> {
                           },
                       dropDownValue: fighterStatusValue,
                       dropDownList: fighterStatusList,
-                      dropDownName: 'Fighter status*'),
+                      dropDownName: 'Athlete status*'),
                   const SizedBox(
                     height: 24,
                   ),

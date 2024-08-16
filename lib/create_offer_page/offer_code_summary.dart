@@ -27,7 +27,7 @@ class OfferCodeSummary extends StatelessWidget {
               padding: paddingLRT,
               child: const Text(
                 '''Your offer is on its way! Send the code below to your potential opponent via direct message. They can use this code to accept, decline, or negotiate the offer upon downloading FTF.'''
-                '''\n\n Also, call them out on social media, letting fight fans know you've made an offer and challenging your opponent to respond 🥊''',
+                '''\n\n Also, call them out on social media, letting fans know you've made an offer and challenging your opponent to respond 🥊''',
                 style: TextStyle(fontSize: 14),
                 textAlign: TextAlign.center,
               ),

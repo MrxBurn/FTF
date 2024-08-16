@@ -547,7 +547,7 @@ class MyOffersPage extends StatelessWidget {
                                         const Align(
                                           alignment: Alignment.topLeft,
                                           child: Text(
-                                            'Declined fights',
+                                            'Declined offers',
                                             style: TextStyle(fontSize: 16),
                                           ),
                                         ),
@@ -663,7 +663,7 @@ class MyOffersPage extends StatelessWidget {
                             padding: paddingLRT,
                             child: const Text(
                               textAlign: TextAlign.center,
-                              "You have no offers on the table. Start engaging with the fight fan base and other fighters by creating exciting fight offers! Set up your first offer now to connect with potential opponents and fans.\nLet the world know what you're about.",
+                              "You currently have no offers on the table. Start engaging with the fan base and other athletes by creating exciting match proposals! Set up your first offer now to connect with potential opponents.\nShow the world what you're all about.",
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),

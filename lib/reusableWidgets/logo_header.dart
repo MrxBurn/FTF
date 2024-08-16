@@ -28,17 +28,10 @@ class _LogoHeaderState extends State<LogoHeader> {
         ),
         Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 100.0, bottom: 45),
-            child: Container(
-              height: 150,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      'assets/illustrations/logo.png',
-                    ) as ImageProvider,
-                  ),
-                  border: Border.all(color: Colors.yellow),
-                  shape: BoxShape.circle),
+            padding: const EdgeInsets.only(top: 100.0, bottom: 15),
+            child: Image.asset(
+              'assets/illustrations/logo.png',
+              height: 220,
             ),
           ),
         ),

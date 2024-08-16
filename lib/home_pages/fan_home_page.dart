@@ -62,13 +62,13 @@ class _FanHomePageState extends State<FanHomePage> {
                               children: [
                                 ButtonCard(
                                   path: imagePaths[0],
-                                  name: 'All Fights',
+                                  name: 'All matches',
                                   route: 'fanFightsOverview',
                                 ),
                                 ButtonCard(
                                   path: imagePaths[1],
                                   route: 'fightersOverview',
-                                  name: 'All fighters',
+                                  name: 'All athletes',
                                 ),
                               ],
                             ),
@@ -81,7 +81,7 @@ class _FanHomePageState extends State<FanHomePage> {
                                 ButtonCard(
                                   path: imagePaths[2],
                                   route: 'myFighters',
-                                  name: 'My Fighters',
+                                  name: 'My athletes',
                                 ),
                                 ButtonCard(
                                   path: imagePaths[3],
@@ -99,7 +99,7 @@ class _FanHomePageState extends State<FanHomePage> {
                                 ButtonCard(
                                   path: imagePaths[4],
                                   route: 'fanForum',
-                                  name: 'Fan Forum',
+                                  name: 'Forum',
                                 ),
                                 ButtonCard(
                                   path: imagePaths[5],

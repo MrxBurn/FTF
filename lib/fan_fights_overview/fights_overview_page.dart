@@ -59,7 +59,7 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const Text(
-                  'All fights',
+                  'All matches',
                   style: headerStyle,
                 ),
                 SizedBox(
@@ -126,7 +126,7 @@ class _FanFightsOverviewState extends State<FanFightsOverview> {
                         : Padding(
                             padding: const EdgeInsets.only(top: 16.0),
                             child: Text(
-                              'There are no fights available at the moment,\nbut check this page regularly for updates.',
+                              'There are no matches available at the moment,\nbut check this page regularly for updates.',
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.grey),
                             ),

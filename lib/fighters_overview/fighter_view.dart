@@ -400,27 +400,30 @@ class _FighterViewState extends State<FighterView> {
                       const SizedBox(
                         height: 16,
                       ),
-                      Padding(
-                        padding: paddingLRT,
-                        child: TextFormField(
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 14),
-                          keyboardType: TextInputType.multiline,
-                          readOnly: true,
-                          maxLines: null,
-                          controller: TextEditingController(
-                              text: fighter['description']),
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 25.0, horizontal: 10.0),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white)),
-                          ),
-                        ),
-                      )
+                      fighter['description'].toString().isNotEmpty
+                          ? Padding(
+                              padding: paddingLRT,
+                              child: TextFormField(
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                                keyboardType: TextInputType.multiline,
+                                readOnly: true,
+                                maxLines: null,
+                                controller: TextEditingController(
+                                    text: fighter['description']),
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 25.0, horizontal: 10.0),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white)),
+                                ),
+                              ),
+                            )
+                          : SizedBox()
                     ]);
                   } else {
                     return const SizedBox();
@@ -445,7 +448,7 @@ class _FighterViewState extends State<FighterView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    'Received fight offers',
+                                    'Received offers',
                                   ),
                                   const SizedBox(
                                     height: 8,
@@ -537,7 +540,7 @@ class _FighterViewState extends State<FighterView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'Sent fight offers',
+                                'Sent offers',
                               ),
                               const SizedBox(
                                 height: 8,

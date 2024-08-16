@@ -4,14 +4,14 @@ List fanThreads = [
     'title': 'Dream matchups',
     'imagePath': 'assets/illustrations/DreamMatchups.jpg',
     'description':
-        "Which fighters should clash right now? Discuss who you're voting for and why this fight needs to happen.",
+        "Who should matchup next? Discuss your picks and share why this matchup needs to happen!",
     'subTitle': '',
     'body': "",
     'links': []
   },
   {
     'collection': 'p4p',
-    'title': 'P4P Fighter Rankings',
+    'title': 'P4P Rankings',
     'imagePath': 'assets/illustrations/P4PFighterRankings.jpg',
     'description':
         "Debate the best of the best. Who reigns supreme in the pound-for-pound rankings today? Join discussions, defend your choices, and analyze the top contenders' skills and achievements.",
@@ -24,7 +24,7 @@ List fanThreads = [
     'title': 'Predictions',
     'imagePath': 'assets/illustrations/Predictions.jpg',
     'description':
-        "Get in on the excitement before the bell rings. Discuss upcoming fights, share predictions, and engage with fellow fans. Whose predictions will come out on top?",
+        "Get in on the excitement before the bell rings. Discuss upcoming matchups, share predictions, and engage with fellow fans. Whose predictions will come out on top?",
     'subTitle': '',
     'body': "",
     'links': []

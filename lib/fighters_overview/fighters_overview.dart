@@ -13,7 +13,7 @@ class FightersOverview extends StatefulWidget {
       this.pageTitle,
       this.isFighterRoute = false,
       this.text =
-          'There are no users (fighters) at the moment.\nUsers will be displayed here once they register.'});
+          'There are no users (athletes) at the moment.\nUsers will be displayed here once they register.'});
 
   final Future<List<dynamic>>? future;
 

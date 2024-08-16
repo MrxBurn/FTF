@@ -350,7 +350,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
             displaySuggestions: displaySuggestions,
             onTap: getData,
             suggestions: queriedList,
-            searchbarText: 'Search fighter...',
+            searchbarText: 'Search opponent...',
             onChanged: onSearchBarTextChanged,
           ),
           Column(
@@ -358,37 +358,40 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
               const SizedBox(
                 height: 16,
               ),
-               searchValue.isNotEmpty && searchValue != '-' ? Container(
-                width: 205,
-                height: 68,
-                decoration: BoxDecoration(
-                  color: const Color(lighterBlack),
-                  boxShadow: [containerShadowRed],
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Center(
-                  child: Text(
-                    searchValue,
-                    style: const TextStyle(
-                        fontSize: 28,
-                        color: Colors.red,
-                        overflow: TextOverflow.ellipsis),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ) : SizedBox(),
+              searchValue.isNotEmpty && searchValue != '-'
+                  ? Container(
+                      width: 205,
+                      height: 68,
+                      decoration: BoxDecoration(
+                        color: const Color(lighterBlack),
+                        boxShadow: [containerShadowRed],
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Center(
+                        child: Text(
+                          searchValue,
+                          style: const TextStyle(
+                              fontSize: 28,
+                              color: Colors.red,
+                              overflow: TextOverflow.ellipsis),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
               Padding(
                 padding: paddingLRT,
                 child: const Text(
                     style: TextStyle(fontSize: 10, color: Colors.grey),
                     textAlign: TextAlign.center,
-                    "Your Potential Opponent Doesn't Have FTF? No worries! You can still create your offer. Fill in the necessary information, and we'll generate a link for you to send to your potential opponent via social media."),
+                    "Your Potential Opponent Doesn't Have FTF? No worries! You can still create your offer. First, ensure you've ticked the 'Opponent not found' box, then fill in the necessary information. We'll generate a unique code for you to send to your potential opponent via social media or other channels."),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 24, right: 24),
                 child: CheckBoxWidget(
                   checkValue: fighterNotFoundChecked,
-                  title: 'Fighter not found',
+                  title: 'Opponent not found',
                   onChanged: onFighterNotFoundTick,
                 ),
               ),
@@ -415,7 +418,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                   changeParentValue: (v) => {setState(() => fighterStatus = v)},
                   dropDownValue: fighterStatus,
                   dropDownList: fighterStatusList,
-                  dropDownName: 'Fighter status*'),
+                  dropDownName: 'Athlete status*'),
               DropDownWidget(
                   changeParentValue: (v) => {setState(() => weight = v)},
                   dropDownValue: weight,
@@ -425,7 +428,7 @@ class _CreateOfferFighterState extends State<CreateOfferFighter> {
                 callback: (v) => {
                   setState(() => yearController.text = '${v.month}-${v.year}')
                 },
-                leadingText: 'Fight date*',
+                leadingText: 'Match date*',
                 controller: yearController,
               ),
               DatePicker(

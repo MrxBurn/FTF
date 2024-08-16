@@ -4,21 +4,21 @@ import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/general.dart';
 
 class SearchBarWidget extends StatefulWidget {
- final  String searchbarText;
+  final String searchbarText;
 
- final  Function onTap;
+  final Function onTap;
 
- final  List suggestions;
+  final List suggestions;
 
- final  ValueChanged<String> onChanged;
+  final ValueChanged<String> onChanged;
 
- final  bool displaySuggestions;
+  final bool displaySuggestions;
 
   final ScrollController scrollController;
 
- final  Function onListTileTap;
+  final Function onListTileTap;
 
- final  Function onSelectedSuggestion;
+  final Function onSelectedSuggestion;
 
   SearchBarWidget(
       {super.key,
@@ -129,7 +129,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                                 : Padding(
                                     padding: const EdgeInsets.only(top: 16.0),
                                     child: Text(
-                                      'There are no users (fighters) at the moment.\nUsers will be displayed here once they register.',
+                                      'There are no users (athletes) at the moment.\nUsers will be displayed here once they register.',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(color: Colors.grey),
                                     ),

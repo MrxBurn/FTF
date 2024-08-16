@@ -181,7 +181,7 @@ class DislikedOfferList extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8, right: 8, top: 16.0),
             child: Text(
               textAlign: TextAlign.center,
-              'Currently, there are no users (fighters) signed up to FTF, so you do not have any disliked offers.',
+              "You haven't received any dislikes on your offers from FTF Fans. If you haven't made an offer yet, now's the perfect time to create one",
               style: TextStyle(color: Colors.grey),
             ),
           );
