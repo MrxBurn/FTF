@@ -11,6 +11,7 @@ import 'package:ftf/reusableWidgets/dropdown_widget.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/month_year_picker.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
+import 'package:ftf/reusableWidgets/text_ellipsis.dart';
 import 'package:ftf/styles/styles.dart';
 
 import 'package:ftf/utils/lists.dart';
@@ -273,12 +274,13 @@ class _ViewOfferPageState extends State<ViewOfferPage> {
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Center(
-                      child: Text(
-                        snapshot.data['opponent'],
+                      child: TextEllipsis(
+                        maxWidth: 200,
+                        text: snapshot.data['opponent'],
                         style: const TextStyle(
-                            fontSize: 28,
-                            color: Colors.red,
-                            overflow: TextOverflow.ellipsis),
+                          fontSize: 28,
+                          color: Colors.red,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -677,13 +679,15 @@ void showNegotiationHistory(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        data['creator'],
+                      TextEllipsis(
+                        maxWidth: 100,
+                        text: data['creator'],
                         style:
                             const TextStyle(fontSize: 18, color: Colors.yellow),
                       ),
-                      Text(
-                        data['opponent'],
+                      TextEllipsis(
+                        maxWidth: 100,
+                        text: data['opponent'],
                         style: const TextStyle(fontSize: 18, color: Colors.red),
                       )
                     ],

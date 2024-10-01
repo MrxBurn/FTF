@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:ftf/main.dart';
 import 'package:ftf/reusableWidgets/logo_header.dart';
 import 'package:ftf/reusableWidgets/rounded_black_button.dart';
+import 'package:ftf/reusableWidgets/text_ellipsis.dart';
 import 'package:ftf/styles/styles.dart';
 import 'package:ftf/utils/snack_bar_no_context.dart';
 import 'package:image_picker/image_picker.dart';
@@ -106,8 +107,9 @@ class _FighterImageUploadState extends State<FighterImageUpload> {
                       SizedBox(
                         height: 12,
                       ),
-                      Text(
-                        'Welcome, $firstName!',
+                      TextEllipsis(
+                        maxWidth: 100,
+                        text: 'Welcome, $firstName!',
                         style: headerStyle,
                       ),
                       SizedBox(

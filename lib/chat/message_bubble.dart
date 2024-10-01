@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ftf/reusableWidgets/text_ellipsis.dart';
 import 'package:ftf/styles/styles.dart';
 
 import 'message_class.dart';
@@ -26,8 +27,9 @@ class MessageBuble extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 5.0, right: 12),
-            child: Text(
-              messageObject.senderName ?? '',
+            child: TextEllipsis(
+              maxWidth: 200,
+              text: messageObject.senderName ?? '',
               textAlign: TextAlign.right,
               style: TextStyle(
                 fontSize: 10,

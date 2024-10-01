@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ftf/fan_fights_overview/fights_overview_widgets/number_of_likes_card.dart';
+import 'package:ftf/reusableWidgets/text_ellipsis.dart';
 import 'package:ftf/styles/styles.dart';
 
 class FightsOverviewCard extends StatelessWidget {
@@ -56,11 +57,15 @@ class FightsOverviewCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        creator,
+                      TextEllipsis(
+                        maxWidth: 100,
+                        text: creator,
                         style: const TextStyle(color: Colors.yellow),
                       ),
-                      Text(opponent, style: const TextStyle(color: Colors.red))
+                      TextEllipsis(
+                          maxWidth: 100,
+                          text: opponent,
+                          style: const TextStyle(color: Colors.red))
                     ],
                   ),
                   const SizedBox(

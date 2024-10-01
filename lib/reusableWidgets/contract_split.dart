@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ftf/reusableWidgets/checkbox.dart';
+import 'package:ftf/reusableWidgets/text_ellipsis.dart';
 import 'package:ftf/styles/styles.dart';
 
 class ContractSplit extends StatefulWidget {
@@ -103,8 +104,9 @@ class _ContractSplitState extends State<ContractSplit> {
                   const SizedBox(
                     height: 6,
                   ),
-                  Text(
-                    widget.creator,
+                  TextEllipsis(
+                    maxWidth: 100,
+                    text: widget.creator,
                     style: TextStyle(
                         fontSize: 12,
                         color: widget.contractedChecked == true
@@ -142,8 +144,9 @@ class _ContractSplitState extends State<ContractSplit> {
                   const SizedBox(
                     height: 6,
                   ),
-                  Text(
-                    widget.opponent,
+                  TextEllipsis(
+                    maxWidth: 100,
+                    text: widget.opponent,
                     style: const TextStyle(fontSize: 12),
                   ),
                 ],
